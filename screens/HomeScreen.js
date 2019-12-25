@@ -8,27 +8,41 @@ import {
 import {
   Button,
   Input,
+  ListItem,
   Overlay
 } from 'react-native-elements';
 
 export default function HomeScreen() {
 
   const [showAddActivityModal, setShowAddActivityModal] = useState(false);
+  const [newActivity, setNewActivity] = useState('');
+  const [activitiesList, setActivitiesList] = useState([]);
 
   return (
     <View style={styles.container}>
 
       <Button title="Add Activity" onPress={() => handlePressedAddActivity(setShowAddActivityModal)} />
 
+      {
+        activitiesList.map((a, i) => (
+          <ListItem
+            key={i}
+            title={a}
+            bottomDivider
+          />
+        ))
+      }
+
       <Overlay isVisible={showAddActivityModal}>
 
         <View>
           <Text>New Activity</Text>
-          <Input placeholder="Enter Activity" />
-          <Button title="Cancel" onPress={() => handleCancelAddActivity(setShowAddActivityModal)} />
 
-          <Button title="Add" onPress={() => handleSaveActivity(setShowAddActivityModal)} />
+          <Input placeholder="Enter Activity" onChangeText={newActivity => setNewActivity(newActivity)} value={newActivity} />
 
+          <Button title="Cancel" onPress={() => handleCancelAddActivity(setShowAddActivityModal, setNewActivity)} />
+
+          <Button title="Add" onPress={() => handleSaveActivity(setShowAddActivityModal, setNewActivity, newActivity, activitiesList)} />
         </View>
 
       </Overlay>
@@ -44,12 +58,15 @@ function handlePressedAddActivity(setShowAddActivityModal) {
   setShowAddActivityModal(true);
 }
 
-function handleCancelAddActivity(setShowAddActivityModal) {
+function handleCancelAddActivity(setShowAddActivityModal, setNewActivity) {
   setShowAddActivityModal(false);
+  setNewActivity('');
 }
 
-function handleSaveActivity(setShowAddActivityModal) {
+function handleSaveActivity(setShowAddActivityModal, setNewActivity, newActivity, activitiesList) {
   setShowAddActivityModal(false);
+  setNewActivity('');
+  activitiesList.push(newActivity);
 }
 
 const styles = StyleSheet.create({

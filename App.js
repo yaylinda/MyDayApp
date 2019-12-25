@@ -1,62 +1,69 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Container } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+export default class App extends Component {
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      isReady: false,
+    };
   }
-}
 
-async function loadResourcesAsync() {
-  await Promise.all([
-    Asset.loadAsync([
-      require('./assets/images/robot-dev.png'),
-      require('./assets/images/robot-prod.png'),
-    ]),
-    Font.loadAsync({
-      // This is the font that we are using for our tab bar
+  render() {
+    if (!this.state.isReady && !this.props.skipLoadingScreen) {
+      return <AppLoading />;
+    } else {
+      return (
+        <Container style={styles.container}>
+          <AppNavigator />
+        </Container>
+      );
+    }
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       ...Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
-      // remove this if you are not using it in your app
-      'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-    }),
-  ]);
-}
-
-function handleLoadingError(error) {
-  // In this case, you might want to report the error to your error reporting
-  // service, for example Sentry
-  console.warn(error);
-}
-
-function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true);
+    });
+    this.setState({ isReady: true });
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#282833',
   },
 });
+
+/**
+ * --atom-red: #ff4495;
+    --atom-green: #52e3c2;
+    --atom-blue: #0781ff;
+    --atom-purple: #d211fe;
+    --atom-bright-orange: #ff4b12;
+    --atom-yellow: #ffd900;
+    --atom-orange: #ed8a19;
+    --atom-light-blue: #40c4ff;
+    --atom-gray: #546e7a;
+    --atom-brand-0: #1a1a21;
+    --atom-brand-1: #282833;
+    --atom-brand-2: #32323e;
+    --atom-brand-3: #393945;
+    --atom-brand-4: #40424f;
+    --atom-brand-5: #4d505f;
+    --atom-brand-6: #6e7288;
+    --atom-brand-7: #8f94ab;
+    --atom-brand-8: #b4b8cd;
+    --atom-contrast: #fff;
+ */
