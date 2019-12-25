@@ -1,159 +1,97 @@
-import React, { useState } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, { Component } from 'react';
 import {
   Button,
-  Input,
-  ListItem,
-  Overlay
-} from 'react-native-elements';
+  Container,
+  Form, 
+  Item, 
+  Picker,
+  Text
+} from 'native-base';
 
-export default function HomeScreen() {
+export default class HomeScreen extends Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAddActivityModal: false,
+      newActivity: '',
+      activitiesList: []
+    };
+  }
 
-  const [showAddActivityModal, setShowAddActivityModal] = useState(false);
-  const [newActivity, setNewActivity] = useState('');
-  const [activitiesList, setActivitiesList] = useState([]);
+  render() {
+    return (
+      <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
 
-  return (
-    <View style={styles.container}>
+        
+  
+        <Button style={{backgroundColor: '#52e3c2'}} onPress={this.handlePressedAddActivity.bind(this)}>
+          <Text>Add Activity</Text>
+        </Button>
+  
+        {/* {
+          this.state.activitiesList.map((a, i) => (
+            <ListItem
+              key={i}
+              title={a}
+              bottomDivider
+            />
+          ))
+        }
+  
+        <Overlay isVisible={this.state.showAddActivityModal}>
+  
+          <View>
+            <Text>New Activity</Text>
+  
+            <Form>
+            <Item picker>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrow-down" />}
+                style={{ width: undefined }}
+                placeholder="Select your Activity"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.newActivity}
+                onValueChange={this.updateNewActivity.bind(this)}
+              >
+                <Picker.Item label="Wallet" value="key0" />
+                <Picker.Item label="ATM Card" value="key1" />
+                <Picker.Item label="Debit Card" value="key2" />
+                <Picker.Item label="Credit Card" value="key3" />
+                <Picker.Item label="Net Banking" value="key4" />
+              </Picker>
+            </Item>
+          </Form>
 
-      <Button title="Add Activity" onPress={() => handlePressedAddActivity(setShowAddActivityModal)} />
+            <Button title="Cancel" onPress={() => this.handleCancelAddActivity()} />
+  
+            <Button title="Add" onPress={() => this.handleSaveActivity()} />
+          </View>
+  
+        </Overlay> */}
 
-      {
-        activitiesList.map((a, i) => (
-          <ListItem
-            key={i}
-            title={a}
-            bottomDivider
-          />
-        ))
-      }
+      </Container>
+    );
+  }
 
-      <Overlay isVisible={showAddActivityModal}>
+  handlePressedAddActivity() {
+    console.log('handlePressedAddActivity');
+    this.setState({showAddActivityModal: true});
+  }
 
-        <View>
-          <Text>New Activity</Text>
-
-          <Input placeholder="Enter Activity" onChangeText={newActivity => setNewActivity(newActivity)} value={newActivity} />
-
-          <Button title="Cancel" onPress={() => handleCancelAddActivity(setShowAddActivityModal, setNewActivity)} />
-
-          <Button title="Add" onPress={() => handleSaveActivity(setShowAddActivityModal, setNewActivity, newActivity, activitiesList)} />
-        </View>
-
-      </Overlay>
-    </View>
-  );
+  updateNewActivity(newActivity) {
+    this.setState({newActivity: newActivity});
+  }
+  
+  handleCancelAddActivity() {
+    this.setState({showAddActivityModal: false, newActivity: ''});
+  }
+  
+  handleSaveActivity(newActivity) {
+    console.log('handleSaveActivity:', newActivity);
+    this.setState({showAddActivityModal: false, newActivity: '', activitiesList: this.state.activitiesList.concat(newActivity)});
+    console.log(this.state.activitiesList);
+  }
 }
-
-HomeScreen.navigationOptions = {
-  title: 'My Day',
-};
-
-function handlePressedAddActivity(setShowAddActivityModal) {
-  setShowAddActivityModal(true);
-}
-
-function handleCancelAddActivity(setShowAddActivityModal, setNewActivity) {
-  setShowAddActivityModal(false);
-  setNewActivity('');
-}
-
-function handleSaveActivity(setShowAddActivityModal, setNewActivity, newActivity, activitiesList) {
-  setShowAddActivityModal(false);
-  setNewActivity('');
-  activitiesList.push(newActivity);
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-});

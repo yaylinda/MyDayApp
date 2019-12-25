@@ -1,9 +1,16 @@
 import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState, Component } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Container } from 'native-base';
+import React, { Component } from 'react';
+import {
+  Content,
+  Container,
+  Left,
+  Right,
+  Body,
+  Header,
+  Title,
+  Text
+} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
@@ -22,7 +29,7 @@ export default class App extends Component {
       return <AppLoading />;
     } else {
       return (
-        <Container style={styles.container}>
+        <Container style={{flex: 1, backgroundColor: '#282833'}}>
           <AppNavigator />
         </Container>
       );
@@ -38,13 +45,6 @@ export default class App extends Component {
     this.setState({ isReady: true });
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#282833',
-  },
-});
 
 /**
  * --atom-red: #ff4495;
