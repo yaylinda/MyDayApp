@@ -85,7 +85,7 @@ export default class SignInScreen extends Component {
       if (this.loginSuccessful) {
         console.log(`[SignInScreen] sessionToken: ${json.sessionToken}`);
         AsyncStorage.setItem('sessionToken', json.sessionToken);
-        this.props.navigation.navigate('App', {
+        this.props.navigation.navigate('Home', {
           username: this.state.username
         });
       } else {

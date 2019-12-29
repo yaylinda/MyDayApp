@@ -20,7 +20,7 @@ export class AuthLoadingScreen extends Component {
 
     if (sessionToken) {
       console.log(`[AuthLoadingScreen] sessionToken=${sessionToken}, getting user...`);
-      let user = await this.getUserFromSessionToken(sessionToken).then((user) => {
+      await this.getUserFromSessionToken(sessionToken).then((user) => {
         username = user.username;
         console.log(`[AuthLoadingScreen] got user, username=${username}`);
       }).catch((error) => {
@@ -35,11 +35,9 @@ export class AuthLoadingScreen extends Component {
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
     if (username) {
-      this.props.navigation.navigate('App', {
-        username: username
-      });
+      this.props.navigation.navigate('Home', {username: username});
     } else {
-      this.props.navigation.navigate('Auth');
+      this.props.navigation.navigate('SignIn');
     }
   };
 

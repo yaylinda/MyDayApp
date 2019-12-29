@@ -9,7 +9,8 @@ import {
   Body,
   Header,
   Title,
-  Text
+  Text,
+  Footer
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -30,7 +31,12 @@ export default class App extends Component {
     } else {
       return (
         <Container style={{flex: 1, backgroundColor: '#282833'}}>
+          <Header style={{backgroundColor: '#282833'}}>
+            <Text style={{fontSize: 20, color: 'white'}}>My Day</Text>
+          </Header>
           <AppNavigator />
+          <Footer style={{backgroundColor: '#282833'}}>
+          </Footer>
         </Container>
       );
     }

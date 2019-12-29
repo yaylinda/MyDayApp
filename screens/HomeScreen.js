@@ -5,12 +5,13 @@ import {
   Form, 
   Item, 
   Picker,
-  Text
+  Text,
+  Header
 } from 'native-base';
 import DayInfo from '../components/DayInfo';
 
 export default class HomeScreen extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -21,8 +22,7 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const { navigation } = this.props.navigation;
-    console.log(`[HomeScreen] username=${navigation.getParam('username', 'USERNAME NOT FOUND')}`);
+    console.log(`[HomeScreen] username=${this.props.navigation.getParam('username', 'USERNAME NOT FOUND')}`);
     return (
       <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
 

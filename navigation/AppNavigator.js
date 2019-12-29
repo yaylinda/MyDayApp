@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SignInScreen from '../auth/SignInScreen';
 import { createStackNavigator } from 'react-navigation-stack';
+import RegisterScreen from '../auth/RegisterScreen';
 
 // import MainTabNavigator from './MainTabNavigator';
 
@@ -16,15 +17,13 @@ import { createStackNavigator } from 'react-navigation-stack';
 //   })
 // );
 
-const AppStack = createStackNavigator({ Home: HomeScreen });
-const AuthStack = createStackNavigator({ SignIn: SignInScreen });
-
 export default createAppContainer(
   createSwitchNavigator(
     {
       AuthLoading: AuthLoadingScreen,
-      App: AppStack,
-      Auth: AuthStack,
+      Home: HomeScreen,
+      SignIn: SignInScreen,
+      Register: RegisterScreen
     },
     {
       initialRouteName: 'AuthLoading',
