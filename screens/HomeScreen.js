@@ -2,13 +2,22 @@ import React, { Component } from 'react';
 import {
   Button,
   Container,
-  Form, 
-  Item, 
+  Form,
+  Item,
   Picker,
   Text,
-  Header
+  Header,
+  Content,
+  Left,
+  Right,
+  Body,
+  Title,
+  Footer,
+  FooterTab,
+  Icon,
 } from 'native-base';
 import DayInfo from '../components/DayInfo';
+import DayScreen from './DayScreen';
 
 export default class HomeScreen extends Component {
 
@@ -17,84 +26,82 @@ export default class HomeScreen extends Component {
     this.state = {
       showAddActivityModal: false,
       newActivity: '',
-      activitiesList: []
+      activitiesList: [],
+      activeTab: 'day'
     };
     console.log(`[HomeScreen] username=${this.props.navigation.getParam('username', 'USERNAME NOT FOUND')}`);
+    console.log(`[HomeScreen] state: ${JSON.stringify(this.state)}`);
   }
 
   render() {
     return (
-      <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
+      <Container style={{ flex: 1, backgroundColor: '#282833' }}>
 
-        <DayInfo date={new Date()}></DayInfo>
-        
-        <Button style={{backgroundColor: '#52e3c2'}} onPress={this.handlePressedAddActivity.bind(this)}>
-          <Text>Add Activity</Text>
-        </Button>
-  
-        {/* {
-          this.state.activitiesList.map((a, i) => (
-            <ListItem
-              key={i}
-              title={a}
-              bottomDivider
-            />
-          ))
-        }
-  
-        <Overlay isVisible={this.state.showAddActivityModal}>
-  
-          <View>
-            <Text>New Activity</Text>
-  
-            <Form>
-            <Item picker>
-              <Picker
-                mode="dropdown"
-                iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
-                placeholder="Select your Activity"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.newActivity}
-                onValueChange={this.updateNewActivity.bind(this)}
-              >
-                <Picker.Item label="Wallet" value="key0" />
-                <Picker.Item label="ATM Card" value="key1" />
-                <Picker.Item label="Debit Card" value="key2" />
-                <Picker.Item label="Credit Card" value="key3" />
-                <Picker.Item label="Net Banking" value="key4" />
-              </Picker>
-            </Item>
-          </Form>
+        <Header style={{ backgroundColor: '#282833' }}>
+          <Text style={{ fontSize: 24, color: 'white' }}>My Day</Text>
+        </Header>
 
-            <Button title="Cancel" onPress={() => this.handleCancelAddActivity()} />
-  
-            <Button title="Add" onPress={() => this.handleSaveActivity()} />
-          </View>
-  
-        </Overlay> */}
+        <Content style={{ padding: 20 }}>
+          { this.renderContent() }
+        </Content>
 
+        <Footer style={{ backgroundColor: '#282833' }}>
+          <FooterTab>
+            <Button vertical active={this.state.activeTab === 'day'} onPress={() => this.handleChangeTab('day')}>
+              <Icon  name="sunny" />
+              <Text>Day</Text>
+            </Button>
+            <Button vertical active={this.state.activeTab === 'stats'} onPress={() => this.handleChangeTab('stats')}>
+              <Icon name="stats" />
+              <Text>Stats</Text>
+            </Button>
+            <Button vertical active={this.state.activeTab === 'catalog'} onPress={() => this.handleChangeTab('catalog')}>
+              <Icon name="list" />
+              <Text>Catalog</Text>
+            </Button>
+            <Button vertical active={this.state.activeTab === 'settings'} onPress={() => this.handleChangeTab('settings')}>
+              <Icon name="settings" />
+              <Text>Settings</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
       </Container>
     );
   }
 
+  renderContent() {
+    if (this.state.activeTab === 'day') {
+      return (<DayScreen></DayScreen>);
+    } else if (this.state.activeTab === 'catalog') {
+      
+    } else if (this.state.activeTab === 'stats') {
+
+    } else if (this.state.activeTab === 'settings') {
+
+    }
+  }
+
+  handleChangeTab(tabName) {
+    console.log(`[HomeScreen] handleChangeTab: ${tabName}`);
+    this.setState({ activeTab: tabName });
+  }
+
   handlePressedAddActivity() {
     console.log('handlePressedAddActivity');
-    this.setState({showAddActivityModal: true});
+    this.setState({ showAddActivityModal: true });
   }
 
   updateNewActivity(newActivity) {
-    this.setState({newActivity: newActivity});
+    this.setState({ newActivity: newActivity });
   }
-  
+
   handleCancelAddActivity() {
-    this.setState({showAddActivityModal: false, newActivity: ''});
+    this.setState({ showAddActivityModal: false, newActivity: '' });
   }
-  
+
   handleSaveActivity(newActivity) {
     console.log('handleSaveActivity:', newActivity);
-    this.setState({showAddActivityModal: false, newActivity: '', activitiesList: this.state.activitiesList.concat(newActivity)});
+    this.setState({ showAddActivityModal: false, newActivity: '', activitiesList: this.state.activitiesList.concat(newActivity) });
     console.log(this.state.activitiesList);
   }
 }

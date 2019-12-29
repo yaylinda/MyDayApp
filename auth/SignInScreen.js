@@ -42,7 +42,7 @@ export default class SignInScreen extends Component {
           </Item>
         </Form>
         <Button style={{backgroundColor: '#52e3c2', justifyContent: 'center'}} onPress={() => this.signIn()}><Text> Sign In </Text></Button>
-        <Button transparent style={{color: '#0781ff', justifyContent: 'center'}} onPress={() => this.goToRegisterScreen()}><Text> Go To Register </Text></Button>
+        <Button transparent style={{color: '#282833', justifyContent: 'center'}} onPress={() => this.goToRegisterScreen()}><Text> Go To Register </Text></Button>
       </Container>
     );
   }

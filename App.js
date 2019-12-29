@@ -10,7 +10,10 @@ import {
   Header,
   Title,
   Text,
-  Footer
+  Footer,
+  FooterTab,
+  Icon,
+  Button
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -30,16 +33,17 @@ export default class App extends Component {
       return <AppLoading />;
     } else {
       return (
-        <Container style={{flex: 1, backgroundColor: '#282833'}}>
-          <Header style={{backgroundColor: '#282833'}}>
-            <Text style={{fontSize: 24, color: 'white'}}>My Day</Text>
-          </Header>
+        <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+          
           <AppNavigator />
-          <Footer style={{backgroundColor: '#282833'}}>
-          </Footer>
+        
         </Container>
       );
     }
+  }
+
+  shouldShowFooter() {
+
   }
 
   async componentDidMount() {
