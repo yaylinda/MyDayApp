@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { getUserFromSessionToken } from '../api/APIService';
+import { host } from '../util/Constants';
 
 export class AuthLoadingScreen extends Component {
   componentDidMount() {
@@ -20,7 +20,7 @@ export class AuthLoadingScreen extends Component {
 
     if (sessionToken) {
       console.log(`[AuthLoadingScreen] sessionToken=${sessionToken}, getting user...`);
-      let user = await getUserFromSessionToken(sessionToken).then((user) => {
+      let user = await this.getUserFromSessionToken(sessionToken).then((user) => {
         username = user.username;
         console.log(`[AuthLoadingScreen] got user, username=${username}`);
       }).catch((error) => {
@@ -52,4 +52,23 @@ export class AuthLoadingScreen extends Component {
       </View>
     );
   }
+
+  async getUserFromSessionToken(sessionToken) {
+    const endpoint = `${host}/users/${sessionToken}`;
+    console.log(`[APIService] calling ${endpoint}`);
+
+    return fetch(endpoint)
+        .then((response) => {
+            if (response.ok) {
+                console.log(`[AuthLoadingScreen] found user for sessionToken`);
+                return response.json();
+            } else {
+                console.log(`[AuthLoadingScreen] unable to find user for sessionToken`);
+                throw new Error();
+            }
+        })
+        .catch((error) => {
+            throw error;
+        });     
+}
 }
