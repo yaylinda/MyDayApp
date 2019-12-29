@@ -7,6 +7,7 @@ import {
   Picker,
   Text
 } from 'native-base';
+import DayInfo from '../components/DayInfo';
 
 export default class HomeScreen extends Component {
   
@@ -20,11 +21,13 @@ export default class HomeScreen extends Component {
   }
 
   render() {
+    const { navigation } = this.props.navigation;
+    console.log(`[HomeScreen] username=${navigation.getParam('username', 'USERNAME NOT FOUND')}`);
     return (
       <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
 
+        <DayInfo date={new Date()}></DayInfo>
         
-  
         <Button style={{backgroundColor: '#52e3c2'}} onPress={this.handlePressedAddActivity.bind(this)}>
           <Text>Add Activity</Text>
         </Button>
