@@ -1,4 +1,17 @@
 import React, { Component } from 'react';
+import {
+    AsyncStorage
+  } from 'react-native';
+import {
+    Container,
+    Form,
+    Label,
+    Item,
+    Input,
+    Text,
+    Button
+  } from 'native-base';
+  import { host } from '../util/Constants';
 
 export default class RegisterScreen extends Component {
     static navigationOptions = {
@@ -18,23 +31,23 @@ export default class RegisterScreen extends Component {
 
       render() {
         return (
-          <Container>
-            <Form>
+          <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
+            <Form style={{marginBottom: 20}}>
               <Item floatingLabel>
-                <Label>Username</Label>
-                <Input autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
+                <Label style={{color: 'white'}}>Username</Label>
+                <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
               </Item>
               <Item floatingLabel>
-                <Label>Password</Label>
-                <Input autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
+                <Label style={{color: 'white'}}>Password</Label>
+                <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
               </Item>
-              <Item floatingLabel last>
-                <Label>Confirm Password</Label>
-                <Input autoCapitalize='none' onChangeText={passwordConf => this.onPasswordConfInputChange(passwordConf)} />
+              <Item floatingLabel>
+                <Label style={{color: 'white'}}>Confirm Password</Label>
+                <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={passwordConf => this.onPasswordConfInputChange(passwordConf)} />
               </Item>
             </Form>
-            <Button success onPress={() => this.register()}><Text> Register </Text></Button>
-            <Button success onPress={() => this.goToRegisterScreen()}><Text> Go To Sign In </Text></Button>
+            <Button style={{backgroundColor: '#52e3c2', justifyContent: 'center'}} onPress={() => this.register()}><Text> Register </Text></Button>
+            <Button transparent style={{color: '#0781ff', justifyContent: 'center'}} onPress={() => this.goToSignInScreen()}><Text> Go To Sign In </Text></Button>
           </Container>
         );
       }

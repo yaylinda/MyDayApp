@@ -19,10 +19,10 @@ export default class HomeScreen extends Component {
       newActivity: '',
       activitiesList: []
     };
+    console.log(`[HomeScreen] username=${this.props.navigation.getParam('username', 'USERNAME NOT FOUND')}`);
   }
 
   render() {
-    console.log(`[HomeScreen] username=${this.props.navigation.getParam('username', 'USERNAME NOT FOUND')}`);
     return (
       <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
 

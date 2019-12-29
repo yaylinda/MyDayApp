@@ -30,19 +30,19 @@ export default class SignInScreen extends Component {
 
   render() {
     return (
-      <Container>
-        <Form>
+      <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
+        <Form style={{marginBottom: 20}}>
           <Item floatingLabel>
-            <Label>Username</Label>
-            <Input autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
+            <Label style={{color: 'white'}}>Username</Label>
+            <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
           </Item>
           <Item floatingLabel last>
-            <Label>Password</Label>
-            <Input autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
+            <Label style={{color: 'white'}}>Password</Label>
+            <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
           </Item>
         </Form>
-        <Button success onPress={() => this.signIn()}><Text> Sign In </Text></Button>
-        <Button success onPress={() => this.goToRegisterScreen()}><Text> Go To Register </Text></Button>
+        <Button style={{backgroundColor: '#52e3c2', justifyContent: 'center'}} onPress={() => this.signIn()}><Text> Sign In </Text></Button>
+        <Button transparent style={{color: '#0781ff', justifyContent: 'center'}} onPress={() => this.goToRegisterScreen()}><Text> Go To Register </Text></Button>
       </Container>
     );
   }
