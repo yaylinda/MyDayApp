@@ -34,9 +34,7 @@ export default class App extends Component {
     } else {
       return (
         <Container style={{ flex: 1, backgroundColor: '#282833' }}>
-          
           <AppNavigator />
-        
         </Container>
       );
     }

@@ -2,21 +2,13 @@ import React, { Component } from 'react';
 import {
   Button,
   Container,
-  Form,
-  Item,
-  Picker,
   Text,
   Header,
   Content,
-  Left,
-  Right,
-  Body,
-  Title,
   Footer,
   FooterTab,
   Icon,
 } from 'native-base';
-import DayInfo from '../components/DayInfo';
 import DayScreen from './DayScreen';
 
 export default class HomeScreen extends Component {

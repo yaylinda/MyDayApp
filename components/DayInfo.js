@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, CardItem, Body, Text, Button, Container } from "native-base";
+import { Card, CardItem, Text, Button, Container } from "native-base";
 import moment from 'moment'
 
 export default class DayInfo extends Component {
@@ -13,7 +13,7 @@ export default class DayInfo extends Component {
         return (
             <Card transparent style={{ backgroundColor: '#282833'}}>
                 <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                    <Text style={{color: '#ff4495'}}>{this.formatDate(this.props.day.date)}</Text>
+                    <Text style={{color: '#ff4495', fontSize: 18}}>{this.formatDate(this.props.day.date)}</Text>
                 </CardItem>
                 <CardItem bordered style={{ backgroundColor: '#282833' }}>
                     <Card transparent style={{ backgroundColor: '#282833' }}>
@@ -51,7 +51,7 @@ export default class DayInfo extends Component {
 
             </Container>);
         } else {
-            return (<Text style={{color: 'white'}}>No Events Today</Text>);
+            return (<Text style={{color: 'white'}}>No Activites Today</Text>);
         }
     }
 

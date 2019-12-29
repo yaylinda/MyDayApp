@@ -1,25 +1,9 @@
 import React, { Component } from 'react';
 import {
-  Button,
   Container,
-  Form,
-  Item,
-  Picker,
-  Text,
-  Header,
-  Content,
-  Left,
-  Right,
-  Body,
-  Title,
-  Footer,
-  FooterTab,
-  Icon,
-  List,
-  ListItem,
 } from 'native-base';
 import { host } from '../util/Constants';
-import { FlatList, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import DayInfo from '../components/DayInfo';
 
 export default class DayScreen extends Component {
