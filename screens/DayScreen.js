@@ -4,7 +4,7 @@ import {
 } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
-import DayInfo from '../components/DayInfo';
+import DayInfo from './DayInfoScreen';
 
 export default class DayScreen extends Component {
 

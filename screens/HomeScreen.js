@@ -29,11 +29,7 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <Container style={{ flex: 1, backgroundColor: '#282833' }}>
-
-        <Header style={{ backgroundColor: '#282833' }}>
-          <Text style={{ fontSize: 24, color: 'white' }}>My Day</Text>
-        </Header>
-
+        
         <Content style={{ padding: 20 }}>
           { this.renderContent() }
         </Content>

@@ -4,6 +4,8 @@ import moment from 'moment'
 import Modal from "react-native-modal";
 import { AsyncStorage } from "react-native";
 import { host } from "../util/Constants";
+import { Rating } from 'react-native-ratings';
+
 
 export default class DayInfo extends Component {
 
@@ -18,7 +20,8 @@ export default class DayInfo extends Component {
             errorMessage: '',
             showAddModal: false,
             addType: '',
-            selectedNewDayEvent: -1
+            selectedNewDayEvent: -1,
+            selectedEmotionRanking: -1
         }
         console.log('[DayInfo] constructor');
     }
@@ -26,9 +29,26 @@ export default class DayInfo extends Component {
     render() {
         return (
             <Container style={{ flex: 1, backgroundColor: '#282833'}}>
+                
                 <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2'}}>{this.formatDate(this.state.day.date)}</Text>
                 </View>
+
+                <Card transparent style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                        <Text style={{color: '#ff4495', fontSize: 18}}>Day's Emotions</Text>
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833' }}>
+                        { this.renderEmotions()}
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button rounded
+                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION'  })}
+                            style={{backgroundColor: '#ff4495'}}>
+                            <Icon name="add-circle" />
+                        </Button>
+                    </CardItem>
+                </Card>
                 
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
@@ -47,23 +67,32 @@ export default class DayInfo extends Component {
                     </CardItem>
                 </Card>
 
-                <Card transparent style={{ backgroundColor: '#282833' }}>
-                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{color: '#ff4495', fontSize: 18}}>Day's Emotions</Text>
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
-                        { this.renderEmotions()}
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button rounded
-                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION'  })}
-                            style={{backgroundColor: '#ff4495'}}>
-                            <Icon name="add-circle" />
-                        </Button>
-                    </CardItem>
-                </Card>
+                <Modal isVisible={this.state.showAddModal && this.state.addType === 'EMOTION'}>
+                <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+                        <View style={{ paddingTop: 30, paddingBottom: 30, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2'}}>How do you feel?</Text>
+                        </View>
+                        
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
+                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
+                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
+                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
+                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
+                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
+                        </View>
 
-                <Modal isVisible={this.state.showAddModal}>
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Button onPress={() => this.cancelAdd()} style={{backgroundColor: '#52e3c2'}}>
+                                <Text>Cancel</Text>
+                            </Button>
+                            <Button onPress={() => this.persistNew()} style={{backgroundColor: '#52e3c2'}}>
+                                <Text>Save</Text>
+                            </Button>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal isVisible={this.state.showAddModal && this.state.addType === 'ACTIVITY'}>
                     <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
                         <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
                             <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2'}}>Add Day Event</Text>

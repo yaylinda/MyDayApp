@@ -11,7 +11,7 @@ export default class CatalogScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            catalogData: { 'ACTIVITY': [], 'EMOTION': [] },
+            catalogData: { 'ACTIVITY': [] },
             errorMessage: '',
             showAddModal: false,
             newType: '',
@@ -47,10 +47,10 @@ export default class CatalogScreen extends Component {
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{color: '#ff4495', fontSize: 18}}>Emotions Catalog</Text>
+                        <Text style={{color: '#ff4495', fontSize: 18}}>Prompts Catalog</Text>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
-                        { this.renderCatalogData('EMOTION') }
+                        { this.renderCatalogData('PROMPTS') }
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button rounded
@@ -112,7 +112,7 @@ export default class CatalogScreen extends Component {
                 </Accordion>
             );
         } else {
-            return (<Text style={{color: 'white'}}>No Activities in Catalog. Add one!</Text>);
+            return (<Text style={{color: 'white'}}>There's nothing here!</Text>);
         }
     }
 
