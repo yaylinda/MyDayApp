@@ -28,7 +28,7 @@ export default class DayScreen extends Component {
             <Container style={{ flex: 1, backgroundColor: '#282833' }}>
                 {
                     this.state.daysData.map((item, index) => {
-                        return (<DayInfo key={index} day={item}></DayInfo>);
+                        return (<DayInfo key={index} day={item} catalogData={this.state.catalogData}></DayInfo>);
                     })
                 }
             </Container>

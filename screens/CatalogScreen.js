@@ -13,7 +13,6 @@ export default class CatalogScreen extends Component {
         this.state = {
             catalogData: { 'ACTIVITY': [], 'EMOTION': [] },
             errorMessage: '',
-
             showAddModal: false,
             newType: '',
             newName: '',
