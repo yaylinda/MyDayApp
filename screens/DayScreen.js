@@ -9,7 +9,6 @@ import DayInfo from '../components/DayInfo';
 export default class DayScreen extends Component {
 
     constructor(props) {
-        // TODO - get day data for user
         super(props);
         this.state = {
             daysData: [],
@@ -20,7 +19,6 @@ export default class DayScreen extends Component {
 
     componentDidMount() {
         this.loadDayData();
-        this.loadCatalog();
     }
 
     render() {

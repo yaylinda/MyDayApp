@@ -49,9 +49,6 @@ export default class DayInfo extends Component {
                             <Text>Add Activity</Text>
                         </CardItem>
                         <CardItem style={{ backgroundColor: '#40424f'}}>
-                            
-                        </CardItem>
-                        <CardItem style={{ backgroundColor: '#40424f'}}>
                             <Left>
                                 <Button onPress={() => this.cancelActivityModal()}><Text>Cancel</Text></Button>
                             </Left>

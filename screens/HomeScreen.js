@@ -10,6 +10,7 @@ import {
   Icon,
 } from 'native-base';
 import DayScreen from './DayScreen';
+import CatalogScreen from './CatalogScreen';
 
 export default class HomeScreen extends Component {
 
@@ -65,7 +66,7 @@ export default class HomeScreen extends Component {
     if (this.state.activeTab === 'day') {
       return (<DayScreen></DayScreen>);
     } else if (this.state.activeTab === 'catalog') {
-      
+      return (<CatalogScreen></CatalogScreen>);
     } else if (this.state.activeTab === 'stats') {
 
     } else if (this.state.activeTab === 'settings') {
