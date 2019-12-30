@@ -20,11 +20,12 @@ export default class DayScreen extends Component {
 
     componentDidMount() {
         this.loadDayData();
+        this.loadCatalog();
     }
 
     render() {
         return (
-            <Container style={{ backgroundColor: '#282833' }}>
+            <Container style={{ flex: 1, backgroundColor: '#282833' }}>
                 {
                     this.state.daysData.map((item, index) => {
                         return (<DayInfo key={index} day={item}></DayInfo>);
