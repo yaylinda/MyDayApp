@@ -14,13 +14,12 @@ export default class CatalogScreen extends Component {
             catalogData: { 'ACTIVITY': [], 'EMOTION': [] },
             errorMessage: '',
 
-            showAddActivityModal: false,
-            showAddEmotionModal: false,
-
-            newActivityName: '',
-            newActivityDescription: '',
-            newActivityColor: '',
-            newActivityIcon: ''
+            showAddModal: false,
+            newType: '',
+            newName: '',
+            newDescription: '',
+            newColor: '',
+            newIcon: ''
         }
     }
 
@@ -35,45 +34,49 @@ export default class CatalogScreen extends Component {
                     <CardItem header bordered>
                         <Text>Activities Catalog</Text>
                     </CardItem>
-                    <CardItem bordered>
-                        {
-                            this.renderCatalogData('ACTIVITY')
-                        }
-                    </CardItem>
+                    <CardItem bordered>{ this.renderCatalogData('ACTIVITY') }</CardItem>
                     <CardItem>
-                        <Button onPress={() => this.setState({ showAddActivityModal: true })}>
+                        <Button onPress={() => this.setState({ showAddModal: true, newType: 'ACTIVITY' })}>
                             <Text>Add Activity to Catalog</Text>
                         </Button>
                     </CardItem>
                 </Card>
-                
+
                 <Card>
                     <CardItem header bordered>
                         <Text>Emotions Catalog</Text>
                     </CardItem>
+                    <CardItem bordered>{ this.renderCatalogData('EMOTION') }</CardItem>
                     <CardItem>
-                        <Button onPress={() => this.setState({ showAddEmotionModal: true })}>
+                        <Button onPress={() => this.setState({ showAddModal: true, newType: 'EMOTION'  })}>
                             <Text>Add Emotion to Catalog</Text>
                         </Button>
                     </CardItem>
                 </Card>
 
-                <Modal isVisible={this.state.showAddActivityModal}>
+                <Modal isVisible={this.state.showAddModal}>
                     <View style={{ backgroundColor: 'white', justifyContent: 'center', borderRadius: 5 }}>
-
                         <Form>
                             <Item floatingLabel>
-                                <Label>Activity Name</Label>
-                                <Input onChangeText={value => this.setState({ newActivityName: value })} />
+                                <Label>Name</Label>
+                                <Input onChangeText={value => this.setState({ newName: value })} />
                             </Item>
                             <Item floatingLabel>
-                                <Label>Activity Description</Label>
-                                <Input onChangeText={value => this.setState({ newActivityDescription: value })} />
+                                <Label>Description</Label>
+                                <Input onChangeText={value => this.setState({ newDescription: value })} />
+                            </Item>
+                            <Item floatingLabel>
+                                <Label>Icon</Label>
+                                <Input onChangeText={value => this.setState({ newIcon: value })} />
+                            </Item>
+                            <Item floatingLabel>
+                                <Label>Color</Label>
+                                <Input onChangeText={value => this.setState({ newColor: value })} />
                             </Item>
                         </Form>
                         <View padder style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button onPress={() => this.cancelAddActivity()}><Text>Cancel</Text></Button>
-                            <Button onPress={() => this.persistNewActivity()}><Text>Save</Text></Button>
+                            <Button onPress={() => this.cancelAdd()}><Text>Cancel</Text></Button>
+                            <Button onPress={() => this.persistNew()}><Text>Save</Text></Button>
                         </View>
                     </View>
                 </Modal>
@@ -120,29 +123,30 @@ export default class CatalogScreen extends Component {
             </View>);
     }
 
-    cancelAddActivity() {
-        console.log(`[CatalogScreen] cancel add activity`);
+    cancelAdd() {
+        console.log(`[CatalogScreen] cancel add new`);
         this.setState({
-            showAddActivityModal: false,
-            newActivityName: '',
-            newActivityDescription: '',
-            newActivityColor: '',
-            newActivityIcon: ''
+            showAddModal: false,
+            newType: '',
+            newName: '',
+            newDescription: '',
+            newColor: '',
+            newIcon: ''
         });
     }
 
-    async persistNewActivity() {
-        console.log(`[CatalogScreen] persist new activity`);
+    async persistNew() {
+        console.log(`[CatalogScreen] persist new`);
         const sessionToken = await AsyncStorage.getItem('sessionToken');
-        const endpoint = `${host}/catalog/events/ACTIVITY`;
+        const endpoint = `${host}/catalog/events/${this.state.newType}`;
         const body = {
             dayEventCatalogId: '',
             belongsTo: '',
-            type: 'ACTIVITY',
-            name: this.state.newActivityName,
-            color: this.state.newActivityColor,
-            icon: this.state.newActivityIcon,
-            description: this.state.newActivityDescription
+            type: this.state.newType,
+            name: this.state.newName,
+            color: this.state.newColor,
+            icon: this.state.newIcon,
+            description: this.state.newDescription
         };
         const headers = {
             Accept: 'application/json',
@@ -161,30 +165,31 @@ export default class CatalogScreen extends Component {
         }).then((response) => {
             if (response.ok) {
                 requestSuccess = true;
-                console.log(`[CatalogScreen] successfully posted new activity`);
+                console.log(`[CatalogScreen] successfully posted new`);
             } else {
                 requestSuccess = false;
-                console.log(`[CatalogScreen] error posting new activity`);
+                console.log(`[CatalogScreen] error posting new`);
             }
             return response.json();
         }).then((json) => {
             console.log(`[CatalogScreen] json: ${json}`);
             if (requestSuccess) {
-                console.log(`[CatalogScreen] updating state.catalog`);
+                console.log(`[CatalogScreen] updating this.state.catalogData`);
                 let tempCatalogData = this.state.catalogData;
-                tempCatalogData['ACTIVITY'] = json;
+                tempCatalogData[this.state.newType] = json;
                 this.setState({ catalogData: tempCatalogData });
             } else {
-                console.log(`[CatalogScreen] error posting new activity with error message: ${json.message}`);
+                console.log(`[CatalogScreen] error posting new event with error message: ${json.message}`);
                 this.errorMessage = json.message;
             }
 
             this.setState({
-                showAddActivityModal: false,
-                newActivityName: '',
-                newActivityDescription: '',
-                newActivityColor: '',
-                newActivityIcon: ''
+                showAddModal: false,
+                newType: '',
+                newName: '',
+                newDescription: '',
+                newColor: '',
+                newIcon: ''
             });
         });
     }

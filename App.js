@@ -19,6 +19,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 
+console.disableYellowBox = true;
+
 export default class App extends Component {
 
   constructor(props) {
