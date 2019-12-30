@@ -42,10 +42,6 @@ export default class App extends Component {
     }
   }
 
-  shouldShowFooter() {
-
-  }
-
   async componentDidMount() {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),

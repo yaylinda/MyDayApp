@@ -12,6 +12,7 @@ export default class DayScreen extends Component {
         super(props);
         this.state = {
             daysData: [],
+            catalogData: { 'ACTIVITY': [], 'EMOTION': [] },
             loadedDayData: false,
             errorMessage: ''
         }
@@ -19,6 +20,7 @@ export default class DayScreen extends Component {
 
     componentDidMount() {
         this.loadDayData();
+        this.loadCatalogData();
     }
 
     render() {
@@ -61,6 +63,42 @@ export default class DayScreen extends Component {
                 this.setState({ daysData: json });
             } else {
                 console.log(`[DayScreen] retrieving day data error message: ${json.message}`);
+                this.errorMessage = json.message;
+                // TODO - show error message on screen
+            }
+        })
+    }
+
+    async loadCatalogData() {
+        const sessionToken = await AsyncStorage.getItem('sessionToken');
+
+        const endpoint = `${host}/catalog/events`;
+        console.log(`[CatalogScreen] calling ${endpoint}`);
+
+        let requestSuccess = false;
+
+        fetch(endpoint, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Session-Token': sessionToken
+            },
+        }).then((response) => {
+            if (response.ok) {
+                console.log(`[CatalogScreen] successfully retrieved day event catalog data`);
+                requestSuccess = true;
+            } else {
+                console.log(`[CatalogScreen] error retrieving day event catalog data`);
+                requestSuccess = false;
+            }
+            return response.json();
+        }).then((json) => {
+            console.log(`[CatalogScreen] json: ${JSON.stringify(json)}`);
+            if (requestSuccess) {
+                console.log('[CatalogScreen] updating state.catalogData');
+                this.setState({ catalogData: json });
+            } else {
+                console.log(`[CatalogScreen] retrieving day event catalog data error message: ${json.message}`);
                 this.errorMessage = json.message;
                 // TODO - show error message on screen
             }

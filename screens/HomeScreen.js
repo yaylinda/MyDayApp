@@ -78,23 +78,4 @@ export default class HomeScreen extends Component {
     console.log(`[HomeScreen] handleChangeTab: ${tabName}`);
     this.setState({ activeTab: tabName });
   }
-
-  handlePressedAddActivity() {
-    console.log('handlePressedAddActivity');
-    this.setState({ showAddActivityModal: true });
-  }
-
-  updateNewActivity(newActivity) {
-    this.setState({ newActivity: newActivity });
-  }
-
-  handleCancelAddActivity() {
-    this.setState({ showAddActivityModal: false, newActivity: '' });
-  }
-
-  handleSaveActivity(newActivity) {
-    console.log('handleSaveActivity:', newActivity);
-    this.setState({ showAddActivityModal: false, newActivity: '', activitiesList: this.state.activitiesList.concat(newActivity) });
-    console.log(this.state.activitiesList);
-  }
 }

@@ -30,53 +30,68 @@ export default class CatalogScreen extends Component {
     render() {
         return (
             <Container style={{ flex: 1, backgroundColor: '#282833' }}>
-                <Card>
-                    <CardItem header bordered>
-                        <Text>Activities Catalog</Text>
+                <Card transparent style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                        <Text style={{color: '#ff4495', fontSize: 18}}>Activities Catalog</Text>
                     </CardItem>
-                    <CardItem bordered>{ this.renderCatalogData('ACTIVITY') }</CardItem>
-                    <CardItem>
-                        <Button onPress={() => this.setState({ showAddModal: true, newType: 'ACTIVITY' })}>
-                            <Text>Add Activity to Catalog</Text>
+                    <CardItem style={{ backgroundColor: '#282833' }}>
+                        { this.renderCatalogData('ACTIVITY') }
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button rounded
+                            onPress={() => this.setState({ showAddModal: true, newType: 'ACTIVITY' })}
+                            style={{backgroundColor: '#ff4495'}}>
+                            <Icon name="add-circle" />
                         </Button>
                     </CardItem>
                 </Card>
 
-                <Card>
-                    <CardItem header bordered>
-                        <Text>Emotions Catalog</Text>
+                <Card transparent style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                        <Text style={{color: '#ff4495', fontSize: 18}}>Emotions Catalog</Text>
                     </CardItem>
-                    <CardItem bordered>{ this.renderCatalogData('EMOTION') }</CardItem>
-                    <CardItem>
-                        <Button onPress={() => this.setState({ showAddModal: true, newType: 'EMOTION'  })}>
-                            <Text>Add Emotion to Catalog</Text>
+                    <CardItem style={{ backgroundColor: '#282833' }}>
+                        { this.renderCatalogData('EMOTION') }
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button rounded
+                            onPress={() => this.setState({ showAddModal: true, newType: 'EMOTION'  })}
+                            style={{backgroundColor: '#ff4495'}}>
+                            <Icon name="add-circle" />
                         </Button>
                     </CardItem>
                 </Card>
 
                 <Modal isVisible={this.state.showAddModal}>
-                    <View style={{ backgroundColor: 'white', justifyContent: 'center', borderRadius: 5 }}>
-                        <Form>
+                    <View style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+                        <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2'}}>Add to Catalog</Text>
+                        </View>
+                        <Form style={{marginBottom: 20}}>
                             <Item floatingLabel>
-                                <Label>Name</Label>
-                                <Input onChangeText={value => this.setState({ newName: value })} />
+                                <Label style={{color: 'white'}}>Name</Label>
+                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newName: value })} />
                             </Item>
                             <Item floatingLabel>
-                                <Label>Description</Label>
-                                <Input onChangeText={value => this.setState({ newDescription: value })} />
+                                <Label style={{color: 'white'}}>Description</Label>
+                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newDescription: value })} />
                             </Item>
                             <Item floatingLabel>
-                                <Label>Icon</Label>
-                                <Input onChangeText={value => this.setState({ newIcon: value })} />
+                                <Label style={{color: 'white'}}>Icon</Label>
+                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newIcon: value })} />
                             </Item>
                             <Item floatingLabel>
-                                <Label>Color</Label>
-                                <Input onChangeText={value => this.setState({ newColor: value })} />
+                                <Label style={{color: 'white'}}>Color</Label>
+                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newColor: value })} />
                             </Item>
                         </Form>
-                        <View padder style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button onPress={() => this.cancelAdd()}><Text>Cancel</Text></Button>
-                            <Button onPress={() => this.persistNew()}><Text>Save</Text></Button>
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Button onPress={() => this.cancelAdd()} style={{backgroundColor: '#52e3c2'}}>
+                                <Text>Cancel</Text>
+                            </Button>
+                            <Button onPress={() => this.persistNew()} style={{backgroundColor: '#52e3c2'}}>
+                                <Text>Save</Text>
+                            </Button>
                         </View>
                     </View>
                 </Modal>
@@ -93,11 +108,12 @@ export default class CatalogScreen extends Component {
                     animation={true}
                     expanded={false}
                     renderHeader={this.renderCatalogDataHeader}
-                    renderContent={this.renderCatalogDataContent}>
+                    renderContent={this.renderCatalogDataContent}
+                    style={{borderWidth: 0}}>
                 </Accordion>
             );
         } else {
-            return (<Text>No Activities in Catalog. Add one!</Text>);
+            return (<Text style={{color: 'white'}}>No Activities in Catalog. Add one!</Text>);
         }
     }
 
@@ -107,18 +123,22 @@ export default class CatalogScreen extends Component {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#A9DAD6"
+                backgroundColor: "#40c4ff",
+                borderColor: "white",
+                borderStyle: 'solid',
+                borderWidth: 3,
+                marginTop: 5
             }}>
-                <Text style={{ fontWeight: "600" }}>{item.name}</Text>
+                <Text style={{ fontWeight: "600", color: "white" }}>{item.name}</Text>
                 {expanded
-                    ? <Icon style={{ fontSize: 18 }} name="remove-circle" />
-                    : <Icon style={{ fontSize: 18 }} name="add-circle" />}
+                    ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
+                    : <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-down" />}
             </View>);
     }
 
     renderCatalogDataContent(item) {
         return (
-            <View padder>
+            <View padder style={{ backgroundColor: 'white', borderColor: "#40c4ff", borderStyle: 'solid', borderWidth: 3 }}>
                 <Text>{item.description}</Text>
             </View>);
     }
