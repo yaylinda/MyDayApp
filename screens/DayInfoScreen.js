@@ -11,7 +11,7 @@ export default class DayInfo extends Component {
 
     static navigationOptions = {
         title: 'Home',
-      };
+    };
 
     constructor(props) {
         super(props);
@@ -20,72 +20,74 @@ export default class DayInfo extends Component {
             errorMessage: '',
             showAddModal: false,
             addType: '',
-            selectedNewDayEvent: -1,
-            selectedEmotionRanking: -1
+            selectedActivityIndex: -1,
+            selectedEmotionScore: 0,
+            selectedHearts: [false, false, false, false, false],
+            heartLabels: ['Bad', 'Kind of bad', 'Okay', 'Pretty good', 'Good'],
         }
         console.log('[DayInfo] constructor');
     }
 
     render() {
         return (
-            <Container style={{ flex: 1, backgroundColor: '#282833'}}>
-                
-                <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2'}}>{this.formatDate(this.state.day.date)}</Text>
+            <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>{this.formatDate(this.state.day.date)}</Text>
                 </View>
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{color: '#ff4495', fontSize: 18}}>Day's Emotions</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Emotions</Text>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
-                        { this.renderEmotions()}
+                        {this.renderEmotions()}
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button rounded
-                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION'  })}
-                            style={{backgroundColor: '#ff4495'}}>
+                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
+                            style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
                 </Card>
-                
+
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{color: '#ff4495', fontSize: 18}}>Day's Activities</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Activities</Text>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
-                        { this.renderActivities() }
+                        {this.renderActivities()}
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button rounded
                             onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
-                            style={{backgroundColor: '#ff4495'}}>
+                            style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
                 </Card>
 
                 <Modal isVisible={this.state.showAddModal && this.state.addType === 'EMOTION'}>
-                <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
-                        <View style={{ paddingTop: 30, paddingBottom: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2'}}>How do you feel?</Text>
-                        </View>
-                        
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
-                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
-                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
-                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
-                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
-                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12'}}></Icon>
+                    <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+                        <View style={{ paddingTop: 30, paddingBottom: 10, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>How do you feel?</Text>
                         </View>
 
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button onPress={() => this.cancelAdd()} style={{backgroundColor: '#52e3c2'}}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                            { this.renderHearts() }
+                        </View>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                            { this.renderHeartsText() }
+                        </View>
+
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Cancel</Text>
                             </Button>
-                            <Button onPress={() => this.persistNew()} style={{backgroundColor: '#52e3c2'}}>
+                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Save</Text>
                             </Button>
                         </View>
@@ -95,9 +97,9 @@ export default class DayInfo extends Component {
                 <Modal isVisible={this.state.showAddModal && this.state.addType === 'ACTIVITY'}>
                     <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
                         <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2'}}>Add Day Event</Text>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Add Day Event</Text>
                         </View>
-                        <Form style={{marginBottom: 20}}>
+                        <Form style={{ marginBottom: 20 }}>
                             <Item picker>
                                 <Picker
                                     mode="dropdown"
@@ -114,11 +116,11 @@ export default class DayInfo extends Component {
                                 </Picker>
                             </Item>
                         </Form>
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button onPress={() => this.cancelAdd()} style={{backgroundColor: '#52e3c2'}}>
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Cancel</Text>
                             </Button>
-                            <Button onPress={() => this.persistNew()} style={{backgroundColor: '#52e3c2'}}>
+                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Save</Text>
                             </Button>
                         </View>
@@ -130,35 +132,35 @@ export default class DayInfo extends Component {
     }
 
     renderActivities() {
-        const activities = this.state.day.events.filter((e) => e.type === 'ACTIVITY');
-
-        if (activities.length) {
+        if (this.state.day.activities.length) {
             return (
-            <View>
-                {activities.map((item, index) => {
-                    return (<Button key={index}><Text>{item.name}</Text></Button>);
-                })}
+                <View>
+                    {this.state.day.activities.map((item, index) => {
+                        return (<Button key={index}><Text>{item.name}</Text></Button>);
+                    })}
 
-            </View>);
+                </View>);
         } else {
-            return (<Text style={{color: 'white'}}>No Activites Today</Text>);
+            return (<Text style={{ color: 'white' }}>No Activites Today</Text>);
         }
     }
 
     renderEmotions() {
-        const emotions = this.state.day.events.filter((e) => e.type === 'EMOTION');
-
-        if (emotions.length) {
+        if (this.state.day.emotions.length) {
             return (
-            <View>
-                {emotions.map((item, index) => {
-                    return (<Button key={index}><Text>{item.name}</Text></Button>);
-                })}
+                <View>
+                    {this.state.day.emotions.map((item, index) => {
+                    return (<Button key={index}><Text>{item.startTime} - {item.emotionScore}</Text></Button>);
+                    })}
 
-            </View>);
+                </View>);
         } else {
-            return (<Text style={{color: 'white'}}>No Emotions Today</Text>);
+            return (<Text style={{ color: 'white' }}>No Emotions Today</Text>);
         }
+    }
+
+    renderPrompts() {
+        // TODO - implement
     }
 
     renderDayEventsPickerItems() {
@@ -169,32 +171,74 @@ export default class DayInfo extends Component {
         }
     }
 
+    renderHearts() {
+        return this.state.selectedHearts.map((h, index) => {
+            return (
+                <Button transparent key={index} onPress={() => this.toggleHearts(index)}>
+                    {
+                        this.state.selectedHearts[index] ?
+                            <Icon name="heart" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12' }}></Icon> :
+                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12' }}></Icon>
+                    }
+                </Button>
+            );
+        });
+    }
+
+    renderHeartsText() {
+        if (this.state.selectedEmotionScore) {
+        return (<Text style={{ fontWeight: "300", color: '#ff4b12' }}>{ this.state.heartLabels[this.state.selectedEmotionScore - 1] }</Text>);
+        }
+    }
+
     cancelAdd() {
         console.log(`[DayInfo] cancel add new`);
         this.setState({
             showAddModal: false,
             addType: '',
-            selectedNewDayEvent: -1
+            selectedActivityIndex: -1,
+            selectedEmotionScore: 0,
+            selectedHearts: [false, false, false, false, false]
         });
     }
 
+    toggleHearts(heartIndex) {
+        let tempHearts = [false, false, false, false, false];
+
+        for (let i = 0; i < this.state.selectedHearts.length; i++) {
+            tempHearts[i] = true;
+            if (i === heartIndex) {
+                break;
+            }
+        }
+
+        this.setState({ selectedHearts: tempHearts });
+        this.setState({ selectedEmotionScore: heartIndex + 1 });
+    }
+
     async persistNew() {
-        console.log(`[DayInfo] persist new`);
+        console.log(`[DayInfo] persist new ${this.state.addType}`);
         const sessionToken = await AsyncStorage.getItem('sessionToken');
-        const endpoint = `${host}/days/${this.state.day.dayId}`;
+        const endpoint = `${host}/days/${this.state.day.dayId}/${this.state.addType}`;
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             'Session-Token': sessionToken
         };
 
-        const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedDayEventIndex];
-        newDayEvent.startTime = moment().format('hh:mm A');
-        newDayEvent.endTime = '';
+        let body = {};
+        if (this.state.addType === 'ACTIVITY') {
+            const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedDayEventIndex];
+            body = newDayEvent;
+        } else if (this.state.addType === 'EMOTION') {
+            body['emotionScore'] = this.state.selectedEmotionScore;
+            body['description'] = ''; // TODO - get description input later
+        } else if (this.state.addType === 'PROMPT') {
+            // TODO - implement prompt
+        }
+        body['startTime'] = moment().format('hh:mm A');
+        body['endTime'] = '';
 
-        const body = this.state.day;
-        body.events.push(newDayEvent);
-        
         console.log(`[DayInfo] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
         let requestSuccess = false;
@@ -213,7 +257,7 @@ export default class DayInfo extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[DayInfo] json: ${json}`);
+            console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log(`[DayInfo] updating this.state.day`);
                 this.setState({ day: json });
@@ -225,7 +269,9 @@ export default class DayInfo extends Component {
             this.setState({
                 showAddModal: false,
                 addType: '',
-                selectedNewDayEvent: -1
+                selectedActivityIndex: -1,
+                selectedEmotionScore: 0,
+                selectedHearts: [false, false, false, false, false]
             });
         });
 
