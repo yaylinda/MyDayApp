@@ -131,20 +131,6 @@ export default class DayInfo extends Component {
         );
     }
 
-    renderActivities() {
-        if (this.state.day.activities.length) {
-            return (
-                <View>
-                    {this.state.day.activities.map((item, index) => {
-                        return (<Button key={index}><Text>{item.name}</Text></Button>);
-                    })}
-
-                </View>);
-        } else {
-            return (<Text style={{ color: 'white' }}>No Activites Today</Text>);
-        }
-    }
-
     renderEmotions() {
         if (this.state.day.emotions.length) {
             return (
@@ -156,6 +142,20 @@ export default class DayInfo extends Component {
                 </View>);
         } else {
             return (<Text style={{ color: 'white' }}>No Emotions Today</Text>);
+        }
+    }
+
+    renderActivities() {
+        if (this.state.day.activities.length) {
+            return (
+                <View>
+                    {this.state.day.activities.map((item, index) => {
+                        return (<Button key={index}><Text>{item.startTime} - {item.name}</Text></Button>);
+                    })}
+
+                </View>);
+        } else {
+            return (<Text style={{ color: 'white' }}>No Activites Today</Text>);
         }
     }
 

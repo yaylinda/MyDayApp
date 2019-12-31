@@ -29,6 +29,11 @@ export default class CatalogScreen extends Component {
     render() {
         return (
             <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
+                </View>
+
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
                         <Text style={{color: '#ff4495', fontSize: 18}}>Activities Catalog</Text>
@@ -155,6 +160,9 @@ export default class CatalogScreen extends Component {
     }
 
     async persistNew() {
+
+        // TODO - persist PROMPT type
+
         console.log(`[CatalogScreen] persist new`);
         const sessionToken = await AsyncStorage.getItem('sessionToken');
         const endpoint = `${host}/catalog/events/${this.state.newType}`;
