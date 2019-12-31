@@ -11,7 +11,7 @@ export default class CatalogScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            catalogData: { 'ACTIVITY': [] },
+            catalogData: { 'ACTIVITY': [], 'PROMPT': [] },
             errorMessage: '',
             showAddModal: false,
             newType: '',

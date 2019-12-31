@@ -38,7 +38,7 @@ export default class DayInfo extends Component {
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Emotions</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Scores</Text>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderEmotions()}
@@ -72,7 +72,9 @@ export default class DayInfo extends Component {
                 <Modal isVisible={this.state.showAddModal && this.state.addType === 'EMOTION'}>
                     <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
                         <View style={{ paddingTop: 30, paddingBottom: 10, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>How do you feel?</Text>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>
+                                How is your day going?
+                            </Text>
                         </View>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -134,28 +136,79 @@ export default class DayInfo extends Component {
     renderEmotions() {
         if (this.state.day.emotions.length) {
             return (
-                <View>
-                    {this.state.day.emotions.map((item, index) => {
-                    return (<Button key={index}><Text>{item.startTime} - {item.emotionScore}</Text></Button>);
-                    })}
-
+                <View style={{flex: 1}}>
+                    {
+                        this.state.day.emotions.map((item, index) => {
+                            return (
+                                <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                                    <View padder style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        width: 110,
+                                        backgroundColor: '#40c4ff',
+                                        borderColor: '#40c4ff',
+                                        borderWidth: 3,
+                                        borderTopLeftRadius: 5,
+                                        borderBottomLeftRadius: 5}}>
+                                        <Text style={{color: 'white', fontWeight: "600"}}>{item.startTime}</Text>
+                                    </View>
+                                    <View padder style={{
+                                        flexGrow: 1,
+                                        backgroundColor: 'white',
+                                        borderColor: '#40c4ff',
+                                        borderWidth: 3,
+                                        borderTopRightRadius: 5,
+                                        borderBottomRightRadius: 5}}>
+                                        <View style={{flexDirection: 'row'}}>
+                                            { this.renderDayScore(item.emotionScore) }
+                                        </View>
+                                    </View>
+                                </View>
+                            );
+                        })
+                    }
                 </View>);
         } else {
-            return (<Text style={{ color: 'white' }}>No Emotions Today</Text>);
+            return (<Text style={{ color: 'white' }}>No Scores for Today</Text>);
         }
     }
 
     renderActivities() {
         if (this.state.day.activities.length) {
             return (
-                <View>
+                <View style={{flex: 1}}>
                     {this.state.day.activities.map((item, index) => {
-                        return (<Button key={index}><Text>{item.startTime} - {item.name}</Text></Button>);
+                        return (
+                            <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                                <View padder style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'center',
+                                    width: 110,
+                                    backgroundColor: '#40c4ff',
+                                    borderColor: '#40c4ff',
+                                    borderWidth: 3,
+                                    borderTopLeftRadius: 5,
+                                    borderBottomLeftRadius: 5}}>
+                                    <Text style={{color: 'white', fontWeight: "600"}}>{item.startTime}</Text>
+                                </View>
+                                <View padder style={{
+                                    flexGrow: 1,
+                                    backgroundColor: 'white',
+                                    borderColor: '#40c4ff',
+                                    borderWidth: 3,
+                                    borderTopRightRadius: 5,
+                                    borderBottomRightRadius: 5}}>
+                                    <Text>
+                                        { item.name }
+                                    </Text>
+                                </View>
+                            </View>
+                        );
                     })}
 
                 </View>);
         } else {
-            return (<Text style={{ color: 'white' }}>No Activites Today</Text>);
+            return (<Text style={{ color: 'white' }}>No Activites for Today</Text>);
         }
     }
 
@@ -177,8 +230,8 @@ export default class DayInfo extends Component {
                 <Button transparent key={index} onPress={() => this.toggleHearts(index)}>
                     {
                         this.state.selectedHearts[index] ?
-                            <Icon name="heart" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12' }}></Icon> :
-                            <Icon name="heart-empty" style={{ fontSize: 30, fontWeight: "500", color: '#ff4b12' }}></Icon>
+                            <Icon name="star" style={{ fontSize: 30, fontWeight: "500", color: '#ffd900' }}></Icon> :
+                            <Icon name="star-outline" style={{ fontSize: 30, fontWeight: "500", color: '#ffd900' }}></Icon>
                     }
                 </Button>
             );
@@ -187,8 +240,16 @@ export default class DayInfo extends Component {
 
     renderHeartsText() {
         if (this.state.selectedEmotionScore) {
-        return (<Text style={{ fontWeight: "300", color: '#ff4b12' }}>{ this.state.heartLabels[this.state.selectedEmotionScore - 1] }</Text>);
+        return (<Text style={{ fontWeight: "500", color: '#ffd900' }}>{ this.state.heartLabels[this.state.selectedEmotionScore - 1] }</Text>);
         }
+    }
+
+    renderDayScore(score) {
+        const scoreHtml = [];
+        for (let i = 0; i < score; i++) {
+            scoreHtml.push(<Icon name="star" style={{ fontSize: 18, color: '#ffd900' }}></Icon>);
+        }
+        return scoreHtml;
     }
 
     cancelAdd() {
