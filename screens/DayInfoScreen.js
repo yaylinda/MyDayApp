@@ -140,7 +140,7 @@ export default class DayInfo extends Component {
                     {
                         this.state.day.emotions.map((item, index) => {
                             return (
-                                <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                                <View key={index} style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
                                     <View padder style={{
                                         flexDirection: 'row',
                                         justifyContent: 'center',
@@ -179,7 +179,7 @@ export default class DayInfo extends Component {
                 <View style={{flex: 1}}>
                     {this.state.day.activities.map((item, index) => {
                         return (
-                            <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                            <View key={index} style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
                                 <View padder style={{
                                     flexDirection: 'row',
                                     justifyContent: 'center',
@@ -247,7 +247,7 @@ export default class DayInfo extends Component {
     renderDayScore(score) {
         const scoreHtml = [];
         for (let i = 0; i < score; i++) {
-            scoreHtml.push(<Icon name="star" style={{ fontSize: 18, color: '#ffd900' }}></Icon>);
+            scoreHtml.push(<Icon key={i} name="star" style={{ fontSize: 18, color: '#ffd900' }}></Icon>);
         }
         return scoreHtml;
     }

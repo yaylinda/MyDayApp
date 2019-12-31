@@ -9,7 +9,8 @@ import {
   Item,
   Input,
   Text,
-  Button
+  Button,
+  View
 } from 'native-base';
 import { host } from '../util/Constants';
 
@@ -30,19 +31,24 @@ export default class SignInScreen extends Component {
 
   render() {
     return (
-      <Container style={{flex: 1, backgroundColor: '#282833', padding: 20}}>
-        <Form style={{marginBottom: 20}}>
+      <Container style={{ flex: 1, backgroundColor: '#282833', padding: 20 }}>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30}}>
+          <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Sign In</Text>
+        </View>
+
+        <Form style={{ marginBottom: 20 }}>
           <Item floatingLabel>
-            <Label style={{color: 'white'}}>Username</Label>
-            <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
+            <Label style={{ color: 'white' }}>Username</Label>
+            <Input style={{ color: 'white' }} autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
           </Item>
-          <Item floatingLabel last>
-            <Label style={{color: 'white'}}>Password</Label>
-            <Input style={{color: 'white'}} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
+          <Item floatingLabel>
+            <Label style={{ color: 'white' }}>Password</Label>
+            <Input style={{ color: 'white' }} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
           </Item>
         </Form>
-        <Button style={{backgroundColor: '#52e3c2', justifyContent: 'center'}} onPress={() => this.signIn()}><Text> Sign In </Text></Button>
-        <Button transparent style={{color: '#ff4495', justifyContent: 'center'}} onPress={() => this.goToRegisterScreen()}><Text> Go To Register </Text></Button>
+        <Button style={{ backgroundColor: '#52e3c2', justifyContent: 'center' }} onPress={() => this.signIn()}><Text> Sign In </Text></Button>
+        <Button transparent style={{ justifyContent: 'center' }} onPress={() => this.goToRegisterScreen()}><Text style={{color: '#ff4495'}}> Go To Register </Text></Button>
       </Container>
     );
   }

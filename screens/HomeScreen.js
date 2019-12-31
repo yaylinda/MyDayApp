@@ -11,6 +11,8 @@ import {
 } from 'native-base';
 import DayScreen from './DayScreen';
 import CatalogScreen from './CatalogScreen';
+import StatisticsScreen from './StatisticsScreen';
+import SettingsScreen from './SettingsScreen';
 
 export default class HomeScreen extends Component {
 
@@ -30,7 +32,7 @@ export default class HomeScreen extends Component {
     return (
       <Container style={{ flex: 1, backgroundColor: '#282833' }}>
         
-        <Content style={{ padding: 20 }}>
+        <Content padder>
           { this.renderContent() }
         </Content>
 
@@ -64,9 +66,9 @@ export default class HomeScreen extends Component {
     } else if (this.state.activeTab === 'catalog') {
       return (<CatalogScreen></CatalogScreen>);
     } else if (this.state.activeTab === 'stats') {
-
+      return (<StatisticsScreen></StatisticsScreen>);
     } else if (this.state.activeTab === 'settings') {
-
+      return (<SettingsScreen></SettingsScreen>);
     }
   }
 
