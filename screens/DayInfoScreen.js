@@ -288,12 +288,12 @@ export default class DayInfo extends Component {
         };
 
         let body = {};
-        if (this.state.addType === 'ACTIVITY') {
-            const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedDayEventIndex];
-            body = newDayEvent;
-        } else if (this.state.addType === 'EMOTION') {
+        if (this.state.addType === 'EMOTION') {
             body['emotionScore'] = this.state.selectedEmotionScore;
             body['description'] = ''; // TODO - get description input later
+        } else if (this.state.addType === 'ACTIVITY') {
+            const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedDayEventIndex];
+            body = newDayEvent;
         } else if (this.state.addType === 'PROMPT') {
             // TODO - implement prompt
         }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header,
+    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header, CheckBox,
 } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
@@ -20,7 +20,8 @@ export default class CatalogScreen extends Component {
             newColor: '',
             newIcon: '',
             newQuestion: '',
-            newAnswers: [],
+            newAnswers: [''],
+            newAllowMultiSelect: false
         }
     }
 
@@ -75,7 +76,9 @@ export default class CatalogScreen extends Component {
                             <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Add to Catalog</Text>
                         </View>
 
-                        {this.renderForm()}
+                        <View padder>
+                            {this.renderForm()}
+                        </View>
 
                         <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
@@ -123,8 +126,6 @@ export default class CatalogScreen extends Component {
     }
 
     renderActivityCatalogDataHeader(item, expanded) {
-        console.log('***************** ACTIVITY HEADER');
-        console.log(JSON.stringify(item));
         return (
             <View padder style={{
                 flexDirection: "row",
@@ -144,8 +145,6 @@ export default class CatalogScreen extends Component {
     }
 
     renderPromptCatalogDataHeader(item, expanded) {
-        console.log('***************** PROMPT HEADER');
-        console.log(JSON.stringify(item));
         return (
             <View padder style={{
                 flexDirection: "row",
@@ -202,12 +201,35 @@ export default class CatalogScreen extends Component {
             );
         } else if (this.state.newType === 'PROMPT') {
             return (
-                <Form style={{ marginBottom: 20 }}>
-                    <Item floatingLabel>
-                        <Label style={{ color: 'white' }}>Question</Label>
-                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newQuestion: value })} />
-                    </Item>
-                </Form>
+                <View>
+                    <Form style={{ marginBottom: 20 }}>
+                        <Item padder floatingLabel>
+                            <Label style={{ color: 'white' }}>Question</Label>
+                            <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newQuestion: value })} />
+                        </Item>
+                        {
+                            this.state.newAnswers.map((answer, index) => {
+                                return (
+                                    <Item floatingLabel key={index}>
+                                        <Label style={{ color: 'white' }}>Answer Option #{index + 1}</Label>
+                                        <Input style={{ color: 'white' }} onChangeText={value => this.updateAnswers(index, value)} />
+                                    </Item>
+                                );
+                            })
+                        }
+
+                    </Form>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button small rounded onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat('') })} style={{ backgroundColor: '#52e3c2'}}>
+                            <Text style={{ color: 'white' }}>Add Answer Option</Text>
+                        </Button>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                        <CheckBox checked={this.state.newAllowMultiSelect} onPress={() => this.setState({ newAllowMultiSelect: !!!this.state.newAllowMultiSelect })} color='#52e3c2' />
+                        <Text style={{ color: 'white', marginLeft: 20 }}>Allow multiple answers?</Text>
+                    </View>
+
+                </View>
             );
         }
     }
@@ -215,6 +237,13 @@ export default class CatalogScreen extends Component {
     cancelAdd() {
         console.log(`[CatalogScreen] cancel add new`);
         this.resetState();
+    }
+
+    updateAnswers(index, value) {
+        const tempAnswers = this.state.newAnswers;
+        tempAnswers[index] = value;
+        this.setState({ newAnswers: tempAnswers });
+        console.log(this.state.newAnswers);
     }
 
     async persistNew() {
@@ -233,7 +262,8 @@ export default class CatalogScreen extends Component {
             icon: this.state.newIcon,
             description: this.state.newDescription,
             question: this.state.newQuestion,
-            answers: this.state.newAnswers
+            answers: this.state.newAnswers,
+            allowMultiSelect: this.state.newAllowMultiSelect
         };
         const headers = {
             Accept: 'application/json',
@@ -319,7 +349,8 @@ export default class CatalogScreen extends Component {
             newColor: '',
             newIcon: '',
             newQuestion: '',
-            newAnswers: []
+            newAnswers: [''],
+            newAllowMultiSelect: false
         });
     }
 
