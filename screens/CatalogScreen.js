@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header, CheckBox,
+    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header, CheckBox, List, ListItem,
 } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
@@ -134,7 +134,8 @@ export default class CatalogScreen extends Component {
                 backgroundColor: "#40c4ff",
                 borderColor: "#40c4ff",
                 borderStyle: 'solid',
-                borderWidth: 3,
+                borderLeftWidth: 3,
+                borderRightWidth: 3,
                 marginTop: 5
             }}>
                 <Text style={{ fontWeight: "600", color: "white" }}>{item.name}</Text>
@@ -153,10 +154,17 @@ export default class CatalogScreen extends Component {
                 backgroundColor: "#40c4ff",
                 borderColor: "#40c4ff",
                 borderStyle: 'solid',
-                borderWidth: 3,
+                borderLeftWidth: 3,
+                borderRightWidth: 3,
                 marginTop: 5
             }}>
-                <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    {item.allowMultiSelect
+                        ? <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="done-all" /> 
+                        : <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="checkmark" />}
+                    <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
+                </View>
+                
                 {expanded
                     ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
                     : <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-down" />}
@@ -165,15 +173,38 @@ export default class CatalogScreen extends Component {
 
     renderActivityCatalogDataContent(item) {
         return (
-            <View padder style={{ backgroundColor: 'white', borderColor: "#40c4ff", borderStyle: 'solid', borderWidth: 3 }}>
-                <Text>{item.description}</Text>
+            <View padder style={{ 
+                backgroundColor: 'white', 
+                borderColor: "#40c4ff", 
+                borderStyle: 'solid', 
+                borderWidth: 3 
+            }}>
+                {item.description ? <Text>{item.description}</Text> : <Text style={{fontStyle: "italic"}}>No description available</Text>
+
+                }
+                
             </View>);
     }
 
     renderPromptCatalogDataContent(item) {
         return (
-            <View padder style={{ backgroundColor: 'white', borderColor: "#40c4ff", borderStyle: 'solid', borderWidth: 3 }}>
-                <Text>{JSON.stringify(item.answers)}</Text>
+            <View style={{ 
+                backgroundColor: 'white', 
+                borderColor: "#40c4ff", 
+                borderStyle: 'solid', 
+                borderWidth: 3
+            }}>
+                <List>
+                    {
+                        item.answers.map((answer, index) => {
+                            return (
+                                <ListItem key={index}>
+                                    <Text>{answer}</Text>
+                                </ListItem>
+                            );
+                        })
+                    }
+                </List>
             </View>);
     }
 
