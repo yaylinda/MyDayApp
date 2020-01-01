@@ -18,7 +18,9 @@ export default class CatalogScreen extends Component {
             newName: '',
             newDescription: '',
             newColor: '',
-            newIcon: ''
+            newIcon: '',
+            newQuestion: '',
+            newAnswers: [],
         }
     }
 
@@ -36,15 +38,15 @@ export default class CatalogScreen extends Component {
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{color: '#ff4495', fontSize: 18}}>Activities Catalog</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Activities Catalog</Text>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
-                        { this.renderCatalogData('ACTIVITY') }
+                        {this.renderCatalogData('ACTIVITY')}
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button rounded
                             onPress={() => this.setState({ showAddModal: true, newType: 'ACTIVITY' })}
-                            style={{backgroundColor: '#ff4495'}}>
+                            style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
@@ -52,15 +54,15 @@ export default class CatalogScreen extends Component {
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
-                        <Text style={{color: '#ff4495', fontSize: 18}}>Prompts Catalog</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Prompts Catalog</Text>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
-                        { this.renderCatalogData('PROMPTS') }
+                        {this.renderCatalogData('PROMPT')}
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button rounded
-                            onPress={() => this.setState({ showAddModal: true, newType: 'EMOTION'  })}
-                            style={{backgroundColor: '#ff4495'}}>
+                            onPress={() => this.setState({ showAddModal: true, newType: 'PROMPT' })}
+                            style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
@@ -68,32 +70,18 @@ export default class CatalogScreen extends Component {
 
                 <Modal isVisible={this.state.showAddModal}>
                     <View style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+
                         <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2'}}>Add to Catalog</Text>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Add to Catalog</Text>
                         </View>
-                        <Form style={{marginBottom: 20}}>
-                            <Item floatingLabel>
-                                <Label style={{color: 'white'}}>Name</Label>
-                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newName: value })} />
-                            </Item>
-                            <Item floatingLabel>
-                                <Label style={{color: 'white'}}>Description</Label>
-                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newDescription: value })} />
-                            </Item>
-                            <Item floatingLabel>
-                                <Label style={{color: 'white'}}>Icon</Label>
-                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newIcon: value })} />
-                            </Item>
-                            <Item floatingLabel>
-                                <Label style={{color: 'white'}}>Color</Label>
-                                <Input style={{color: 'white'}} onChangeText={value => this.setState({ newColor: value })} />
-                            </Item>
-                        </Form>
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Button onPress={() => this.cancelAdd()} style={{backgroundColor: '#52e3c2'}}>
+
+                        {this.renderForm()}
+
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Cancel</Text>
                             </Button>
-                            <Button onPress={() => this.persistNew()} style={{backgroundColor: '#52e3c2'}}>
+                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Save</Text>
                             </Button>
                         </View>
@@ -106,29 +94,44 @@ export default class CatalogScreen extends Component {
 
     renderCatalogData(type) {
         if (this.state.catalogData[type] && this.state.catalogData[type].length) {
-            return (
-                <Accordion
-                    dataArray={this.state.catalogData[type]}
-                    animation={true}
-                    expanded={false}
-                    renderHeader={this.renderCatalogDataHeader}
-                    renderContent={this.renderCatalogDataContent}
-                    style={{borderWidth: 0}}>
-                </Accordion>
-            );
+            if (type === 'ACTIVITY') {
+                return (
+                    <Accordion
+                        dataArray={this.state.catalogData[type]}
+                        animation={true}
+                        expanded={false}
+                        renderHeader={this.renderActivityCatalogDataHeader}
+                        renderContent={this.renderActivityCatalogDataContent}
+                        style={{ borderWidth: 0 }}>
+                    </Accordion>
+                );
+            } else if (type === 'PROMPT') {
+                return (
+                    <Accordion
+                        dataArray={this.state.catalogData[type]}
+                        animation={true}
+                        expanded={false}
+                        renderHeader={this.renderPromptCatalogDataHeader}
+                        renderContent={this.renderPromptCatalogDataContent}
+                        style={{ borderWidth: 0 }}>
+                    </Accordion>
+                );
+            }
         } else {
-            return (<Text style={{color: 'white'}}>There's nothing here!</Text>);
+            return (<Text style={{ color: 'white' }}>There's nothing here!</Text>);
         }
     }
 
-    renderCatalogDataHeader(item, expanded) {
+    renderActivityCatalogDataHeader(item, expanded) {
+        console.log('***************** ACTIVITY HEADER');
+        console.log(JSON.stringify(item));
         return (
             <View padder style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
                 backgroundColor: "#40c4ff",
-                borderColor: "white",
+                borderColor: "#40c4ff",
                 borderStyle: 'solid',
                 borderWidth: 3,
                 marginTop: 5
@@ -140,23 +143,78 @@ export default class CatalogScreen extends Component {
             </View>);
     }
 
-    renderCatalogDataContent(item) {
+    renderPromptCatalogDataHeader(item, expanded) {
+        console.log('***************** PROMPT HEADER');
+        console.log(JSON.stringify(item));
+        return (
+            <View padder style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: "#40c4ff",
+                borderColor: "#40c4ff",
+                borderStyle: 'solid',
+                borderWidth: 3,
+                marginTop: 5
+            }}>
+                <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
+                {expanded
+                    ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
+                    : <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-down" />}
+            </View>);
+    }
+
+    renderActivityCatalogDataContent(item) {
         return (
             <View padder style={{ backgroundColor: 'white', borderColor: "#40c4ff", borderStyle: 'solid', borderWidth: 3 }}>
                 <Text>{item.description}</Text>
             </View>);
     }
 
+    renderPromptCatalogDataContent(item) {
+        return (
+            <View padder style={{ backgroundColor: 'white', borderColor: "#40c4ff", borderStyle: 'solid', borderWidth: 3 }}>
+                <Text>{JSON.stringify(item.answers)}</Text>
+            </View>);
+    }
+
+    renderForm() {
+        if (this.state.newType === 'ACTIVITY') {
+            return (
+                <Form style={{ marginBottom: 20 }}>
+                    <Item floatingLabel>
+                        <Label style={{ color: 'white' }}>Name</Label>
+                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newName: value })} />
+                    </Item>
+                    <Item floatingLabel>
+                        <Label style={{ color: 'white' }}>Description</Label>
+                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newDescription: value })} />
+                    </Item>
+                    <Item floatingLabel>
+                        <Label style={{ color: 'white' }}>Icon</Label>
+                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newIcon: value })} />
+                    </Item>
+                    <Item floatingLabel>
+                        <Label style={{ color: 'white' }}>Color</Label>
+                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newColor: value })} />
+                    </Item>
+                </Form>
+            );
+        } else if (this.state.newType === 'PROMPT') {
+            return (
+                <Form style={{ marginBottom: 20 }}>
+                    <Item floatingLabel>
+                        <Label style={{ color: 'white' }}>Question</Label>
+                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newQuestion: value })} />
+                    </Item>
+                </Form>
+            );
+        }
+    }
+
     cancelAdd() {
         console.log(`[CatalogScreen] cancel add new`);
-        this.setState({
-            showAddModal: false,
-            newType: '',
-            newName: '',
-            newDescription: '',
-            newColor: '',
-            newIcon: ''
-        });
+        this.resetState();
     }
 
     async persistNew() {
@@ -173,7 +231,9 @@ export default class CatalogScreen extends Component {
             name: this.state.newName,
             color: this.state.newColor,
             icon: this.state.newIcon,
-            description: this.state.newDescription
+            description: this.state.newDescription,
+            question: this.state.newQuestion,
+            answers: this.state.newAnswers
         };
         const headers = {
             Accept: 'application/json',
@@ -199,7 +259,7 @@ export default class CatalogScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[CatalogScreen] json: ${json}`);
+            console.log(`[CatalogScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log(`[CatalogScreen] updating this.state.catalogData`);
                 let tempCatalogData = this.state.catalogData;
@@ -210,14 +270,7 @@ export default class CatalogScreen extends Component {
                 this.errorMessage = json.message;
             }
 
-            this.setState({
-                showAddModal: false,
-                newType: '',
-                newName: '',
-                newDescription: '',
-                newColor: '',
-                newIcon: ''
-            });
+            this.resetState();
         });
     }
 
@@ -255,6 +308,19 @@ export default class CatalogScreen extends Component {
                 // TODO - show error message on screen
             }
         })
+    }
+
+    resetState() {
+        this.setState({
+            showAddModal: false,
+            newType: '',
+            newName: '',
+            newDescription: '',
+            newColor: '',
+            newIcon: '',
+            newQuestion: '',
+            newAnswers: []
+        });
     }
 
 }
