@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, CardItem, Text, Button, Container, Left, Right, View, Picker, Form, Item, Icon } from "native-base";
+import { Card, CardItem, Text, Button, Container, Left, Right, View, Picker, Form, Item, Icon, ListItem, CheckBox, Body, List } from "native-base";
 import moment from 'moment'
 import Modal from "react-native-modal";
 import { AsyncStorage } from "react-native";
@@ -24,6 +24,8 @@ export default class DayInfo extends Component {
             selectedEmotionScore: 0,
             selectedHearts: [false, false, false, false, false],
             heartLabels: ['Bad', 'Kind of bad', 'Okay', 'Pretty good', 'Good'],
+            randomPromptIndex: -1,
+            selectedPromptAnswerIndex: -1
         }
         console.log('[DayInfo] constructor');
     }
@@ -63,6 +65,22 @@ export default class DayInfo extends Component {
                     <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
                         <Button rounded
                             onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
+                            style={{ backgroundColor: '#ff4495' }}>
+                            <Icon name="add-circle" />
+                        </Button>
+                    </CardItem>
+                </Card>
+
+                <Card transparent style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Prompts</Text>
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833' }}>
+                        {this.renderPrompts()}
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button rounded
+                            onPress={() => this.handleAddRandomPrompt()}
                             style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
@@ -118,6 +136,25 @@ export default class DayInfo extends Component {
                                 </Picker>
                             </Item>
                         </Form>
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
+                                <Text>Cancel</Text>
+                            </Button>
+                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
+                                <Text>Save</Text>
+                            </Button>
+                        </View>
+                    </View>
+                </Modal>
+
+                <Modal isVisible={this.state.showAddModal && this.state.addType === 'PROMPT'}>
+                    <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+                        <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Answer Prompt</Text>
+                        </View>
+
+                        { this.renderRandomPrompt() }
+                        
                         <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Cancel</Text>
@@ -213,7 +250,51 @@ export default class DayInfo extends Component {
     }
 
     renderPrompts() {
-        // TODO - implement
+        if (this.state.day.prompts.length) {
+            return (
+                <View style={{flex: 1}}>
+                    {
+                        this.state.day.prompts.map((item, index) => {
+                            return (
+                                <View key={index} style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                                    <View padder style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        width: 110,
+                                        backgroundColor: '#40c4ff',
+                                        borderColor: '#40c4ff',
+                                        borderWidth: 3,
+                                        borderTopLeftRadius: 5,
+                                        borderBottomLeftRadius: 5}}>
+                                        <Text style={{color: 'white', fontWeight: "600"}}>{item.startTime}</Text>
+                                    </View>
+                                    <View padder style={{
+                                        flexGrow: 1,
+                                        backgroundColor: 'white',
+                                        borderColor: '#40c4ff',
+                                        borderWidth: 3,
+                                        borderTopRightRadius: 5,
+                                        borderBottomRightRadius: 5}}>
+                                        <View>
+                                            <View style={{ flexDirection: 'row'}}>
+                                                <Text style={{ fontWeight: '600' }}>Q: </Text>
+                                                <Text>{item.question}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row'}}>
+                                                <Text style={{ fontWeight: '600'}}>A: </Text>
+                                                <Text>{item.selectedAnswer}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            );
+                        })
+                    }
+                </View>
+            );
+        } else {
+            return (<Text style={{ color: 'white' }}>No Activites for Today</Text>);
+        }
     }
 
     renderDayEventsPickerItems() {
@@ -252,15 +333,36 @@ export default class DayInfo extends Component {
         return scoreHtml;
     }
 
+    renderRandomPrompt() {
+        if (this.state.randomPromptIndex > -1) {
+        return (
+            <View>
+                <Text>{this.props.catalogData['PROMPT'][this.state.randomPromptIndex].question}</Text>
+                <List>
+                    {
+                        this.props.catalogData['PROMPT'][this.state.randomPromptIndex].answers.map((answer, index) => {
+                            return (
+                                <ListItem key={index}>
+                                    <CheckBox 
+                                        checked={this.state.selectedPromptAnswerIndex === index} 
+                                        onPress={() => this.setState({ selectedPromptAnswerIndex: index })} 
+                                    />
+                                    <Body>
+                                        <Text>{ answer }</Text>
+                                    </Body>
+                                </ListItem>
+                            );
+                        })
+                    }
+                </List>
+            </View>
+        );
+                }
+    }
+
     cancelAdd() {
         console.log(`[DayInfo] cancel add new`);
-        this.setState({
-            showAddModal: false,
-            addType: '',
-            selectedActivityIndex: -1,
-            selectedEmotionScore: 0,
-            selectedHearts: [false, false, false, false, false]
-        });
+        this.resetState();
     }
 
     toggleHearts(heartIndex) {
@@ -275,6 +377,14 @@ export default class DayInfo extends Component {
 
         this.setState({ selectedHearts: tempHearts });
         this.setState({ selectedEmotionScore: heartIndex + 1 });
+    }
+
+    handleAddRandomPrompt() {
+        this.setState({
+            showAddModal: true, 
+            addType: 'PROMPT', 
+            randomPromptIndex: Math.floor(Math.random() * this.props.catalogData['PROMPT'].length)
+        });
     }
 
     async persistNew() {
@@ -295,7 +405,8 @@ export default class DayInfo extends Component {
             const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedDayEventIndex];
             body = newDayEvent;
         } else if (this.state.addType === 'PROMPT') {
-            // TODO - implement prompt
+            body['question'] = this.props.catalogData['PROMPT'][this.state.randomPromptIndex].question;
+            body['selectedAnswer'] = this.props.catalogData['PROMPT'][this.state.randomPromptIndex].answers[this.state.selectedPromptAnswerIndex];
         }
         body['startTime'] = moment().format('hh:mm A');
         body['endTime'] = '';
@@ -327,18 +438,24 @@ export default class DayInfo extends Component {
                 this.errorMessage = json.message;
             }
 
-            this.setState({
-                showAddModal: false,
-                addType: '',
-                selectedActivityIndex: -1,
-                selectedEmotionScore: 0,
-                selectedHearts: [false, false, false, false, false]
-            });
+            this.resetState();
         });
 
     }
 
     formatDate(date) {
         return moment(date, "YYYY-MM-DD").format('dddd, MMM Do YYYY');
+    }
+
+    resetState() {
+        this.setState({
+            showAddModal: false,
+            addType: '',
+            selectedActivityIndex: -1,
+            selectedEmotionScore: 0,
+            selectedHearts: [false, false, false, false, false],
+            randomPromptIndex: -1,
+            selectedPromptAnswerIndex: -1
+        });
     }
 }

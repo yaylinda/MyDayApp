@@ -158,13 +158,13 @@ export default class CatalogScreen extends Component {
                 borderRightWidth: 3,
                 marginTop: 5
             }}>
-                <View style={{ flexDirection: 'row' }}>
+                {/* <View style={{ flexDirection: 'row' }}>
                     {item.allowMultiSelect
-                        ? <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="done-all" /> 
+                        ? <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="done-all" />
                         : <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="checkmark" />}
                     <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
-                </View>
-                
+                </View> */}
+                <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
                 {expanded
                     ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
                     : <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-down" />}
@@ -173,25 +173,25 @@ export default class CatalogScreen extends Component {
 
     renderActivityCatalogDataContent(item) {
         return (
-            <View padder style={{ 
-                backgroundColor: 'white', 
-                borderColor: "#40c4ff", 
-                borderStyle: 'solid', 
-                borderWidth: 3 
+            <View padder style={{
+                backgroundColor: 'white',
+                borderColor: "#40c4ff",
+                borderStyle: 'solid',
+                borderWidth: 3
             }}>
-                {item.description ? <Text>{item.description}</Text> : <Text style={{fontStyle: "italic"}}>No description available</Text>
-
+                {item.description
+                    ? <Text>{item.description}</Text>
+                    : <Text style={{ fontStyle: "italic" }}>No description available</Text>
                 }
-                
             </View>);
     }
 
     renderPromptCatalogDataContent(item) {
         return (
-            <View style={{ 
-                backgroundColor: 'white', 
-                borderColor: "#40c4ff", 
-                borderStyle: 'solid', 
+            <View style={{
+                backgroundColor: 'white',
+                borderColor: "#40c4ff",
+                borderStyle: 'solid',
                 borderWidth: 3
             }}>
                 <List>
@@ -251,7 +251,7 @@ export default class CatalogScreen extends Component {
 
                     </Form>
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button small rounded onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat('') })} style={{ backgroundColor: '#52e3c2'}}>
+                        <Button small rounded onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat('') })} style={{ backgroundColor: '#52e3c2' }}>
                             <Text style={{ color: 'white' }}>Add Answer Option</Text>
                         </Button>
                     </View>
