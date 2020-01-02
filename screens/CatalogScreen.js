@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header, CheckBox, List, ListItem,
+    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header, CheckBox, List, ListItem, Content,
 } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
@@ -31,7 +31,7 @@ export default class CatalogScreen extends Component {
 
     render() {
         return (
-            <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+            <Content style={{ flex: 1, backgroundColor: '#282833' }}>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
@@ -91,7 +91,7 @@ export default class CatalogScreen extends Component {
                     </View>
                 </Modal>
 
-            </Container>
+            </Content>
         );
     }
 

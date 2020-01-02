@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Container,
+  Container, Content,
 } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
 import DayInfo from './DayInfoScreen';
 
 export default class DayScreen extends Component {
-    static navigationOptions = {
-        title: 'Day',
-      };
 
     constructor(props) {
         super(props);
@@ -28,13 +25,13 @@ export default class DayScreen extends Component {
 
     render() {
         return (
-            <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+            <Content style={{ flex: 1, backgroundColor: '#282833' }} contentContainerStyle={{ flexGrow: 1, backgroundColor: '#282833'}}>
                 {
                     this.state.daysData.map((item, index) => {
                         return (<DayInfo key={index} day={item} catalogData={this.state.catalogData}></DayInfo>);
                     })
                 }
-            </Container>
+            </Content>
         );
     }
 

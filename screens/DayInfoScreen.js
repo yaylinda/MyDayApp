@@ -9,10 +9,6 @@ import { Rating } from 'react-native-ratings';
 
 export default class DayInfo extends Component {
 
-    static navigationOptions = {
-        title: 'Home',
-    };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -32,9 +28,9 @@ export default class DayInfo extends Component {
 
     render() {
         return (
-            <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+            <View style={{ flex: 1, backgroundColor: '#282833' }}>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>{this.formatDate(this.state.day.date)}</Text>
                 </View>
 
@@ -53,7 +49,6 @@ export default class DayInfo extends Component {
                         </Button>
                     </CardItem>
                 </Card>
-
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
                     <CardItem header bordered style={{ backgroundColor: '#282833' }}>
@@ -166,7 +161,7 @@ export default class DayInfo extends Component {
                     </View>
                 </Modal>
 
-            </Container>
+            </View>
         );
     }
 
