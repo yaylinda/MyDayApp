@@ -35,9 +35,9 @@ export class AuthLoadingScreen extends Component {
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
     if (username) {
-      this.props.navigation.navigate('Home', {username: username});
+      this.props.navigation.navigate('App', {username: username});
     } else {
-      this.props.navigation.navigate('SignIn');
+      this.props.navigation.navigate('Auth');
     }
   };
 

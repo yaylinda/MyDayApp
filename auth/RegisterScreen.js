@@ -98,9 +98,7 @@ export default class RegisterScreen extends Component {
       if (this.loginSuccessful) {
         console.log(`[RegisterScreen] sessionToken: ${json.sessionToken}`);
         AsyncStorage.setItem('sessionToken', json.sessionToken);
-        this.props.navigation.navigate('Home', {
-          username: this.state.username
-        });
+        this.props.navigation.navigate('App');
       } else {
         console.log(`[RegisterScreen] login error message: ${json.message}`);
         this.errorMessage = json.message;

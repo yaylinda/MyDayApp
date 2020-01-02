@@ -7,6 +7,9 @@ import { AsyncStorage } from 'react-native';
 import DayInfo from './DayInfoScreen';
 
 export default class DayScreen extends Component {
+    static navigationOptions = {
+        title: 'Day',
+      };
 
     constructor(props) {
         super(props);

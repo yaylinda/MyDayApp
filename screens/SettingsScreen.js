@@ -26,5 +26,6 @@ export default class SettingsScreen extends Component {
 
     async signOut() {
         await AsyncStorage.setItem('sessionToken', '');
+        this.props.navigation.navigate('Auth');
     }
 }
