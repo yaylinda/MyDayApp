@@ -1,17 +1,13 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { AuthLoadingScreen } from '../auth/AuthLoadingScreen';
-import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../auth/SignInScreen';
 import RegisterScreen from '../auth/RegisterScreen';
-import { createStackNavigator } from 'react-navigation-stack';
 import DayScreen from '../screens/DayScreen';
 import CatalogScreen from '../screens/CatalogScreen';
 import StatisticsScreen from '../screens/StatisticsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import { Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 const AppStack = createBottomTabNavigator(

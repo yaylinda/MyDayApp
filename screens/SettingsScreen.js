@@ -10,7 +10,7 @@ export default class SettingsScreen extends Component {
 
     render() {
         return (
-            <Content style={{ flex: 1, backgroundColor: '#282833' }}>
+            <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Settings</Text>
                 </View>

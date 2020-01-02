@@ -25,10 +25,10 @@ export default class DayScreen extends Component {
 
     render() {
         return (
-            <Content style={{ flex: 1, backgroundColor: '#282833' }} contentContainerStyle={{ flexGrow: 1, backgroundColor: '#282833'}}>
+            <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
                 {
                     this.state.daysData.map((item, index) => {
-                        return (<DayInfo key={index} day={item} catalogData={this.state.catalogData}></DayInfo>);
+                        return (<DayInfo key={index} day={item} catalogData={this.state.catalogData} />);
                     })
                 }
             </Content>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Container, Card, CardItem, Button, Text, Left, Right, Form, Picker, Item, Label, Input, Accordion, View, Icon, Body, Header, CheckBox, List, ListItem, Content,
+    Card, CardItem, Button, Text, Form, Item, Label, Input, Accordion, View, Icon, CheckBox, List, ListItem, Content,
 } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
@@ -31,7 +31,7 @@ export default class CatalogScreen extends Component {
 
     render() {
         return (
-            <Content style={{ flex: 1, backgroundColor: '#282833' }}>
+            <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
@@ -158,12 +158,6 @@ export default class CatalogScreen extends Component {
                 borderRightWidth: 3,
                 marginTop: 5
             }}>
-                {/* <View style={{ flexDirection: 'row' }}>
-                    {item.allowMultiSelect
-                        ? <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="done-all" />
-                        : <Icon style={{ fontSize: 18, color: 'white', marginRight: 10 }} name="checkmark" />}
-                    <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
-                </View> */}
                 <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
                 {expanded
                     ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
@@ -255,11 +249,6 @@ export default class CatalogScreen extends Component {
                             <Text style={{ color: 'white' }}>Add Answer Option</Text>
                         </Button>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
-                        <CheckBox checked={this.state.newAllowMultiSelect} onPress={() => this.setState({ newAllowMultiSelect: !!!this.state.newAllowMultiSelect })} color='#52e3c2' />
-                        <Text style={{ color: 'white', marginLeft: 20 }}>Allow multiple answers?</Text>
-                    </View>
-
                 </View>
             );
         }
@@ -274,13 +263,9 @@ export default class CatalogScreen extends Component {
         const tempAnswers = this.state.newAnswers;
         tempAnswers[index] = value;
         this.setState({ newAnswers: tempAnswers });
-        console.log(this.state.newAnswers);
     }
 
     async persistNew() {
-
-        // TODO - persist PROMPT type
-
         console.log(`[CatalogScreen] persist new`);
         const sessionToken = await AsyncStorage.getItem('sessionToken');
         const endpoint = `${host}/catalog/events/${this.state.newType}`;

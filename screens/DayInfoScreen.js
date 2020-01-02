@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import { Card, CardItem, Text, Button, Container, Left, Right, View, Picker, Form, Item, Icon, ListItem, CheckBox, Body, List } from "native-base";
+import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, Body, List } from "native-base";
 import moment from 'moment'
 import Modal from "react-native-modal";
 import { AsyncStorage } from "react-native";
 import { host } from "../util/Constants";
-import { Rating } from 'react-native-ratings';
-
 
 export default class DayInfo extends Component {
 
@@ -30,107 +28,75 @@ export default class DayInfo extends Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#282833' }}>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>{this.formatDate(this.state.day.date)}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>
+                        {this.formatDate(this.state.day.date)}
+                    </Text>
                 </View>
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
-                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{
+                        backgroundColor: '#282833',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Scores</Text>
+                        <Button rounded small
+                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
+                            style={{ backgroundColor: '#ff4495' }}>
+                            <Icon name="add-circle" style={{ fontSize: 18 }} />
+                        </Button>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderEmotions()}
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button rounded
-                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" />
-                        </Button>
-                    </CardItem>
                 </Card>
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
-                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{
+                        backgroundColor: '#282833',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Activities</Text>
+                        <Button rounded small
+                            onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
+                            style={{ backgroundColor: '#ff4495' }}>
+                            <Icon name="add-circle" style={{ fontSize: 18 }} />
+                        </Button>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderActivities()}
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button rounded
-                            onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" />
-                        </Button>
-                    </CardItem>
                 </Card>
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
-                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{
+                        backgroundColor: '#282833',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Prompts</Text>
+                        <Button rounded small
+                            onPress={() => this.handleAddRandomPrompt()}
+                            style={{ backgroundColor: '#ff4495' }}>
+                            <Icon name="add-circle" style={{ fontSize: 18 }} />
+                        </Button>
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderPrompts()}
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button rounded
-                            onPress={() => this.handleAddRandomPrompt()}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" />
-                        </Button>
-                    </CardItem>
                 </Card>
 
-                <Modal isVisible={this.state.showAddModal && this.state.addType === 'EMOTION'}>
+                <Modal isVisible={this.state.showAddModal}>
                     <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
-                        <View style={{ paddingTop: 30, paddingBottom: 10, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>
-                                How is your day going?
-                            </Text>
-                        </View>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                            { this.renderHearts() }
-                        </View>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                            { this.renderHeartsText() }
-                        </View>
-
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Cancel</Text>
-                            </Button>
-                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Save</Text>
-                            </Button>
-                        </View>
-                    </View>
-                </Modal>
-
-                <Modal isVisible={this.state.showAddModal && this.state.addType === 'ACTIVITY'}>
-                    <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
                         <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Add Day Event</Text>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>{this.renderModalTitle()}</Text>
                         </View>
-                        <Form style={{ marginBottom: 20 }}>
-                            <Item picker>
-                                <Picker
-                                    mode="dropdown"
-                                    iosIcon={<Icon name="arrow-down" />}
-                                    style={{ width: undefined }}
-                                    placeholder="Select Day Event"
-                                    placeholderStyle={{ color: "#bfc6ea" }}
-                                    placeholderIconColor="#007aff"
-                                    selectedValue={this.state.selectedDayEventIndex}
-                                    onValueChange={value => this.setState({ selectedDayEventIndex: value })}>
-                                    {
-                                        this.renderDayEventsPickerItems()
-                                    }
-                                </Picker>
-                            </Item>
-                        </Form>
+
+                        {this.renderModalContent()}
+
                         <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
                                 <Text>Cancel</Text>
@@ -139,28 +105,9 @@ export default class DayInfo extends Component {
                                 <Text>Save</Text>
                             </Button>
                         </View>
+
                     </View>
                 </Modal>
-
-                <Modal isVisible={this.state.showAddModal && this.state.addType === 'PROMPT'}>
-                    <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
-                        <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Answer Prompt</Text>
-                        </View>
-
-                        { this.renderRandomPrompt() }
-                        
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Cancel</Text>
-                            </Button>
-                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Save</Text>
-                            </Button>
-                        </View>
-                    </View>
-                </Modal>
-
             </View>
         );
     }
@@ -168,11 +115,11 @@ export default class DayInfo extends Component {
     renderEmotions() {
         if (this.state.day.emotions.length) {
             return (
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                     {
                         this.state.day.emotions.map((item, index) => {
                             return (
-                                <View key={index} style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                     <View padder style={{
                                         flexDirection: 'row',
                                         justifyContent: 'center',
@@ -181,8 +128,9 @@ export default class DayInfo extends Component {
                                         borderColor: '#40c4ff',
                                         borderWidth: 3,
                                         borderTopLeftRadius: 5,
-                                        borderBottomLeftRadius: 5}}>
-                                        <Text style={{color: 'white', fontWeight: "600"}}>{item.startTime}</Text>
+                                        borderBottomLeftRadius: 5
+                                    }}>
+                                        <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
                                     </View>
                                     <View padder style={{
                                         flexGrow: 1,
@@ -190,9 +138,10 @@ export default class DayInfo extends Component {
                                         borderColor: '#40c4ff',
                                         borderWidth: 3,
                                         borderTopRightRadius: 5,
-                                        borderBottomRightRadius: 5}}>
-                                        <View style={{flexDirection: 'row'}}>
-                                            { this.renderDayScore(item.emotionScore) }
+                                        borderBottomRightRadius: 5
+                                    }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            {this.renderDayScore(item.emotionScore)}
                                         </View>
                                     </View>
                                 </View>
@@ -201,17 +150,25 @@ export default class DayInfo extends Component {
                     }
                 </View>);
         } else {
-            return (<Text style={{ color: 'white' }}>No Scores for Today</Text>);
+            return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No scores for this day yet</Text>);
         }
+    }
+
+    renderDayScore(score) {
+        const scoreHtml = [];
+        for (let i = 0; i < score; i++) {
+            scoreHtml.push(<Icon key={i} name="star" style={{ fontSize: 18, color: '#ffd900' }}></Icon>);
+        }
+        return scoreHtml;
     }
 
     renderActivities() {
         if (this.state.day.activities.length) {
             return (
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                     {this.state.day.activities.map((item, index) => {
                         return (
-                            <View key={index} style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                            <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                 <View padder style={{
                                     flexDirection: 'row',
                                     justifyContent: 'center',
@@ -220,8 +177,9 @@ export default class DayInfo extends Component {
                                     borderColor: '#40c4ff',
                                     borderWidth: 3,
                                     borderTopLeftRadius: 5,
-                                    borderBottomLeftRadius: 5}}>
-                                    <Text style={{color: 'white', fontWeight: "600"}}>{item.startTime}</Text>
+                                    borderBottomLeftRadius: 5
+                                }}>
+                                    <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
                                 </View>
                                 <View padder style={{
                                     flexGrow: 1,
@@ -229,9 +187,10 @@ export default class DayInfo extends Component {
                                     borderColor: '#40c4ff',
                                     borderWidth: 3,
                                     borderTopRightRadius: 5,
-                                    borderBottomRightRadius: 5}}>
+                                    borderBottomRightRadius: 5
+                                }}>
                                     <Text>
-                                        { item.name }
+                                        {item.name}
                                     </Text>
                                 </View>
                             </View>
@@ -240,18 +199,18 @@ export default class DayInfo extends Component {
 
                 </View>);
         } else {
-            return (<Text style={{ color: 'white' }}>No Activites for Today</Text>);
+            return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No activities for this day yet</Text>);
         }
     }
 
     renderPrompts() {
         if (this.state.day.prompts.length) {
             return (
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                     {
                         this.state.day.prompts.map((item, index) => {
                             return (
-                                <View key={index} style={{flexDirection: 'row', justifyContent: 'center', marginTop: 5}}>
+                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                     <View padder style={{
                                         flexDirection: 'row',
                                         justifyContent: 'center',
@@ -260,8 +219,9 @@ export default class DayInfo extends Component {
                                         borderColor: '#40c4ff',
                                         borderWidth: 3,
                                         borderTopLeftRadius: 5,
-                                        borderBottomLeftRadius: 5}}>
-                                        <Text style={{color: 'white', fontWeight: "600"}}>{item.startTime}</Text>
+                                        borderBottomLeftRadius: 5
+                                    }}>
+                                        <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
                                     </View>
                                     <View padder style={{
                                         flexGrow: 1,
@@ -269,14 +229,15 @@ export default class DayInfo extends Component {
                                         borderColor: '#40c4ff',
                                         borderWidth: 3,
                                         borderTopRightRadius: 5,
-                                        borderBottomRightRadius: 5}}>
+                                        borderBottomRightRadius: 5
+                                    }}>
                                         <View>
-                                            <View style={{ flexDirection: 'row'}}>
+                                            <View style={{ flexDirection: 'row' }}>
                                                 <Text style={{ fontWeight: '600' }}>Q: </Text>
                                                 <Text>{item.question}</Text>
                                             </View>
-                                            <View style={{ flexDirection: 'row'}}>
-                                                <Text style={{ fontWeight: '600'}}>A: </Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Text style={{ fontWeight: '600' }}>A: </Text>
                                                 <Text>{item.selectedAnswer}</Text>
                                             </View>
                                         </View>
@@ -288,16 +249,42 @@ export default class DayInfo extends Component {
                 </View>
             );
         } else {
-            return (<Text style={{ color: 'white' }}>No Activites for Today</Text>);
+            return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No answered prompts for this day yet</Text>);
         }
     }
 
-    renderDayEventsPickerItems() {
-        if (this.props.catalogData && this.state.addType) {
-            return this.props.catalogData[this.state.addType].map((catalog, index) => {
-                return (<Picker.Item key={index} value={index} label={catalog.name}></Picker.Item>);
-            });
+    renderModalTitle() {
+        if (this.state.addType === 'EMOTION') {
+            return ('New Day Score');
+        } else if (this.state.addType === 'ACTIVITY') {
+            return ('New Day Activity');
+        } else if (this.state.addType === 'PROMPT') {
+            return ('New Day Prompt');
         }
+    }
+
+    renderModalContent() {
+        if (this.state.addType === 'EMOTION') {
+            return (this.renderEmotionModal());
+        } else if (this.state.addType === 'ACTIVITY') {
+            return (this.renderActivityModal());
+        } else if (this.state.addType === 'PROMPT') {
+            return (this.renderPromptModal());
+        }
+    }
+
+    renderEmotionModal() {
+        return (
+            <View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    {this.renderHearts()}
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    {this.renderHeartsText()}
+                </View>
+            </View>
+        );
     }
 
     renderHearts() {
@@ -316,34 +303,25 @@ export default class DayInfo extends Component {
 
     renderHeartsText() {
         if (this.state.selectedEmotionScore) {
-        return (<Text style={{ fontWeight: "500", color: '#ffd900' }}>{ this.state.heartLabels[this.state.selectedEmotionScore - 1] }</Text>);
+            return (<Text style={{ fontWeight: "500", color: '#ffd900' }}>{this.state.heartLabels[this.state.selectedEmotionScore - 1]}</Text>);
         }
     }
 
-    renderDayScore(score) {
-        const scoreHtml = [];
-        for (let i = 0; i < score; i++) {
-            scoreHtml.push(<Icon key={i} name="star" style={{ fontSize: 18, color: '#ffd900' }}></Icon>);
-        }
-        return scoreHtml;
-    }
-
-    renderRandomPrompt() {
-        if (this.state.randomPromptIndex > -1) {
+    renderActivityModal() {
         return (
-            <View>
-                <Text>{this.props.catalogData['PROMPT'][this.state.randomPromptIndex].question}</Text>
+            <View padder>
+                <Text style={{ color: 'white' }}>Select activity</Text>
                 <List>
                     {
-                        this.props.catalogData['PROMPT'][this.state.randomPromptIndex].answers.map((answer, index) => {
+                        this.props.catalogData['ACTIVITY'].map((item, index) => {
                             return (
                                 <ListItem key={index}>
-                                    <CheckBox 
-                                        checked={this.state.selectedPromptAnswerIndex === index} 
-                                        onPress={() => this.setState({ selectedPromptAnswerIndex: index })} 
+                                    <CheckBox
+                                        checked={this.state.selectedActivityIndex === index}
+                                        onPress={() => this.setState({ selectedActivityIndex: index })}
                                     />
                                     <Body>
-                                        <Text>{ answer }</Text>
+                                        <Text style={{ color: 'white' }}>{item.name}</Text>
                                     </Body>
                                 </ListItem>
                             );
@@ -352,7 +330,41 @@ export default class DayInfo extends Component {
                 </List>
             </View>
         );
-                }
+    }
+
+    renderDayEventsPickerItems() {
+        if (this.props.catalogData && this.state.addType) {
+            return this.props.catalogData[this.state.addType].map((catalog, index) => {
+                return (<Picker.Item key={index} value={index} label={catalog.name}></Picker.Item>);
+            });
+        }
+    }
+
+    renderPromptModal() {
+        if (this.state.randomPromptIndex > -1) {
+            return (
+                <View padder>
+                    <Text style={{ color: 'white' }}>{this.props.catalogData['PROMPT'][this.state.randomPromptIndex].question}</Text>
+                    <List>
+                        {
+                            this.props.catalogData['PROMPT'][this.state.randomPromptIndex].answers.map((answer, index) => {
+                                return (
+                                    <ListItem key={index}>
+                                        <CheckBox
+                                            checked={this.state.selectedPromptAnswerIndex === index}
+                                            onPress={() => this.setState({ selectedPromptAnswerIndex: index })}
+                                        />
+                                        <Body>
+                                            <Text style={{ color: 'white' }}>{answer}</Text>
+                                        </Body>
+                                    </ListItem>
+                                );
+                            })
+                        }
+                    </List>
+                </View>
+            );
+        }
     }
 
     cancelAdd() {
@@ -376,8 +388,8 @@ export default class DayInfo extends Component {
 
     handleAddRandomPrompt() {
         this.setState({
-            showAddModal: true, 
-            addType: 'PROMPT', 
+            showAddModal: true,
+            addType: 'PROMPT',
             randomPromptIndex: Math.floor(Math.random() * this.props.catalogData['PROMPT'].length)
         });
     }
@@ -397,7 +409,7 @@ export default class DayInfo extends Component {
             body['emotionScore'] = this.state.selectedEmotionScore;
             body['description'] = ''; // TODO - get description input later
         } else if (this.state.addType === 'ACTIVITY') {
-            const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedDayEventIndex];
+            const newDayEvent = this.props.catalogData[this.state.addType][this.state.selectedActivityIndex];
             body = newDayEvent;
         } else if (this.state.addType === 'PROMPT') {
             body['question'] = this.props.catalogData['PROMPT'][this.state.randomPromptIndex].question;

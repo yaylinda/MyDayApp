@@ -2,19 +2,7 @@ import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import React, { Component } from 'react';
 import {
-  Content,
-  Container,
-  Left,
-  Right,
-  Body,
-  Header,
-  Title,
-  Text,
-  Footer,
-  FooterTab,
-  Icon,
-  Button
-} from 'native-base';
+  Container} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
