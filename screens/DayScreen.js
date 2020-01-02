@@ -16,6 +16,7 @@ export default class DayScreen extends Component {
             loadedDayData: false,
             errorMessage: ''
         }
+        console.log('[DayScreen] constructor');
     }
 
     componentDidMount() {

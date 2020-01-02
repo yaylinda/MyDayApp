@@ -38,34 +38,38 @@ export default class CatalogScreen extends Component {
                 </View>
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
-                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{
+                        backgroundColor: '#282833',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Activities Catalog</Text>
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
-                        {this.renderCatalogData('ACTIVITY')}
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button rounded
+                        <Button small rounded
                             onPress={() => this.setState({ showAddModal: true, newType: 'ACTIVITY' })}
                             style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833' }}>
+                        {this.renderCatalogData('ACTIVITY')}
+                    </CardItem>
                 </Card>
 
                 <Card transparent style={{ backgroundColor: '#282833' }}>
-                    <CardItem header bordered style={{ backgroundColor: '#282833' }}>
+                    <CardItem header bordered style={{
+                        backgroundColor: '#282833',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                    }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Prompts Catalog</Text>
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
-                        {this.renderCatalogData('PROMPT')}
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button rounded
+                        <Button small rounded
                             onPress={() => this.setState({ showAddModal: true, newType: 'PROMPT' })}
                             style={{ backgroundColor: '#ff4495' }}>
                             <Icon name="add-circle" />
                         </Button>
+                    </CardItem>
+                    <CardItem style={{ backgroundColor: '#282833' }}>
+                        {this.renderCatalogData('PROMPT')}
                     </CardItem>
                 </Card>
 
@@ -121,7 +125,7 @@ export default class CatalogScreen extends Component {
                 );
             }
         } else {
-            return (<Text style={{ color: 'white' }}>There's nothing here!</Text>);
+            return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No catalog data yet</Text>);
         }
     }
 

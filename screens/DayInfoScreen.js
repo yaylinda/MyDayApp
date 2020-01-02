@@ -40,7 +40,7 @@ export default class DayInfo extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Scores</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Scores</Text>
                         <Button rounded small
                             onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
                             style={{ backgroundColor: '#ff4495' }}>
@@ -58,7 +58,7 @@ export default class DayInfo extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Activities</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Activities</Text>
                         <Button rounded small
                             onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
                             style={{ backgroundColor: '#ff4495' }}>
@@ -76,7 +76,7 @@ export default class DayInfo extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day's Prompts</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Prompts</Text>
                         <Button rounded small
                             onPress={() => this.handleAddRandomPrompt()}
                             style={{ backgroundColor: '#ff4495' }}>
