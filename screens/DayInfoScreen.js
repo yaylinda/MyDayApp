@@ -341,7 +341,7 @@ export default class DayInfo extends Component {
     }
 
     renderPromptModal() {
-        if (this.state.randomPromptIndex > -1) {
+        if (this.state.randomPromptIndex > 0 && this.props.catalogData['PROMPT']) {
             return (
                 <View padder>
                     <Text style={{ color: 'white' }}>{this.props.catalogData['PROMPT'][this.state.randomPromptIndex].question}</Text>
