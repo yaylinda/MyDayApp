@@ -20,10 +20,13 @@ export default class StatisticsScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.statsTypes = ['SUMMARY', 'SCORE', 'ACTIVITY', 'PROMPT'];
         this.state = {
-            currentTabIndex: 0,
-            stats: {},
+            allStats: {
+                SUMMARY: {},
+                SCORE: {},
+                ACTIVITY: {},
+                PROMPT: {}
+            },
         }
     }
 
@@ -38,7 +41,7 @@ export default class StatisticsScreen extends Component {
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Statistics</Text>
                 </View>
 
-                <Tabs tabBarUnderlineStyle={{backgroundColor: '#52e3c2'}} onChangeTab={(i) => this.tabChange(i)}>
+                <Tabs tabBarUnderlineStyle={{backgroundColor: '#52e3c2'}}>
                     <Tab heading="Summary" 
                         tabStyle={{backgroundColor: '#282833'}} 
                         activeTabStyle={{backgroundColor: '#282833'}}
@@ -56,10 +59,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{color: '#52e3c2'}}
                     >
                         <View style={{backgroundColor: '#282833'}}>
-                            { this.renderLineGraph('day', 'Average Scores By Hour') }
-                            { this.renderLineGraph('week', 'Last 7 Days') }
-                            { this.renderLineGraph('month', 'Last Month') }
-                            { this.renderLineGraph('year', 'Last Year') }
+                            { this.renderLineGraph('SCORE', 'day', 'Average Scores By Hour') }
+                            { this.renderLineGraph('SCORE', 'week', 'Last 7 Days') }
+                            { this.renderLineGraph('SCORE', 'month', 'Last Month') }
+                            { this.renderLineGraph('SCORE', 'year', 'Last Year') }
                         </View>
                     </Tab>
                     <Tab heading="Activities" 
@@ -88,8 +91,8 @@ export default class StatisticsScreen extends Component {
         );
     }
 
-    renderLineGraph(timeRange, chartTitle) {
-        const input = this.state.stats[timeRange];
+    renderLineGraph(statsType, timeRange, chartTitle) {
+        const input = this.state.allStats[statsType][timeRange];
 
         if (input) {
             let customLabels = [];
@@ -99,7 +102,6 @@ export default class StatisticsScreen extends Component {
                 customLabels = input.labels;
             }
 
-            // dummy data to set max for y-axis
             const data = {
                 labels: customLabels,
                 datasets: [
@@ -125,17 +127,10 @@ export default class StatisticsScreen extends Component {
         
     }
 
-    tabChange(tab) {
-        console.log('tab change to: ', tab.i);
-        this.setState({ currentTabIndex: tab.i });
-        // TODO - cache stats (no need to call API again if we have already called it and stored it)
-        this.loadStats();
-    }
-
     async loadStats() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${host}/stats/${this.statsTypes[this.state.currentTabIndex]}`;
+        const endpoint = `${host}/stats`;
         console.log(`[StatisticsScreen] calling ${endpoint}`);
 
         let requestSuccess = false;
@@ -148,20 +143,20 @@ export default class StatisticsScreen extends Component {
             },
         }).then((response) => {
             if (response.ok) {
-                console.log(`[StatisticsScreen] successfully retrieved stats object`);
+                console.log(`[StatisticsScreen] successfully retrieved allStats object`);
                 requestSuccess = true;
             } else {
-                console.log(`[StatisticsScreen] error retrieving stats object`);
+                console.log(`[StatisticsScreen] error retrieving allStats object`);
                 requestSuccess = false;
             }
             return response.json();
         }).then((json) => {
             console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
-                console.log('[StatisticsScreen] updating state.stats');
-                this.setState({ stats: json });
+                console.log('[StatisticsScreen] updating state.allStats');
+                this.setState({ allStats: json });
             } else {
-                console.log(`[StatisticsScreen] retrieving stats object error message: ${json.message}`);
+                console.log(`[StatisticsScreen] retrieving allStats object error message: ${json.message}`);
                 this.errorMessage = json.message;
                 // TODO - show error message on screen
             }
