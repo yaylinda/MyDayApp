@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, View, Text, Content, Tabs, Tab, Segment, Button } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
-import { LineChart } from 'react-native-chart-kit';
+import { LineChart, StackedBarChart } from 'react-native-chart-kit';
 import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
@@ -72,7 +72,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{color: '#52e3c2'}}
                     >
                         <View style={{backgroundColor: '#282833'}}>
-                            <Text>Activities</Text>
+                            { this.renderStackedBarChat('ACTIVITY', 'day', 'Average Scores By Hour') }
+                            { this.renderStackedBarChat('ACTIVITY', 'week', 'Last 7 Days') }
+                            { this.renderStackedBarChat('ACTIVITY', 'month', 'Last Month') }
+                            { this.renderStackedBarChat('ACTIVITY', 'year', 'Last Year') }
                         </View>
                     </Tab>
                     <Tab heading="Prompts" 
@@ -125,6 +128,40 @@ export default class StatisticsScreen extends Component {
             );
         }
         
+    }
+
+    renderStackedBarChat(statsType, timeRange, chartTitle) {
+        const input = this.state.allStats[statsType][timeRange];
+
+        if (input) {
+            let customLabels = [];
+            if (timeRange === 'day') {
+                customLabels = input.labels.map((elem, index) => index % 2 ? '' : elem);
+            } else {
+                customLabels = input.labels;
+            }
+
+
+            const data = {
+                labels: customLabels,
+                legend: input.legend,
+                data: input.labels.map((label) => input.labelsDataMap[label]),
+                barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
+            }
+
+            return (
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                    <Text style={{textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2'}}>{chartTitle}</Text>
+                    <StackedBarChart 
+                        data={data}
+                        width={screenWidth}
+                        height={220}
+                        chartConfig={chartConfig}
+                        barPercentage={1}
+                    />
+                </View>
+            );
+        }
     }
 
     async loadStats() {
