@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container, View, Text, Content, Tabs, Tab, Segment, Button } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
-import { LineChart, StackedBarChart } from 'react-native-chart-kit';
 import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
@@ -117,13 +116,7 @@ export default class StatisticsScreen extends Component {
             return(
                 <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={{textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2'}}>{chartTitle}</Text>
-                    <LineChart
-                        data={data}
-                        width={screenWidth * 0.95}
-                        chartConfig={chartConfig}
-                        verticalLabelRotation={45}
-                        height={280}
-                    />
+
                 </View>
             );
         }
@@ -152,13 +145,6 @@ export default class StatisticsScreen extends Component {
             return (
                 <View style={{flex: 1, justifyContent: 'center'}}>
                     <Text style={{textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2'}}>{chartTitle}</Text>
-                    <StackedBarChart 
-                        data={data}
-                        width={screenWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        barPercentage={1}
-                    />
                 </View>
             );
         }
