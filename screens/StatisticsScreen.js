@@ -3,17 +3,19 @@ import { Container, View, Text, Content, Tabs, Tab, Segment, Button } from 'nati
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
 import { Dimensions } from "react-native";
-const screenWidth = Dimensions.get("window").width;
+import { LineChart, Grid, YAxis, XAxis, BarChart } from 'react-native-svg-charts';
+import * as scale from 'd3-scale';
 
-const chartConfig = {
-    backgroundGradientFrom: "#282833",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#282833",
-    backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5
-  };
+// const screenWidth = Dimensions.get("window").width;
+// const chartConfig = {
+//     backgroundGradientFrom: "#282833",
+//     backgroundGradientFromOpacity: 0,
+//     backgroundGradientTo: "#282833",
+//     backgroundGradientToOpacity: 0,
+//     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+//     strokeWidth: 2, // optional, default 3
+//     barPercentage: 0.5
+//   };
 
 export default class StatisticsScreen extends Component {
 
@@ -40,50 +42,50 @@ export default class StatisticsScreen extends Component {
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Statistics</Text>
                 </View>
 
-                <Tabs tabBarUnderlineStyle={{backgroundColor: '#52e3c2'}}>
-                    <Tab heading="Summary" 
-                        tabStyle={{backgroundColor: '#282833'}} 
-                        activeTabStyle={{backgroundColor: '#282833'}}
-                        textStyle={{color: 'white'}}
-                        activeTextStyle={{color: '#52e3c2'}}
+                <Tabs tabBarUnderlineStyle={{ backgroundColor: '#52e3c2' }}>
+                    <Tab heading="Summary"
+                        tabStyle={{ backgroundColor: '#282833' }}
+                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        textStyle={{ color: 'white' }}
+                        activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View style={{backgroundColor: '#282833'}}>
+                        <View style={{ backgroundColor: '#282833' }}>
                             <Text>Summary</Text>
                         </View>
                     </Tab>
-                    <Tab heading="Scores" 
-                        tabStyle={{backgroundColor: '#282833'}} 
-                        activeTabStyle={{backgroundColor: '#282833'}}
-                        textStyle={{color: 'white'}}
-                        activeTextStyle={{color: '#52e3c2'}}
+                    <Tab heading="Scores"
+                        tabStyle={{ backgroundColor: '#282833' }}
+                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        textStyle={{ color: 'white' }}
+                        activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View style={{backgroundColor: '#282833'}}>
-                            { this.renderLineGraph('SCORE', 'day', 'Average Scores By Hour') }
-                            { this.renderLineGraph('SCORE', 'week', 'Last 7 Days') }
-                            { this.renderLineGraph('SCORE', 'month', 'Last Month') }
-                            { this.renderLineGraph('SCORE', 'year', 'Last Year') }
+                        <View padder style={{ backgroundColor: '#282833' }}>
+                            {this.renderLineGraph('SCORE', 'day', 'Today\'s Scores')}
+                            {this.renderLineGraph('SCORE', 'week', 'Last 7 Days')}
+                            {this.renderLineGraph('SCORE', 'month', 'This Month')}
+                            {this.renderLineGraph('SCORE', 'year', 'This Year')}
                         </View>
                     </Tab>
-                    <Tab heading="Activities" 
-                        tabStyle={{backgroundColor: '#282833'}} 
-                        activeTabStyle={{backgroundColor: '#282833'}}
-                        textStyle={{color: 'white'}}
-                        activeTextStyle={{color: '#52e3c2'}}
+                    <Tab heading="Activities"
+                        tabStyle={{ backgroundColor: '#282833' }}
+                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        textStyle={{ color: 'white' }}
+                        activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View style={{backgroundColor: '#282833'}}>
-                            { this.renderStackedBarChat('ACTIVITY', 'day', 'Average Scores By Hour') }
-                            { this.renderStackedBarChat('ACTIVITY', 'week', 'Last 7 Days') }
-                            { this.renderStackedBarChat('ACTIVITY', 'month', 'Last Month') }
-                            { this.renderStackedBarChat('ACTIVITY', 'year', 'Last Year') }
+                        <View padder style={{ backgroundColor: '#282833' }}>
+                            {this.renderStackedBarChat('ACTIVITY', 'day', 'Average Scores By Hour')}
+                            {this.renderStackedBarChat('ACTIVITY', 'week', 'Last 7 Days')}
+                            {this.renderStackedBarChat('ACTIVITY', 'month', 'Last Month')}
+                            {this.renderStackedBarChat('ACTIVITY', 'year', 'Last Year')}
                         </View>
                     </Tab>
-                    <Tab heading="Prompts" 
-                        tabStyle={{backgroundColor: '#282833'}} 
-                        activeTabStyle={{backgroundColor: '#282833'}}
-                        textStyle={{color: 'white'}}
-                        activeTextStyle={{color: '#52e3c2'}}
+                    <Tab heading="Prompts"
+                        tabStyle={{ backgroundColor: '#282833' }}
+                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        textStyle={{ color: 'white' }}
+                        activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View style={{backgroundColor: '#282833'}}>
+                        <View style={{ backgroundColor: '#282833' }}>
                             <Text>Prompts</Text>
                         </View>
                     </Tab>
@@ -99,28 +101,61 @@ export default class StatisticsScreen extends Component {
         if (input) {
             let customLabels = [];
             if (timeRange === 'day') {
-                customLabels = input.labels.map((elem, index) => index % 2 ? '' : elem);
+                customLabels = input.labels.map((elem, index) => index % 3 ? '' : elem);
             } else {
                 customLabels = input.labels;
             }
 
-            const data = {
-                labels: customLabels,
-                datasets: [
-                  {
-                    data: input.labels.map((label) => input.labelsDataMap[label]),
-                  }
-                ],
-              };
+            const values = input.labels.map((label) => input.labelsDataMap[label]);
 
-            return(
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                    <Text style={{textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2'}}>{chartTitle}</Text>
+            const data = [];
+            for (let i = 0; i < customLabels.length; i++) {
+                data.push({
+                    x: customLabels[i],
+                    y: values[i]
+                });
+            }
 
+            return (
+                <View style={{ marginBottom: 20, justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                    <View style={{ flexDirection: 'row', display: "flex" }}>
+                        <YAxis
+                            contentInset={{ top: 10, bottom: 10 }}
+                            data={data}
+                            yAccessor={({ item }) => item.y}
+                            formatLabel={value => value}
+                            numberOfTicks={6}
+                            min={0}
+                            max={5}
+                            style={{ flex: 0.1, marginBottom: 15, marginLeft: -15 }}
+                            svg={{ fill: 'gray', fontSize: 10 }}
+                        />
+                        <View style={{ flex: 0.9, marginLeft: -10 }}>
+                            <BarChart
+                                style={{ height: 150 }}
+                                data={data}
+                                yAccessor={({ item }) => item.y}
+                                svg={{ fill: 'rgb(26, 255, 146)' }}
+                                contentInset={{ top: 10, bottom: 10 }}
+                                yMin={0}
+                                yMax={5}
+                            >
+                                <Grid />
+                            </BarChart>
+                            <XAxis
+                                data={data}
+                                formatLabel={(_, index) => data[index].x}
+                                numberOfTicks={customLabels.length}
+                                contentInset={{ left:20, right: 20 }}
+                                svg={{ fill: 'gray', fontSize: 10 }}
+                            />
+                        </View>
+                    </View>
                 </View>
             );
         }
-        
+
     }
 
     renderStackedBarChat(statsType, timeRange, chartTitle) {
@@ -143,8 +178,8 @@ export default class StatisticsScreen extends Component {
             }
 
             return (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                    <Text style={{textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2'}}>{chartTitle}</Text>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <Text style={{ textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2' }}>{chartTitle}</Text>
                 </View>
             );
         }
