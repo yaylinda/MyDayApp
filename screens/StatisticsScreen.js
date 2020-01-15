@@ -3,19 +3,9 @@ import { Container, View, Text, Content, Tabs, Tab, Segment, Button } from 'nati
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
 import { Dimensions } from "react-native";
-import { LineChart, Grid, YAxis, XAxis, BarChart } from 'react-native-svg-charts';
-import * as scale from 'd3-scale';
-
-// const screenWidth = Dimensions.get("window").width;
-// const chartConfig = {
-//     backgroundGradientFrom: "#282833",
-//     backgroundGradientFromOpacity: 0,
-//     backgroundGradientTo: "#282833",
-//     backgroundGradientToOpacity: 0,
-//     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-//     strokeWidth: 2, // optional, default 3
-//     barPercentage: 0.5
-//   };
+import { LineChart, Grid, YAxis, XAxis, BarChart, StackedBarChart } from 'react-native-svg-charts';
+import palette from 'google-palette';
+import extractDataPoints from 'react-native-svg-charts';
 
 export default class StatisticsScreen extends Component {
 
@@ -146,8 +136,7 @@ export default class StatisticsScreen extends Component {
                             <XAxis
                                 data={data}
                                 formatLabel={(_, index) => data[index].x}
-                                numberOfTicks={customLabels.length}
-                                contentInset={{ left:20, right: 20 }}
+                                contentInset={{ left: 20, right: 20 }}
                                 svg={{ fill: 'gray', fontSize: 10 }}
                             />
                         </View>
@@ -164,22 +153,62 @@ export default class StatisticsScreen extends Component {
         if (input) {
             let customLabels = [];
             if (timeRange === 'day') {
-                customLabels = input.labels.map((elem, index) => index % 2 ? '' : elem);
+                customLabels = input.labels.map((elem, index) => index % 3 ? '' : elem);
             } else {
                 customLabels = input.labels;
             }
 
+            const data = [];
+            input.labels.forEach(labelKey => {
+                const datum = {};
+                datum['x'] = labelKey;
+                for (let i = 0; i < input.legend.length; i++) {
+                    datum[input.legend[i]] = input.labelsDataMap[labelKey][i];
+                }
+                data.push(datum);
+            });
+            
+            let y = data.map(datum => {
+                let sum = 0;
+                input.legend.forEach(label => {
+                    sum += datum[label];
+                })
+                return sum;
+            });
 
-            const data = {
-                labels: customLabels,
-                legend: input.legend,
-                data: input.labels.map((label) => input.labelsDataMap[label]),
-                barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"]
-            }
+            let colors = palette('mpn65', input.legend.length);
+            colors = colors.map(c => `#${c}`)
 
             return (
-                <View style={{ flex: 1, justifyContent: 'center' }}>
-                    <Text style={{ textAlign: 'center', fontSize: 18, marginTop: 10, marginBottom: 10, color: '#52e3c2' }}>{chartTitle}</Text>
+                <View style={{ marginBottom: 20, justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                    <View style={{ flexDirection: 'row', display: "flex" }}>
+                        <YAxis
+                            data={ y }
+                            contentInset={{ top: 10, bottom: 10 }}
+                            formatLabel={ (value, index) => index % 2 ? '' : value }
+                            style={{ flex: 0.1, marginBottom: 15, marginLeft: -15 }}
+                            svg={{ fill: 'gray', fontSize: 10 }}
+                            numberOfTicks={ Math.max(...y) }
+                        />
+                        <View style={{ flex: 0.9, marginLeft: -10 }}>
+                            <StackedBarChart
+                                style={{ height: 150 }}
+                                data={data}
+                                keys={input.legend}
+                                colors={colors}
+                                contentInset={{ top: 10, bottom: 10 }}
+                            >
+                                <Grid />
+                            </StackedBarChart>
+                            <XAxis
+                                data={data}
+                                formatLabel={(_, index) => customLabels[index]}
+                                contentInset={{ left: 20, right: 20 }}
+                                svg={{ fill: 'gray', fontSize: 10 }}
+                            />
+                        </View>
+                    </View>
                 </View>
             );
         }
