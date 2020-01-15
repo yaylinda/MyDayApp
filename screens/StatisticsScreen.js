@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, View, Text, Content, Tabs, Tab, Segment, Button } from 'native-base';
+import { Container, View, Text, Content, Tabs, Tab, Segment, Button, Card } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
 import { Dimensions } from "react-native";
@@ -39,8 +39,8 @@ export default class StatisticsScreen extends Component {
                         textStyle={{ color: 'white' }}
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View style={{ backgroundColor: '#282833' }}>
-                            <Text>Summary</Text>
+                        <View padder style={{ backgroundColor: '#282833' }}>
+                            { this.renderSummaryStats() }
                         </View>
                     </Tab>
                     <Tab heading="Scores"
@@ -75,13 +75,21 @@ export default class StatisticsScreen extends Component {
                         textStyle={{ color: 'white' }}
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View style={{ backgroundColor: '#282833' }}>
-                            <Text>Prompts</Text>
+                        <View padder style={{ backgroundColor: '#282833' }}>
+                            { this.renderPromptStats() }
                         </View>
                     </Tab>
                 </Tabs>
 
             </Content>
+        );
+    }
+    
+    renderSummaryStats() {
+        return (
+            <View>
+                {/* TODO - implement */}
+            </View>
         );
     }
 
@@ -212,6 +220,14 @@ export default class StatisticsScreen extends Component {
                 </View>
             );
         }
+    }
+
+    renderPromptStats() {
+        return (
+            <View>
+                {/* TODO - implement */}
+            </View>
+        );
     }
 
     async loadStats() {

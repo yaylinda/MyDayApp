@@ -436,7 +436,7 @@ export default class DayInfo extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
+            // console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log(`[DayInfo] updating this.state.day`);
                 this.setState({ day: json });

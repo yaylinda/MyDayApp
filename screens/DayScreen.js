@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 import {
-  Container, Content,
+    Container, Content, DeckSwiper, Button, Icon, Text, View,
 } from 'native-base';
 import { host } from '../util/Constants';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Dimensions } from 'react-native';
 import DayInfo from './DayInfoScreen';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
+
+function wp (percentage) {
+    const value = (percentage * viewportWidth) / 100;
+    return Math.round(value);
+}
+
+const slideHeight = viewportHeight * 0.36;
+const slideWidth = wp(75);
+const itemHorizontalMargin = wp(2);
+
+const sliderWidth = viewportWidth;
+const itemWidth = slideWidth + itemHorizontalMargin * 2;
 
 export default class DayScreen extends Component {
 
@@ -25,15 +40,25 @@ export default class DayScreen extends Component {
     }
 
     render() {
+        
         return (
             <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
-                {
-                    this.state.daysData.map((item, index) => {
-                        return (<DayInfo key={index} day={item} catalogData={this.state.catalogData} />);
-                    })
-                }
+                <View>
+                    <Carousel
+                        layout={'stack'} layoutCardOffset={`18`}
+                        ref={(c) => { this._carousel = c; }}
+                        data={this.state.daysData}
+                        renderItem={this.renderItem}
+                        sliderWidth={Dimensions.get('window').width}
+                        itemWidth={Dimensions.get('window').width}
+                    />
+                </View>
             </Content>
         );
+    }
+
+    renderItem = ({item, index}) => {
+        return (<DayInfo key={index} day={item} catalogData={this.state.catalogData} />);
     }
 
     async loadDayData() {
@@ -47,7 +72,7 @@ export default class DayScreen extends Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Session-Token': sessionToken
-              },
+            },
         }).then((response) => {
             if (response.ok) {
                 console.log(`[DayScreen] successfully retrieved day data`);
@@ -94,7 +119,7 @@ export default class DayScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[CatalogScreen] json: ${JSON.stringify(json)}`);
+            // console.log(`[CatalogScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log('[CatalogScreen] updating state.catalogData');
                 this.setState({ catalogData: json });
