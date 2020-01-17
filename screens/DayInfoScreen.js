@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, Body, List } from "native-base";
+import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, Body, List, Fab } from "native-base";
 import moment from 'moment'
 import Modal from "react-native-modal";
 import { AsyncStorage } from "react-native";
@@ -10,6 +10,7 @@ export default class DayInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            active: false,
             day: this.props.day,
             errorMessage: '',
             showAddModal: false,
@@ -26,7 +27,7 @@ export default class DayInfo extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: '#282833' }}>
+            <View style={{ flex: 1, backgroundColor: '#282833', paddingRight: 20}}>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>
@@ -41,11 +42,7 @@ export default class DayInfo extends Component {
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Scores</Text>
-                        <Button rounded small
-                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" style={{ fontSize: 18 }} />
-                        </Button>
+                        
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderEmotions()}
@@ -59,11 +56,7 @@ export default class DayInfo extends Component {
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Activities</Text>
-                        <Button rounded small
-                            onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" style={{ fontSize: 18 }} />
-                        </Button>
+                        
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderActivities()}
@@ -77,11 +70,7 @@ export default class DayInfo extends Component {
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Prompts</Text>
-                        <Button rounded small
-                            onPress={() => this.handleAddRandomPrompt()}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" style={{ fontSize: 18 }} />
-                        </Button>
+                        
                     </CardItem>
                     <CardItem style={{ backgroundColor: '#282833' }}>
                         {this.renderPrompts()}
