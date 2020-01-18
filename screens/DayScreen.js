@@ -80,42 +80,52 @@ export default class DayScreen extends Component {
                         tappableDots={!!this.carousel}
                     />
                 </View>
-
-                {/* TODO - move this entire element somewhere else... maybe the footer? 
-                    need to think about where to put the function handlers as well */}
-                {/* <Fab
-                    active={this.state.active}
-                    direction="up"
-                    containerStyle={{ }}
-                    style={{ backgroundColor: '#ff4495'}}
-                    position="bottomRight"
-                    onPress={() => this.setState({ active: !this.state.active })}>
-                        <Icon name="add-circle" />
-
-                        <Button rounded small
-                            onPress={() => this.handleAddRandomPrompt()}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="help" style={{ fontSize: 18 }} />
-                        </Button>   
-
-                        <Button rounded small
-                            onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="apps" style={{ fontSize: 18 }} />
-                        </Button>
-
-                        <Button rounded small
-                            onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="star-outline" style={{ fontSize: 18 }} />
-                        </Button>
-                </Fab> */}
+                { this.renderFab() }
             </Content>
         );
     }
 
     renderItem = ({ item, index }) => {
-        return (<DayInfo key={index} day={item} catalogData={this.state.catalogData} />);
+        return (
+            <DayInfo 
+                key={index} 
+                day={item} 
+                catalogData={this.state.catalogData} 
+                showFab={index === 0}
+            />
+        );
+    }
+
+    renderFab() {
+            return (
+                <Fab
+                    active={this.state.active}
+                    direction="up"
+                    containerStyle={{ paddingRight: 20}}
+                    style={{ backgroundColor: '#ff4495'}}
+                    position="bottomRight"
+                    onPress={() => this.setState({ active: !this.state.active })}>
+                    <Icon name="add-circle" />
+
+                    <Button rounded small
+                        onPress={() => this.handleAddRandomPrompt()}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="help" style={{ fontSize: 18 }} />
+                    </Button>   
+
+                    <Button rounded small
+                        onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="apps" style={{ fontSize: 18 }} />
+                    </Button>
+
+                    <Button rounded small
+                        onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="star-outline" style={{ fontSize: 18 }} />
+                    </Button>
+                </Fab>
+            );
     }
 
     async loadDayData() {

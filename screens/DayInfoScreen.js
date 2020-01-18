@@ -27,8 +27,13 @@ export default class DayInfo extends Component {
 
     render() {
         return (
-            <Content padder style={{ backgroundColor: '#32323e', height: Dimensions.get('window').height * 0.80, borderRadius: 20}}>
-
+            <Content padder style={{
+                backgroundColor: '#32323e', 
+                height: Dimensions.get('window').height * 0.80,
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: 'white'
+            }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
                     <Text style={{ fontSize: 24, fontWeight: '800', color: '#52e3c2' }}>
                         {this.formatDate(this.state.day.date)}
@@ -77,26 +82,8 @@ export default class DayInfo extends Component {
                     </CardItem>
                 </Card>
 
-                <Modal isVisible={this.state.showAddModal}>
-                    <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+                { this.renderModal() }
 
-                        <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>{this.renderModalTitle()}</Text>
-                        </View>
-
-                        {this.renderModalContent()}
-
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Cancel</Text>
-                            </Button>
-                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Save</Text>
-                            </Button>
-                        </View>
-
-                    </View>
-                </Modal>
             </Content>
         );
     }
@@ -242,6 +229,31 @@ export default class DayInfo extends Component {
         }
     }
 
+    renderModal() {
+        return (
+            <Modal isVisible={this.state.showAddModal}>
+                <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+
+                    <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>{this.renderModalTitle()}</Text>
+                    </View>
+
+                    {this.renderModalContent()}
+
+                    <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
+                            <Text>Cancel</Text>
+                        </Button>
+                        <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
+                            <Text>Save</Text>
+                        </Button>
+                    </View>
+
+                </View>
+            </Modal>
+        );
+    }
+
     renderModalTitle() {
         if (this.state.addType === 'EMOTION') {
             return ('New Day Score');
@@ -352,6 +364,40 @@ export default class DayInfo extends Component {
                         }
                     </List>
                 </View>
+            );
+        }
+    }
+
+    renderFab() {
+        if (this.props.showFab) {
+            return (
+                <Fab
+                    active={this.state.active}
+                    direction="up"
+                    containerStyle={{ }}
+                    style={{ backgroundColor: '#ff4495'}}
+                    position="bottomRight"
+                    onPress={() => this.setState({ active: !this.state.active })}>
+                    <Icon name="add-circle" />
+
+                    <Button rounded small
+                        onPress={() => this.handleAddRandomPrompt()}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="help" style={{ fontSize: 18 }} />
+                    </Button>   
+
+                    <Button rounded small
+                        onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="apps" style={{ fontSize: 18 }} />
+                    </Button>
+
+                    <Button rounded small
+                        onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="star-outline" style={{ fontSize: 18 }} />
+                    </Button>
+                </Fab>
             );
         }
     }
