@@ -51,14 +51,13 @@ export default class DayScreen extends Component {
             <Content scrollEnabled={false} style={{ backgroundColor: '#282833', flex: 1}}>
                 <View style={{ marginBottom: 20 }}>
                     <Carousel
-                        layout={'default'}
+                        layout={'stack'}
                         ref={c => this.carousel = c}
                         data={this.state.daysData}
                         renderItem={this.renderItem}
                         onSnapToItem={(index) => this.setState({ activeSlide: index })}
                         sliderWidth={Dimensions.get('window').width}
-                        itemWidth={Dimensions.get('window').width * 0.8}
-
+                        itemWidth={Dimensions.get('window').width * 0.85}
                     />
                 </View>
                 <View>

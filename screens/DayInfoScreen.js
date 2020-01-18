@@ -440,7 +440,7 @@ export default class DayInfo extends Component {
     }
 
     formatDate(date) {
-        return moment(date, "YYYY-MM-DD").format('dddd, MMM Do YYYY');
+        return moment(date, "YYYY-MM-DD").format('ddd, MMM Do YYYY');
     }
 
     resetState() {
