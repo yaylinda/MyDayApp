@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, Body, List, Fab } from "native-base";
+import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, Body, List, Fab, Content } from "native-base";
 import moment from 'moment'
 import Modal from "react-native-modal";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Dimensions } from "react-native";
 import { host } from "../util/Constants";
 
 export default class DayInfo extends Component {
@@ -27,52 +27,52 @@ export default class DayInfo extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: '#282833', paddingRight: 20}}>
+            <Content padder style={{ backgroundColor: '#32323e', height: Dimensions.get('window').height * 0.80, borderRadius: 20}}>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
+                    <Text style={{ fontSize: 24, fontWeight: '800', color: '#52e3c2' }}>
                         {this.formatDate(this.state.day.date)}
                     </Text>
                 </View>
 
-                <Card transparent style={{ backgroundColor: '#282833' }}>
+                <Card transparent style={{ backgroundColor: '#32323e' }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#282833',
+                        backgroundColor: '#32323e',
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Scores</Text>
                         
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
+                    <CardItem style={{ backgroundColor: '#32323e' }}>
                         {this.renderEmotions()}
                     </CardItem>
                 </Card>
 
-                <Card transparent style={{ backgroundColor: '#282833' }}>
+                <Card transparent style={{ backgroundColor: '#32323e' }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#282833',
+                        backgroundColor: '#32323e',
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Activities</Text>
                         
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
+                    <CardItem style={{ backgroundColor: '#32323e' }}>
                         {this.renderActivities()}
                     </CardItem>
                 </Card>
 
-                <Card transparent style={{ backgroundColor: '#282833' }}>
+                <Card transparent style={{ backgroundColor: '#32323e' }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#282833',
+                        backgroundColor: '#32323e',
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Prompts</Text>
                         
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
+                    <CardItem style={{ backgroundColor: '#32323e' }}>
                         {this.renderPrompts()}
                     </CardItem>
                 </Card>
@@ -97,7 +97,7 @@ export default class DayInfo extends Component {
 
                     </View>
                 </Modal>
-            </View>
+            </Content>
         );
     }
 

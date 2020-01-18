@@ -48,40 +48,39 @@ export default class DayScreen extends Component {
     render() {
 
         return (
-            <Content padder style={{ backgroundColor: '#282833' }}>
-                <View>
+            <Content scrollEnabled={false} style={{ backgroundColor: '#282833', flex: 1}}>
+                <View style={{ marginBottom: 20 }}>
                     <Carousel
+                        layout={'default'}
                         ref={c => this.carousel = c}
                         data={this.state.daysData}
                         renderItem={this.renderItem}
-                        vertical={true}
                         onSnapToItem={(index) => this.setState({ activeSlide: index })}
-                        sliderWidth={sliderWidth}
-                        itemWidth={itemWidth}
-                        sliderHeight={Dimensions.get('window').height * 0.8}
-                        itemHeight={Dimensions.get('window').height * 0.8}
+                        sliderWidth={Dimensions.get('window').width}
+                        itemWidth={Dimensions.get('window').width * 0.8}
+
                     />
-                    <Pagination style={{borderWidth:1, borderColor:'white'}}
+                </View>
+                <View>
+                    <Pagination
                         dotsLength={this.state.daysData.length}
                         activeDotIndex={this.state.activeSlide}
                         containerStyle={{
-                            paddingVertical: 8
+                            paddingVertical: 0
                         }}
-                        dotColor={'rgba(255, 255, 255, 0.92)'}
+                        dotColor={'white'}
                         dotStyle={{
                             width: 8,
                             height: 8,
-                            borderRadius: 4,
-                            marginHorizontal: 8
+                            borderRadius: 8
                         }}
-                        inactiveDotColor={'black'}
+                        inactiveDotColor={'#b4b8cd'}
                         inactiveDotOpacity={0.4}
                         inactiveDotScale={0.6}
                         carouselRef={this.carousel}
                         tappableDots={!!this.carousel}
                     />
                 </View>
-
 
                 {/* TODO - move this entire element somewhere else... maybe the footer? 
                     need to think about where to put the function handlers as well */}
