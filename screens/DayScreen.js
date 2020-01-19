@@ -3,9 +3,11 @@ import {
     Container, Content, DeckSwiper, Button, Icon, Text, View, Fab, List, ListItem, CheckBox, Body,
 } from 'native-base';
 import { host } from '../util/Constants';
-import { AsyncStorage, Dimensions, Modal } from 'react-native';
+import { AsyncStorage, Dimensions } from 'react-native';
 import DayInfo from './DayInfoScreen';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Modal from "react-native-modal";
+import moment from 'moment'
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
@@ -38,9 +40,9 @@ export default class DayScreen extends Component {
             selectedActivityIndex: -1,
             selectedEmotionScore: 0,
             selectedHearts: [false, false, false, false, false],
+            heartLabels: ['Bad', 'Kind of bad', 'Okay', 'Pretty good', 'Good'],
             randomPromptIndex: -1,
             selectedPromptAnswerIndex: -1
-
         }
         console.log('[DayScreen] constructor');
     }
@@ -64,6 +66,7 @@ export default class DayScreen extends Component {
                             onSnapToItem={(index) => this.setState({ activeSlide: index })}
                             sliderWidth={Dimensions.get('window').width}
                             itemWidth={Dimensions.get('window').width * 0.85}
+                            extraData={this.state.daysData}
                         />
                     </View>
                     <View>
@@ -95,12 +98,7 @@ export default class DayScreen extends Component {
 
     renderItem = ({ item, index }) => {
         return (
-            <DayInfo
-                key={index}
-                day={item}
-                catalogData={this.state.catalogData}
-                showFab={index === 0}
-            />
+            <DayInfo key={index} day={item} />
         );
     }
 
@@ -416,10 +414,12 @@ export default class DayScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            // console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
+            console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
-                console.log(`[DayInfo] updating this.state.day`);
-                this.setState({ day: json });
+                console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.activeSlide}`);
+                let tempDays = this.state.daysData;
+                tempDays[this.state.activeSlide] = json;
+                this.setState({ daysData: tempDays });
             } else {
                 console.log(`[DayInfo] error posting new event with error message: ${json.message}`);
                 this.errorMessage = json.message;

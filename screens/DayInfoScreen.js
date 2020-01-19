@@ -9,19 +9,6 @@ export default class DayInfo extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            active: false,
-            day: this.props.day,
-            errorMessage: '',
-            showAddModal: false,
-            addType: '',
-            selectedActivityIndex: -1,
-            selectedEmotionScore: 0,
-            selectedHearts: [false, false, false, false, false],
-            heartLabels: ['Bad', 'Kind of bad', 'Okay', 'Pretty good', 'Good'],
-            randomPromptIndex: -1,
-            selectedPromptAnswerIndex: -1
-        }
         console.log('[DayInfo] constructor');
     }
 
@@ -36,7 +23,7 @@ export default class DayInfo extends Component {
             }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
                     <Text style={{ fontSize: 24, fontWeight: '800', color: '#52e3c2' }}>
-                        {this.formatDate(this.state.day.date)}
+                        {this.formatDate(this.props.day.date)}
                     </Text>
                 </View>
 
@@ -87,11 +74,11 @@ export default class DayInfo extends Component {
     }
 
     renderEmotions() {
-        if (this.state.day.emotions.length) {
+        if (this.props.day.emotions.length) {
             return (
                 <View style={{ flex: 1 }}>
                     {
-                        this.state.day.emotions.map((item, index) => {
+                        this.props.day.emotions.map((item, index) => {
                             return (
                                 <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                     <View padder style={{
@@ -137,10 +124,10 @@ export default class DayInfo extends Component {
     }
 
     renderActivities() {
-        if (this.state.day.activities.length) {
+        if (this.props.day.activities.length) {
             return (
                 <View style={{ flex: 1 }}>
-                    {this.state.day.activities.map((item, index) => {
+                    {this.props.day.activities.map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                 <View padder style={{
@@ -178,11 +165,11 @@ export default class DayInfo extends Component {
     }
 
     renderPrompts() {
-        if (this.state.day.prompts.length) {
+        if (this.props.day.prompts.length) {
             return (
                 <View style={{ flex: 1 }}>
                     {
-                        this.state.day.prompts.map((item, index) => {
+                        this.props.day.prompts.map((item, index) => {
                             return (
                                 <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                     <View padder style={{
