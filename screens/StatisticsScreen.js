@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Container, View, Text, Content, Tabs, Tab, Segment, Button, Card } from 'native-base';
+import { View, Text, Content, Tabs, Tab } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
-import { Dimensions } from "react-native";
-import { LineChart, Grid, YAxis, XAxis, BarChart, StackedBarChart } from 'react-native-svg-charts';
+import { Grid, YAxis, XAxis, BarChart, StackedBarChart } from 'react-native-svg-charts';
 import palette from 'google-palette';
-import extractDataPoints from 'react-native-svg-charts';
 import { NavigationEvents } from 'react-navigation';
 
 export default class StatisticsScreen extends Component {
@@ -43,7 +41,7 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            { this.renderSummaryStats() }
+                            {this.renderSummaryStats()}
                         </View>
                     </Tab>
                     <Tab heading="Scores"
@@ -79,7 +77,7 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            { this.renderPromptStats() }
+                            {this.renderPromptStats()}
                         </View>
                     </Tab>
                 </Tabs>
@@ -87,7 +85,7 @@ export default class StatisticsScreen extends Component {
             </Content>
         );
     }
-    
+
     renderSummaryStats() {
         return (
             <View>
@@ -178,7 +176,7 @@ export default class StatisticsScreen extends Component {
                 }
                 data.push(datum);
             });
-            
+
             let y = data.map(datum => {
                 let sum = 0;
                 input.legend.forEach(label => {
@@ -195,12 +193,12 @@ export default class StatisticsScreen extends Component {
                     <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
                     <View style={{ flexDirection: 'row', display: "flex" }}>
                         <YAxis
-                            data={ y }
+                            data={y}
                             contentInset={{ top: 10, bottom: 10 }}
-                            formatLabel={ (value, index) => index % 2 ? '' : value }
+                            formatLabel={(value, index) => index % 2 ? '' : value}
                             style={{ flex: 0.1, marginBottom: 15, marginLeft: -15 }}
                             svg={{ fill: 'gray', fontSize: 10 }}
-                            numberOfTicks={ Math.max(...y) }
+                            numberOfTicks={Math.max(...y)}
                         />
                         <View style={{ flex: 0.9, marginLeft: -10 }}>
                             <StackedBarChart

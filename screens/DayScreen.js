@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Container, Content, DeckSwiper, Button, Icon, Text, View, Fab, List, ListItem, CheckBox, Body,
-} from 'native-base';
+import { Content, Button, Icon, Text, View, List, ListItem, CheckBox, Body } from 'native-base';
 import { host } from '../util/Constants';
 import { AsyncStorage, Dimensions } from 'react-native';
 import DayInfo from './DayInfoScreen';
@@ -80,8 +78,8 @@ export default class DayScreen extends Component {
                             tappableDots={!!this.carousel}
                         />
                     </View>
-                    { this.renderAddFab() }
-                    { this.renderRestartFab() }
+                    {this.renderAddFab()}
+                    {this.renderRestartFab()}
                 </Content>
                 {this.state.showAddModal ? this.renderModal() : null}
             </View>
@@ -96,7 +94,7 @@ export default class DayScreen extends Component {
 
     renderAddFab() {
         return (
-            <ActionButton 
+            <ActionButton
                 buttonColor="#ff4495" offsetX={40} offsetY={40}
                 renderIcon={() => <Icon name="add" style={{ fontSize: 18, color: 'white' }} />}>
                 <ActionButton.Item
@@ -106,7 +104,7 @@ export default class DayScreen extends Component {
                     style={{ backgroundColor: '#ff4495' }}>
                     <Icon name="star-outline" style={{ fontSize: 18, color: 'white' }} />
                 </ActionButton.Item>
-                
+
                 <ActionButton.Item
                     size={40}
                     title={'Activity'}
@@ -130,11 +128,11 @@ export default class DayScreen extends Component {
         if (this.state.activeSlide > 0) {
             return (
                 <ActionButton
-                    buttonColor="#52e3c2" 
-                    offsetX={40} 
-                    offsetY={40} 
+                    buttonColor="#52e3c2"
+                    offsetX={40}
+                    offsetY={40}
                     position={'left'}
-                    onPress={() => this.refs.carousel.snapToItem(0) }
+                    onPress={() => this.refs.carousel.snapToItem(0)}
                     renderIcon={() => <Icon name="calendar" style={{ fontSize: 18, color: 'white' }} />}
                 />
             );
