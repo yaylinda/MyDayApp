@@ -8,6 +8,7 @@ import DayInfo from './DayInfoScreen';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Modal from "react-native-modal";
 import moment from 'moment'
+import ActionButton from 'react-native-action-button';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
@@ -34,7 +35,7 @@ export default class DayScreen extends Component {
             errorMessage: '',
 
             // states for FAB / modal actions
-            active: false,
+            addFabActive: false,
             showAddModal: false,
             addType: '',
             selectedActivityIndex: -1,
@@ -60,19 +61,20 @@ export default class DayScreen extends Component {
                     <View style={{ marginBottom: 20 }}>
                         <Carousel
                             layout={'stack'}
-                            ref={c => this.carousel = c}
+                            ref={'carousel'}
                             data={this.state.daysData}
                             renderItem={this.renderItem}
                             onSnapToItem={(index) => this.setState({ activeSlide: index })}
                             sliderWidth={Dimensions.get('window').width}
                             itemWidth={Dimensions.get('window').width * 0.85}
                             extraData={this.state.daysData}
+                            initialNumToRender={1}
                         />
                     </View>
                     <View>
                         <Pagination
                             dotsLength={this.state.daysData.length}
-                            activeDotIndex={this.state.activeSlide}
+                            activeDotIndex={this.state.addFabActiveSlide}
                             containerStyle={{
                                 paddingVertical: 0
                             }}
@@ -89,7 +91,8 @@ export default class DayScreen extends Component {
                             tappableDots={!!this.carousel}
                         />
                     </View>
-                    {this.renderFab()}
+                    { this.renderAddFab() }
+                    { this.renderRestartFab() }
                 </Content>
                 {this.state.showAddModal ? this.renderModal() : null}
             </View>
@@ -102,36 +105,51 @@ export default class DayScreen extends Component {
         );
     }
 
-    renderFab() {
+    renderAddFab() {
         return (
-            <Fab
-                active={this.state.active}
-                direction="up"
-                containerStyle={{ paddingRight: 20 }}
-                style={{ backgroundColor: '#ff4495' }}
-                position="bottomRight"
-                onPress={() => this.setState({ active: !this.state.active })}>
-                <Icon name="add-circle" />
-
-                <Button rounded small
-                    onPress={() => this.handleAddRandomPrompt()}
-                    style={{ backgroundColor: '#ff4495' }}>
-                    <Icon name="help" style={{ fontSize: 18 }} />
-                </Button>
-
-                <Button rounded small
-                    onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
-                    style={{ backgroundColor: '#ff4495' }}>
-                    <Icon name="apps" style={{ fontSize: 18 }} />
-                </Button>
-
-                <Button rounded small
+            <ActionButton 
+                buttonColor="#ff4495" offsetX={40} offsetY={40}
+                renderIcon={() => <Icon name="add" style={{ fontSize: 18, color: 'white' }} />}>
+                <ActionButton.Item
+                    size={40}
+                    title={'Score'}
                     onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
                     style={{ backgroundColor: '#ff4495' }}>
-                    <Icon name="star-outline" style={{ fontSize: 18 }} />
-                </Button>
-            </Fab>
+                    <Icon name="star-outline" style={{ fontSize: 18, color: 'white' }} />
+                </ActionButton.Item>
+                
+                <ActionButton.Item
+                    size={40}
+                    title={'Activity'}
+                    onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
+                    style={{ backgroundColor: '#ff4495' }}>
+                    <Icon name="apps" style={{ fontSize: 18, color: 'white' }} />
+                </ActionButton.Item>
+
+                <ActionButton.Item
+                    size={40}
+                    title={'Prompt'}
+                    onPress={() => this.handleAddRandomPrompt()}
+                    style={{ backgroundColor: '#ff4495' }}>
+                    <Icon name="help" style={{ fontSize: 18, color: 'white' }} />
+                </ActionButton.Item>
+            </ActionButton>
         );
+    }
+
+    renderRestartFab() {
+        if (this.state.activeSlide > 0) {
+            return (
+                <ActionButton
+                    buttonColor="#52e3c2" 
+                    offsetX={40} 
+                    offsetY={40} 
+                    position={'left'}
+                    onPress={() => this.refs.carousel.snapToItem(0) }
+                    renderIcon={() => <Icon name="calendar" style={{ fontSize: 18, color: 'white' }} />}
+                />
+            );
+        }
     }
 
     renderModal() {
@@ -372,7 +390,7 @@ export default class DayScreen extends Component {
 
     async persistNew() {
         console.log(`[DayInfo] persist new ${this.state.addType}`);
-        const currentDay = this.state.daysData[this.state.activeSlide];
+        const currentDay = this.state.daysData[this.state.addFabActiveSlide];
 
         const sessionToken = await AsyncStorage.getItem('sessionToken');
         const endpoint = `${host}/days/${currentDay.dayId}/${this.state.addType}`;
@@ -416,9 +434,9 @@ export default class DayScreen extends Component {
         }).then((json) => {
             console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
-                console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.activeSlide}`);
+                console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.addFabActiveSlide}`);
                 let tempDays = this.state.daysData;
-                tempDays[this.state.activeSlide] = json;
+                tempDays[this.state.addFabActiveSlide] = json;
                 this.setState({ daysData: tempDays });
             } else {
                 console.log(`[DayInfo] error posting new event with error message: ${json.message}`);
