@@ -5,6 +5,7 @@ import {
 import { host } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
 import Modal from "react-native-modal";
+import { NavigationEvents } from 'react-navigation';
 
 export default class CatalogScreen extends Component {
 
@@ -32,6 +33,13 @@ export default class CatalogScreen extends Component {
     render() {
         return (
             <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
+
+                <NavigationEvents
+                    onWillFocus={payload => console.log('will focus - CatalogScreen')}
+                    onDidFocus={payload => console.log('did focus - CatalogScreen')}
+                    onWillBlur={payload => console.log('will blur - CatalogScreen')}
+                    onDidBlur={payload => console.log('did blur - CatalogScreen')}
+                />
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
@@ -303,6 +311,7 @@ export default class CatalogScreen extends Component {
             if (response.ok) {
                 requestSuccess = true;
                 console.log(`[CatalogScreen] successfully posted new`);
+                AsyncStorage.setItem('doCatalogUpdate', 'doCatalogUpdate');
             } else {
                 requestSuccess = false;
                 console.log(`[CatalogScreen] error posting new`);

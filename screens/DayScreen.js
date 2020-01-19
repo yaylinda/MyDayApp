@@ -9,20 +9,8 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Modal from "react-native-modal";
 import moment from 'moment'
 import ActionButton from 'react-native-action-button';
+import { NavigationEvents } from 'react-navigation';
 
-const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
-
-function wp(percentage) {
-    const value = (percentage * viewportWidth) / 100;
-    return Math.round(value);
-}
-
-const slideHeight = viewportHeight * 0.36;
-const slideWidth = wp(75);
-const itemHorizontalMargin = wp(2);
-
-export const sliderWidth = viewportWidth;
-export const itemWidth = slideWidth + itemHorizontalMargin * 2;
 export default class DayScreen extends Component {
 
     constructor(props) {
@@ -54,9 +42,10 @@ export default class DayScreen extends Component {
     }
 
     render() {
-
         return (
             <View style={{ backgroundColor: '#282833', flex: 1 }}>
+                <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
+
                 <Content scrollEnabled={false} style={{ backgroundColor: '#282833', flex: 1 }}>
                     <View style={{ marginBottom: 20 }}>
                         <Carousel
@@ -74,7 +63,7 @@ export default class DayScreen extends Component {
                     <View>
                         <Pagination
                             dotsLength={this.state.daysData.length}
-                            activeDotIndex={this.state.addFabActiveSlide}
+                            activeDotIndex={this.state.activeSlide}
                             containerStyle={{
                                 paddingVertical: 0
                             }}
@@ -380,6 +369,7 @@ export default class DayScreen extends Component {
             if (requestSuccess) {
                 console.log('[CatalogScreen] updating state.catalogData');
                 this.setState({ catalogData: json });
+                AsyncStorage.setItem('doCatalogUpdate', '');
             } else {
                 console.log(`[CatalogScreen] retrieving day event catalog data error message: ${json.message}`);
                 this.errorMessage = json.message;
@@ -390,7 +380,7 @@ export default class DayScreen extends Component {
 
     async persistNew() {
         console.log(`[DayInfo] persist new ${this.state.addType}`);
-        const currentDay = this.state.daysData[this.state.addFabActiveSlide];
+        const currentDay = this.state.daysData[this.state.activeSlide];
 
         const sessionToken = await AsyncStorage.getItem('sessionToken');
         const endpoint = `${host}/days/${currentDay.dayId}/${this.state.addType}`;
@@ -434,10 +424,11 @@ export default class DayScreen extends Component {
         }).then((json) => {
             console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
-                console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.addFabActiveSlide}`);
+                console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.activeSlide}`);
                 let tempDays = this.state.daysData;
-                tempDays[this.state.addFabActiveSlide] = json;
+                tempDays[this.state.activeSlide] = json;
                 this.setState({ daysData: tempDays });
+                AsyncStorage.setItem('doStatsUpdate', 'doStatsUpdate');
             } else {
                 console.log(`[DayInfo] error posting new event with error message: ${json.message}`);
                 this.errorMessage = json.message;
@@ -457,6 +448,15 @@ export default class DayScreen extends Component {
             randomPromptIndex: -1,
             selectedPromptAnswerIndex: -1
         });
+    }
+
+    async checkForUpdates() {
+        console.log('[DayScreen] [onWillFocus] - checkForUpdates');
+        const doCatalogUpdate = await AsyncStorage.getItem('doCatalogUpdate');
+        if (doCatalogUpdate) {
+            console.log('[DayScreen] [onWillFocus] - checkForUpdates: doCatalogUpdate=true');
+            this.loadCatalogData();
+        }
     }
 
 }

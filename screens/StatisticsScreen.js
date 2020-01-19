@@ -6,6 +6,7 @@ import { Dimensions } from "react-native";
 import { LineChart, Grid, YAxis, XAxis, BarChart, StackedBarChart } from 'react-native-svg-charts';
 import palette from 'google-palette';
 import extractDataPoints from 'react-native-svg-charts';
+import { NavigationEvents } from 'react-navigation';
 
 export default class StatisticsScreen extends Component {
 
@@ -28,6 +29,8 @@ export default class StatisticsScreen extends Component {
     render() {
         return (
             <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
+                <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
+
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Statistics</Text>
                 </View>
@@ -258,11 +261,21 @@ export default class StatisticsScreen extends Component {
             if (requestSuccess) {
                 console.log('[StatisticsScreen] updating state.allStats');
                 this.setState({ allStats: json });
+                AsyncStorage.setItem('doStatsUpdate', '');
             } else {
                 console.log(`[StatisticsScreen] retrieving allStats object error message: ${json.message}`);
                 this.errorMessage = json.message;
                 // TODO - show error message on screen
             }
         })
+    }
+
+    async checkForUpdates() {
+        console.log('[StatisticsScreen] [onWillFocus] - checkForUpdates');
+        const doStatsUpdate = await AsyncStorage.getItem('doStatsUpdate');
+        if (doStatsUpdate) {
+            console.log('[StatisticsScreen] [onWillFocus] - checkForUpdates: doStatsUpdate=true');
+            this.loadStats();
+        }
     }
 }
