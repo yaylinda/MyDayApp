@@ -6,16 +6,21 @@ import { Grid, YAxis, XAxis, BarChart, StackedBarChart } from 'react-native-svg-
 import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
 
+const SCORE_KEY = 'score';
+const ACTIVITY_KEY = 'activity';
+const PROMPT_KEY = 'prompt';
+const SUMMARY_KEY = 'summary';
+
 export default class StatisticsScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             allStats: {
-                SUMMARY: {},
-                SCORE: {},
-                ACTIVITY: {},
-                PROMPT: {}
+                [SCORE_KEY]: {},
+                [ACTIVITY_KEY]: {},
+                [PROMPT_KEY]: {},
+                [SUMMARY_KEY]: {}
             },
         }
     }
@@ -51,10 +56,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            {this.renderLineGraph('SCORE', 'day', 'Today\'s Scores')}
-                            {this.renderLineGraph('SCORE', 'week', 'Last 7 Days')}
-                            {this.renderLineGraph('SCORE', 'month', 'This Month')}
-                            {this.renderLineGraph('SCORE', 'year', 'This Year')}
+                            {this.renderLineGraph(SCORE_KEY, 'day', 'Today\'s Scores')}
+                            {this.renderLineGraph(SCORE_KEY, 'week', 'Last 7 Days')}
+                            {this.renderLineGraph(SCORE_KEY, 'month', 'This Month')}
+                            {this.renderLineGraph(SCORE_KEY, 'year', 'This Year')}
                         </View>
                     </Tab>
                     <Tab heading="Activities"
@@ -64,10 +69,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            {this.renderStackedBarChat('ACTIVITY', 'day', 'Average Scores By Hour')}
-                            {this.renderStackedBarChat('ACTIVITY', 'week', 'Last 7 Days')}
-                            {this.renderStackedBarChat('ACTIVITY', 'month', 'Last Month')}
-                            {this.renderStackedBarChat('ACTIVITY', 'year', 'Last Year')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, 'day', 'Average Scores By Hour')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, 'week', 'Last 7 Days')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, 'month', 'Last Month')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, 'year', 'Last Year')}
                         </View>
                     </Tab>
                     <Tab heading="Prompts"

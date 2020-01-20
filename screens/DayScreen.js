@@ -16,7 +16,7 @@ export default class DayScreen extends Component {
         this.state = {
             daysData: [],
             activeSlide: 0,
-            catalogData: { 'ACTIVITY': [], 'EMOTION': [] },
+            catalogData: { 'ACTIVITY': [], 'EMOTION': [], 'PROMPT': [] },
             loadedDayData: false,
             errorMessage: '',
 
@@ -252,7 +252,7 @@ export default class DayScreen extends Component {
     }
 
     renderPromptModal() {
-        if (this.state.randomPromptIndex > 0 && this.state.catalogData['PROMPT']) {
+        if (this.state.randomPromptIndex >= 0 && this.state.catalogData['PROMPT']) {
             return (
                 <View padder>
                     <Text style={{ color: 'white' }}>{this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question}</Text>
@@ -298,11 +298,13 @@ export default class DayScreen extends Component {
     }
 
     handleAddRandomPrompt() {
+        console.log('handleAddRandomPrompt');
         this.setState({
             showAddModal: true,
             addType: 'PROMPT',
             randomPromptIndex: Math.floor(Math.random() * this.state.catalogData['PROMPT'].length)
         });
+        console.log(`handleAddRandomPrompt: randomPromptIndex=${this.state.randomPromptIndex}`);
     }
 
     async loadDayData() {
