@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Content, Tabs, Tab } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
-import { Grid, YAxis, XAxis, BarChart, StackedBarChart } from 'react-native-svg-charts';
+import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart } from 'react-native-svg-charts';
 import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
 
@@ -82,7 +82,7 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            {this.renderPromptStats()}
+                            { this.renderPromptStats() }
                         </View>
                     </Tab>
                 </Tabs>
@@ -93,8 +93,8 @@ export default class StatisticsScreen extends Component {
 
     renderSummaryStats() {
         return (
-            <View>
-                {/* TODO - implement */}
+            <View style={{ marginBottom: 20, justifyContent: 'center' }}>
+
             </View>
         );
     }
@@ -229,9 +229,52 @@ export default class StatisticsScreen extends Component {
     }
 
     renderPromptStats() {
-        return (
+        const input = this.state.allStats[PROMPT_KEY];
+
+        const allPieData = [];
+
+        Object.keys(input).forEach(q => {
+            let pieData = {
+                title: q,
+                data: []
+            };
+
+            let colors = palette('mpn65', input[q].labels.length);
+            colors = colors.map(c => `#${c}`)
+            
+            pieData.data = input[q].labels.map((answerLabel, index) => {
+                return {
+                    key: answerLabel,
+                    value: input[q].labelsDataMap[answerLabel],
+                    svg: { fill: colors[index] }
+                }
+            });
+
+            allPieData.push(pieData);
+        });
+
+        return(
             <View>
-                {/* TODO - implement */}
+                {
+                    allPieData.map((pieData, index) => {
+                        return this.renderPromptPieChart(index, pieData.data, pieData.title);
+                    })
+                }
+            </View>
+        );
+    }
+
+    renderPromptPieChart(key, data, chartTitle) {
+        console.log(`renderPromptPieChart for: ${chartTitle}`);
+        console.log(data);
+
+        return (
+            <View key={key} style={{ marginBottom: 20, justifyContent: 'center' }}>
+                <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                <PieChart
+                    data={data}
+                    style={{ height: 200 }}
+                />
             </View>
         );
     }
