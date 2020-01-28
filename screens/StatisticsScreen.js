@@ -10,6 +10,10 @@ const SCORE_KEY = 'score';
 const ACTIVITY_KEY = 'activity';
 const PROMPT_KEY = 'prompt';
 const SUMMARY_KEY = 'summary';
+const DAY_KEY = 'day';
+const WEEK_KEY = 'week';
+const MONTH_KEY = 'month';
+const YEAR_KEY = 'year';
 
 export default class StatisticsScreen extends Component {
 
@@ -56,10 +60,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            {this.renderLineGraph(SCORE_KEY, 'day', 'Today\'s Scores')}
-                            {this.renderLineGraph(SCORE_KEY, 'week', 'Last 7 Days')}
-                            {this.renderLineGraph(SCORE_KEY, 'month', 'This Month')}
-                            {this.renderLineGraph(SCORE_KEY, 'year', 'This Year')}
+                            {this.renderLineGraph(SCORE_KEY, DAY_KEY, 'Today\'s Scores')}
+                            {this.renderLineGraph(SCORE_KEY, WEEK_KEY, 'Last 7 Days')}
+                            {this.renderLineGraph(SCORE_KEY, MONTH_KEY, 'This Month')}
+                            {this.renderLineGraph(SCORE_KEY, YEAR_KEY, 'This Year')}
                         </View>
                     </Tab>
                     <Tab heading="Activities"
@@ -69,10 +73,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            {this.renderStackedBarChat(ACTIVITY_KEY, 'day', 'Average Scores By Hour')}
-                            {this.renderStackedBarChat(ACTIVITY_KEY, 'week', 'Last 7 Days')}
-                            {this.renderStackedBarChat(ACTIVITY_KEY, 'month', 'Last Month')}
-                            {this.renderStackedBarChat(ACTIVITY_KEY, 'year', 'Last Year')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, DAY_KEY, 'Average Scores By Hour')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, WEEK_KEY, 'Last 7 Days')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, MONTH_KEY, 'Last Month')}
+                            {this.renderStackedBarChat(ACTIVITY_KEY, YEAR_KEY, 'Last Year')}
                         </View>
                     </Tab>
                     <Tab heading="Prompts"
@@ -82,7 +86,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: '#282833' }}>
-                            { this.renderPromptStats() }
+                            {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today\'s Prompt Answers')}
+                            {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'This Week\'s Prompt Answers')}
+                            {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month\'s Prompt Answers')}
+                            {this.renderPromptStats(PROMPT_KEY, YEAR_KEY, 'This Year\'s Prompt Answers')}
                         </View>
                     </Tab>
                 </Tabs>
@@ -228,46 +235,47 @@ export default class StatisticsScreen extends Component {
         }
     }
 
-    renderPromptStats() {
-        const input = this.state.allStats[PROMPT_KEY];
+    renderPromptStats(statsType, timeRange, chartTitle) {
+        const input = this.state.allStats[statsType][timeRange];
 
-        const allPieData = [];
+        if (input) {
+            const allPieData = [];
 
-        Object.keys(input).forEach(q => {
-            let pieData = {
-                title: q,
-                data: []
-            };
+            input.labels.forEach(q => {
+                const pieData = {
+                    title: q,
+                    data: []
+                };
 
-            let colors = palette('mpn65', input[q].labels.length);
-            colors = colors.map(c => `#${c}`)
-            
-            pieData.data = input[q].labels.map((answerLabel, index) => {
-                return {
-                    key: answerLabel,
-                    value: input[q].labelsDataMap[answerLabel],
-                    svg: { fill: colors[index] }
-                }
+                let colors = palette('mpn65', input.labels.length);
+                colors = colors.map(c => `#${c}`)
+
+                pieData.data = input.labelsDataMap[q].labels.map((answerLabel, index) => {
+                    return {
+                        key: answerLabel,
+                        value: input.labelsDataMap[q].labelsDataMap[answerLabel],
+                        svg: { fill: colors[index] }
+                    }
+                });
+
+                allPieData.push(pieData);
             });
 
-            allPieData.push(pieData);
-        });
-
-        return(
-            <View>
-                {
-                    allPieData.map((pieData, index) => {
-                        return this.renderPromptPieChart(index, pieData.data, pieData.title);
-                    })
-                }
-            </View>
-        );
+            return (
+                <View>
+                    <Text style={{ fontSize: 18, fontWeight: '500', 
+                        color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                    {
+                        allPieData.map((pieData, index) => {
+                            return this.renderPromptPieChart(index, pieData.data, pieData.title);
+                        })
+                    }
+                </View>
+            );
+        }
     }
 
     renderPromptPieChart(key, data, chartTitle) {
-        console.log(`renderPromptPieChart for: ${chartTitle}`);
-        console.log(data);
-
         return (
             <View key={key} style={{ marginBottom: 20, justifyContent: 'center' }}>
                 <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
