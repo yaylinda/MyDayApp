@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Content, Tabs, Tab } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { host } from '../util/Constants';
-import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart } from 'react-native-svg-charts';
+import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart, ProgressCircle } from 'react-native-svg-charts';
 import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
 
@@ -14,6 +14,10 @@ const DAY_KEY = 'day';
 const WEEK_KEY = 'week';
 const MONTH_KEY = 'month';
 const YEAR_KEY = 'year';
+const COUNTS_KEY = 'counts'
+const RECORDS_KEY = 'records';
+const LABELS_KEY = 'labels';
+const LABELS_DATA_MAP_KEY = 'labelsDataMap';
 
 export default class StatisticsScreen extends Component {
 
@@ -99,9 +103,49 @@ export default class StatisticsScreen extends Component {
     }
 
     renderSummaryStats() {
-        return (
-            <View style={{ marginBottom: 20, justifyContent: 'center' }}>
+        if (this.state.allStats[SUMMARY_KEY] 
+            && this.state.allStats[SUMMARY_KEY][COUNTS_KEY] 
+            && this.state.allStats[SUMMARY_KEY][RECORDS_KEY]) {
 
+            const counts = this.state.allStats[SUMMARY_KEY][COUNTS_KEY][LABELS_DATA_MAP_KEY];
+            const records = this.state.allStats[SUMMARY_KEY][RECORDS_KEY][LABELS_DATA_MAP_KEY];
+
+            return (
+                <View style={{ justifyContent: 'center' }}>
+                    { this.renderProgressCircle(counts.numDaysWithRecords, counts.numDaysTotal, 'ANY')}
+                    { this.renderProgressCircle(counts.numDaysWithScore, counts.numDaysTotal, 'SCORE')}
+                    { this.renderProgressCircle(counts.numDaysWithActivity, counts.numDaysTotal, 'ACTIVITY')}
+                    { this.renderProgressCircle(counts.numPromptsTotal, counts.numDaysTotal, 'PROMPT')}
+
+                </View>
+            );
+
+        }
+    }
+
+    renderProgressCircle(value, outOf, dataType) {
+        return (
+            <View style={{ display: 'flex', flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
+                <View style={{ display: 'flex', flex: 1, justifyContent: 'center'}}>
+                    <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10}}>
+                        Recorded 
+                        <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType} </Text> 
+                        data
+                        <Text style={{fontWeight: '600', color: '#d211fe'}}> {value} </Text> 
+                        out of 
+                        <Text style={{fontWeight: '600', color: '#d211fe'}}> {outOf} </Text> 
+                         days
+                    </Text>
+                </View>
+                <View style={{ flex: 1, display: 'flex', justifyContent: 'flex-end'}}>
+                    <ProgressCircle 
+                        style={{ flex: 1, height: 100 }} 
+                        progress={ value / outOf } 
+                        progressColor={'#d211fe'} 
+                        strokeWidth={10} 
+                        cornerRadius={0}
+                    />
+                </View>
             </View>
         );
     }
