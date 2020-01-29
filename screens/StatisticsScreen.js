@@ -5,6 +5,7 @@ import { host } from '../util/Constants';
 import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart, ProgressCircle } from 'react-native-svg-charts';
 import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
+import moment from 'moment'
 
 const SCORE_KEY = 'score';
 const ACTIVITY_KEY = 'activity';
@@ -116,7 +117,11 @@ export default class StatisticsScreen extends Component {
                     { this.renderProgressCircle(counts.numDaysWithScore, counts.numDaysTotal, 'SCORE')}
                     { this.renderProgressCircle(counts.numDaysWithActivity, counts.numDaysTotal, 'ACTIVITY')}
                     { this.renderProgressCircle(counts.numPromptsTotal, counts.numDaysTotal, 'PROMPT')}
-
+                    { this.renderScoreRecordsText('HIGHEST', true, 'SCORE', records.highestAvgDayScore, records.highestAvgDayScoreDate) }
+                    { this.renderScoreRecordsText('LOWEST', false, 'SCORE', records.lowestAvgDayScore, records.lowestAvgDayScoreDate) }
+                    { this.renderMostCommonText('SCORE', records.mostCommonScore, records.mostCommonScoreCount) }
+                    { this.renderMostCommonText('ACTIVITY', records.mostCommonActivity, records.mostCommonActivityCount) }
+                    { this.renderMostCommonText('PROMPT', records.mostCommonPrompt, records.mostCommonPromptCount) }
                 </View>
             );
 
@@ -147,6 +152,29 @@ export default class StatisticsScreen extends Component {
                     />
                 </View>
             </View>
+        );
+    }
+
+    renderScoreRecordsText(extremeType, showHighestColor, dataType, value, date) {
+        const extremeTypeColor = showHighestColor ? '#0781ff' : '#ff4b12';
+        return (
+            <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
+                <Text style={{fontWeight: '600', color: extremeTypeColor}}>{extremeType}</Text> average 
+                <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
+                <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>. 
+                Recorded on {this.formatDate(date)}.
+            </Text>
+        );
+    }
+
+    renderMostCommonText(dataType, value, count) {
+        return (
+            <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
+                Most common
+                <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
+                <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>, with
+                <Text style={{fontWeight: '600', color: '#d211fe'}}> {count}</Text> occurrances.
+            </Text>
         );
     }
 
@@ -375,5 +403,9 @@ export default class StatisticsScreen extends Component {
             console.log('[StatisticsScreen] [onWillFocus] - checkForUpdates: doStatsUpdate=true');
             this.loadStats();
         }
+    }
+
+    formatDate(date) {
+        return moment(date, "YYYY-MM-DD").format('ddd, MMM Do YYYY');
     }
 }
