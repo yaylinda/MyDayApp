@@ -457,6 +457,14 @@ export default class DayScreen extends Component {
             console.log('[DayScreen] [onWillFocus] - checkForUpdates: doCatalogUpdate=true');
             this.loadCatalogData();
         }
+
+        if (this.state.daysData && this.state.daysData[0] && this.state.daysData[0].date) {
+            const latestDate = moment(this.state.daysData[0].date);
+            if (latestDate.isBefore(moment(new Date()).startOf('day'))) {
+                console.log('need to refresh days');
+                this.loadDayData();
+            }
+        }
     }
 
 }
