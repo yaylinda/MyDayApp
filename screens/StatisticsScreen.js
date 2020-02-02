@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Content, Tabs, Tab } from 'native-base';
 import { AsyncStorage } from 'react-native';
-import { host } from '../util/Constants';
+import { HOST, COLORS } from '../util/Constants';
 import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart, ProgressCircle } from 'react-native-svg-charts';
 import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
@@ -40,7 +40,7 @@ export default class StatisticsScreen extends Component {
 
     render() {
         return (
-            <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
+            <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                 <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
@@ -49,22 +49,22 @@ export default class StatisticsScreen extends Component {
 
                 <Tabs tabBarUnderlineStyle={{ backgroundColor: '#52e3c2' }}>
                     <Tab heading="Summary"
-                        tabStyle={{ backgroundColor: '#282833' }}
-                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View padder style={{ backgroundColor: '#282833' }}>
+                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderSummaryStats()}
                         </View>
                     </Tab>
                     <Tab heading="Scores"
-                        tabStyle={{ backgroundColor: '#282833' }}
-                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View padder style={{ backgroundColor: '#282833' }}>
+                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderLineGraph(SCORE_KEY, DAY_KEY, 'Today\'s Scores')}
                             {this.renderLineGraph(SCORE_KEY, WEEK_KEY, 'Last 7 Days')}
                             {this.renderLineGraph(SCORE_KEY, MONTH_KEY, 'This Month')}
@@ -72,12 +72,12 @@ export default class StatisticsScreen extends Component {
                         </View>
                     </Tab>
                     <Tab heading="Activities"
-                        tabStyle={{ backgroundColor: '#282833' }}
-                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View padder style={{ backgroundColor: '#282833' }}>
+                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderStackedBarChat(ACTIVITY_KEY, DAY_KEY, 'Average Scores By Hour')}
                             {this.renderStackedBarChat(ACTIVITY_KEY, WEEK_KEY, 'Last 7 Days')}
                             {this.renderStackedBarChat(ACTIVITY_KEY, MONTH_KEY, 'Last Month')}
@@ -85,12 +85,12 @@ export default class StatisticsScreen extends Component {
                         </View>
                     </Tab>
                     <Tab heading="Prompts"
-                        tabStyle={{ backgroundColor: '#282833' }}
-                        activeTabStyle={{ backgroundColor: '#282833' }}
+                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
-                        <View padder style={{ backgroundColor: '#282833' }}>
+                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today\'s Prompt Answers')}
                             {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'This Week\'s Prompt Answers')}
                             {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month\'s Prompt Answers')}
@@ -362,7 +362,7 @@ export default class StatisticsScreen extends Component {
     async loadStats() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${host}/stats`;
+        const endpoint = `${HOST}/stats`;
         console.log(`[StatisticsScreen] calling ${endpoint}`);
 
         let requestSuccess = false;

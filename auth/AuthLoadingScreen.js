@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { host } from '../util/Constants';
+import { HOST, COLORS } from '../util/Constants';
 
 export class AuthLoadingScreen extends Component {
   componentDidMount() {
@@ -52,7 +52,7 @@ export class AuthLoadingScreen extends Component {
   }
 
   async getUserFromSessionToken(sessionToken) {
-    const endpoint = `${host}/users/${sessionToken}`;
+    const endpoint = `${HOST}/users/${sessionToken}`;
     console.log(`[APIService] calling ${endpoint}`);
 
     return fetch(endpoint)

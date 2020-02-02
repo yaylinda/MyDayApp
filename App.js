@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import {
   Container} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-
+import { HOST, COLORS } from './util/Constants';
 import AppNavigator from './navigation/AppNavigator';
 
 console.disableYellowBox = true;
@@ -23,7 +23,7 @@ export default class App extends Component {
       return <AppLoading />;
     } else {
       return (
-        <Container style={{ flex: 1, backgroundColor: '#282833' }}>
+        <Container style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
           <AppNavigator />
         </Container>
       );

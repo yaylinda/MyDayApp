@@ -3,7 +3,7 @@ import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, B
 import moment from 'moment'
 import Modal from "react-native-modal";
 import { AsyncStorage, Dimensions } from "react-native";
-import { host } from "../util/Constants";
+import { HOST, COLORS } from "../util/Constants";
 
 export default class DayInfo extends Component {
 
@@ -15,7 +15,7 @@ export default class DayInfo extends Component {
     render() {
         return (
             <Content padder style={{
-                backgroundColor: '#32323e',
+                backgroundColor: COLORS.BACKGROUND_LIGHT,
                 height: Dimensions.get('window').height * 0.80,
                 borderRadius: 20,
                 borderWidth: 1,
@@ -27,44 +27,44 @@ export default class DayInfo extends Component {
                     </Text>
                 </View>
 
-                <Card transparent style={{ backgroundColor: '#32323e' }}>
+                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#32323e',
+                        backgroundColor: COLORS.BACKGROUND_LIGHT,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Scores</Text>
 
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#32323e' }}>
+                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
                         {this.renderEmotions()}
                     </CardItem>
                 </Card>
 
-                <Card transparent style={{ backgroundColor: '#32323e' }}>
+                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#32323e',
+                        backgroundColor: COLORS.BACKGROUND_LIGHT,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Activities</Text>
 
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#32323e' }}>
+                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
                         {this.renderActivities()}
                     </CardItem>
                 </Card>
 
-                <Card transparent style={{ backgroundColor: '#32323e' }}>
+                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#32323e',
+                        backgroundColor: COLORS.BACKGROUND_LIGHT,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
                         <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Prompts</Text>
 
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#32323e' }}>
+                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
                         {this.renderPrompts()}
                     </CardItem>
                 </Card>

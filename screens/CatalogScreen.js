@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
     Card, CardItem, Button, Text, Form, Item, Label, Input, Accordion, View, Icon, List, ListItem, Content,
 } from 'native-base';
-import { host } from '../util/Constants';
+import { HOST, COLORS } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
 import Modal from "react-native-modal";
 
@@ -31,14 +31,14 @@ export default class CatalogScreen extends Component {
 
     render() {
         return (
-            <Content padder style={{ flex: 1, backgroundColor: '#282833' }}>
+            <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
                 </View>
 
-                <Card transparent style={{ backgroundColor: '#282833' }}>
+                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#282833',
+                        backgroundColor: COLORS.BACKGROUND_MAIN,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
@@ -49,14 +49,14 @@ export default class CatalogScreen extends Component {
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
+                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                         {this.renderCatalogData('ACTIVITY')}
                     </CardItem>
                 </Card>
 
-                <Card transparent style={{ backgroundColor: '#282833' }}>
+                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                     <CardItem header bordered style={{
-                        backgroundColor: '#282833',
+                        backgroundColor: COLORS.BACKGROUND_MAIN,
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
@@ -67,7 +67,7 @@ export default class CatalogScreen extends Component {
                             <Icon name="add-circle" />
                         </Button>
                     </CardItem>
-                    <CardItem style={{ backgroundColor: '#282833' }}>
+                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                         {this.renderCatalogData('PROMPT')}
                     </CardItem>
                 </Card>

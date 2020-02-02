@@ -12,7 +12,7 @@ import {
   Button,
   View
 } from 'native-base';
-import { host } from '../util/Constants';
+import { HOST, COLORS } from '../util/Constants';
 
 export default class SignInScreen extends Component {
   static navigationOptions = {
@@ -31,7 +31,7 @@ export default class SignInScreen extends Component {
 
   render() {
     return (
-      <Container style={{ flex: 1, backgroundColor: '#282833', padding: 20 }}>
+      <Container style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, padding: 20 }}>
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30}}>
           <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Sign In</Text>
@@ -64,7 +64,7 @@ export default class SignInScreen extends Component {
   async signIn() {
     console.log(`[SignInScreen] signing in with username=${this.state.username}, password=${this.state.password}`);
 
-    const endpoint = `${host}/users/login`;
+    const endpoint = `${HOST}/users/login`;
     console.log(`[SignInScreen] calling ${endpoint}`);
 
     return fetch(endpoint, {

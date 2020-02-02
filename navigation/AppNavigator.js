@@ -9,6 +9,7 @@ import StatisticsScreen from '../screens/StatisticsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { HOST, COLORS } from '../util/Constants';
 
 const AppStack = createBottomTabNavigator(
   {
@@ -91,7 +92,7 @@ const AppStack = createBottomTabNavigator(
       activeTintColor: '#52e3c2',
       inactiveTintColor: 'white',
       style: {
-        backgroundColor: '#282833',
+        backgroundColor: COLORS.BACKGROUND_MAIN,
         borderTopColor: '#6e7288',
         borderTopWidth: 1
       },

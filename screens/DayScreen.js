@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Content, Button, Icon, Text, View, List, ListItem, CheckBox, Body } from 'native-base';
-import { host } from '../util/Constants';
+import { HOST, COLORS } from '../util/Constants';
 import { AsyncStorage, Dimensions } from 'react-native';
 import DayInfo from './DayInfoScreen';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -41,10 +41,10 @@ export default class DayScreen extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: '#282833', flex: 1 }}>
+            <View style={{ backgroundColor: COLORS.BACKGROUND_MAIN, flex: 1 }}>
                 <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
 
-                <Content scrollEnabled={false} style={{ backgroundColor: '#282833', flex: 1 }}>
+                <Content scrollEnabled={false} style={{ backgroundColor: COLORS.BACKGROUND_MAIN, flex: 1 }}>
                     <View style={{ marginBottom: 20 }}>
                         <Carousel
                             layout={'stack'}
@@ -310,7 +310,7 @@ export default class DayScreen extends Component {
     async loadDayData() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${host}/days`;
+        const endpoint = `${HOST}/days`;
         console.log(`[DayScreen] calling ${endpoint}`);
 
         fetch(endpoint, {
@@ -344,7 +344,7 @@ export default class DayScreen extends Component {
     async loadCatalogData() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${host}/catalog/events`;
+        const endpoint = `${HOST}/catalog/events`;
         console.log(`[CatalogScreen] calling ${endpoint}`);
 
         let requestSuccess = false;
@@ -383,7 +383,7 @@ export default class DayScreen extends Component {
         const currentDay = this.state.daysData[this.state.activeSlide];
 
         const sessionToken = await AsyncStorage.getItem('sessionToken');
-        const endpoint = `${host}/days/${currentDay.dayId}/${this.state.addType}`;
+        const endpoint = `${HOST}/days/${currentDay.dayId}/${this.state.addType}`;
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json',

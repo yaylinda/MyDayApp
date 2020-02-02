@@ -12,7 +12,7 @@ import {
   Button,
   View
 } from 'native-base';
-import { host } from '../util/Constants';
+import { HOST, COLORS } from '../util/Constants';
 
 export default class RegisterScreen extends Component {
   static navigationOptions = {
@@ -32,7 +32,7 @@ export default class RegisterScreen extends Component {
 
   render() {
     return (
-      <Container style={{ flex: 1, backgroundColor: '#282833', padding: 20 }}>
+      <Container style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, padding: 20 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30 }}>
           <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Register</Text>
         </View>
@@ -71,7 +71,7 @@ export default class RegisterScreen extends Component {
   async register() {
     console.log(`[RegisterScreen] registering with username=${this.state.username}, password=${this.state.password}`);
 
-    const endpoint = `${host}/users/register`;
+    const endpoint = `${HOST}/users/register`;
     console.log(`[RegisterScreen] calling ${endpoint}`);
 
     return fetch(endpoint, {
