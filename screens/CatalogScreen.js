@@ -271,7 +271,7 @@ export default class CatalogScreen extends Component {
     async persistNew() {
         console.log(`[CatalogScreen] persist new`);
         const sessionToken = await AsyncStorage.getItem('sessionToken');
-        const endpoint = `${host}/catalog/events/${this.state.newType}`;
+        const endpoint = `${HOST}/catalog/events/${this.state.newType}`;
         const body = {
             dayEventCatalogId: '',
             belongsTo: '',
@@ -327,7 +327,7 @@ export default class CatalogScreen extends Component {
     async loadCatalogData() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${host}/catalog/events`;
+        const endpoint = `${HOST}/catalog/events`;
         console.log(`[CatalogScreen] calling ${endpoint}`);
 
         let requestSuccess = false;

@@ -65,10 +65,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderLineGraph(SCORE_KEY, DAY_KEY, 'Today\'s Scores')}
-                            {this.renderLineGraph(SCORE_KEY, WEEK_KEY, 'Last 7 Days')}
-                            {this.renderLineGraph(SCORE_KEY, MONTH_KEY, 'This Month')}
-                            {this.renderLineGraph(SCORE_KEY, YEAR_KEY, 'This Year')}
+                            {this.renderScoreStats(SCORE_KEY, DAY_KEY, 'Today')}
+                            {this.renderScoreStats(SCORE_KEY, WEEK_KEY, 'Last 7 Days')}
+                            {this.renderScoreStats(SCORE_KEY, MONTH_KEY, 'This Month')}
+                            {this.renderScoreStats(SCORE_KEY, YEAR_KEY, 'This Year')}
                         </View>
                     </Tab>
                     <Tab heading="Activities"
@@ -78,10 +78,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderStackedBarChat(ACTIVITY_KEY, DAY_KEY, 'Average Scores By Hour')}
-                            {this.renderStackedBarChat(ACTIVITY_KEY, WEEK_KEY, 'Last 7 Days')}
-                            {this.renderStackedBarChat(ACTIVITY_KEY, MONTH_KEY, 'Last Month')}
-                            {this.renderStackedBarChat(ACTIVITY_KEY, YEAR_KEY, 'Last Year')}
+                            {this.renderActivityStats(ACTIVITY_KEY, DAY_KEY, 'Today')}
+                            {this.renderActivityStats(ACTIVITY_KEY, WEEK_KEY, 'Last 7 Days')}
+                            {this.renderActivityStats(ACTIVITY_KEY, MONTH_KEY, 'This Month')}
+                            {this.renderActivityStats(ACTIVITY_KEY, YEAR_KEY, 'This Year')}
                         </View>
                     </Tab>
                     <Tab heading="Prompts"
@@ -91,10 +91,10 @@ export default class StatisticsScreen extends Component {
                         activeTextStyle={{ color: '#52e3c2' }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today\'s Prompt Answers')}
-                            {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'This Week\'s Prompt Answers')}
-                            {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month\'s Prompt Answers')}
-                            {this.renderPromptStats(PROMPT_KEY, YEAR_KEY, 'This Year\'s Prompt Answers')}
+                            {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today')}
+                            {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'Last 7 Days')}
+                            {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month')}
+                            {this.renderPromptStats(PROMPT_KEY, YEAR_KEY, 'This Year')}
                         </View>
                     </Tab>
                 </Tabs>
@@ -124,13 +124,12 @@ export default class StatisticsScreen extends Component {
                     { this.renderMostCommonText('PROMPT', records.mostCommonPrompt, records.mostCommonPromptCount) }
                 </View>
             );
-
         }
     }
 
     renderProgressCircle(value, outOf, dataType) {
         return (
-            <View style={{ display: 'flex', flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
+            <View padder style={{ display: 'flex', flexDirection: 'row', marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                 <View style={{ display: 'flex', flex: 1, justifyContent: 'center'}}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10}}>
                         Recorded 
@@ -158,27 +157,32 @@ export default class StatisticsScreen extends Component {
     renderScoreRecordsText(extremeType, showHighestColor, dataType, value, date) {
         const extremeTypeColor = showHighestColor ? '#0781ff' : '#ff4b12';
         return (
-            <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
-                <Text style={{fontWeight: '600', color: extremeTypeColor}}>{extremeType}</Text> average 
-                <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
-                <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>. 
-                Recorded on {this.formatDate(date)}.
-            </Text>
+            <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
+                    <Text style={{fontWeight: '600', color: extremeTypeColor}}>{extremeType}</Text> average 
+                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
+                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>. 
+                    Recorded on {this.formatDate(date)}.
+                </Text>
+            </View>
+            
         );
     }
 
     renderMostCommonText(dataType, value, count) {
         return (
-            <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
-                Most common
-                <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
-                <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>, with
-                <Text style={{fontWeight: '600', color: '#d211fe'}}> {count}</Text> occurrances.
-            </Text>
+            <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
+                    Most common
+                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
+                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>, with
+                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {count}</Text> occurrances.
+                </Text>
+            </View>
         );
     }
 
-    renderLineGraph(statsType, timeRange, chartTitle) {
+    renderScoreStats(statsType, timeRange, chartTitle) {
         const input = this.state.allStats[statsType][timeRange];
 
         if (input) {
@@ -200,7 +204,7 @@ export default class StatisticsScreen extends Component {
             }
 
             return (
-                <View style={{ marginBottom: 20, justifyContent: 'center' }}>
+                <View padder style={{ marginBottom: 20, justifyContent: 'center', backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
                     <View style={{ flexDirection: 'row', display: "flex" }}>
                         <YAxis
@@ -223,6 +227,7 @@ export default class StatisticsScreen extends Component {
                                 contentInset={{ top: 10, bottom: 10 }}
                                 yMin={0}
                                 yMax={5}
+                                showGrid={false}
                             >
                                 <Grid />
                             </BarChart>
@@ -237,10 +242,9 @@ export default class StatisticsScreen extends Component {
                 </View>
             );
         }
-
     }
 
-    renderStackedBarChat(statsType, timeRange, chartTitle) {
+    renderActivityStats(statsType, timeRange, chartTitle) {
         const input = this.state.allStats[statsType][timeRange];
 
         if (input) {
@@ -273,7 +277,7 @@ export default class StatisticsScreen extends Component {
             colors = colors.map(c => `#${c}`)
 
             return (
-                <View style={{ marginBottom: 20, justifyContent: 'center' }}>
+                <View padder style={{ marginBottom: 20, justifyContent: 'center', backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
                     <View style={{ flexDirection: 'row', display: "flex" }}>
                         <YAxis
@@ -291,6 +295,7 @@ export default class StatisticsScreen extends Component {
                                 keys={input.legend}
                                 colors={colors}
                                 contentInset={{ top: 10, bottom: 10 }}
+                                showGrid={false}
                             >
                                 <Grid />
                             </StackedBarChart>
@@ -316,30 +321,24 @@ export default class StatisticsScreen extends Component {
             input.labels.forEach(q => {
                 const pieData = {
                     title: q,
-                    data: []
+                    data: input.labelsDataMap[q].labelsDataMap,
+                    colors: [],
+                
                 };
 
-                let colors = palette('mpn65', input.labels.length);
+                let colors = palette('mpn65', input.labelsDataMap[q].labels.length);
                 colors = colors.map(c => `#${c}`)
-
-                pieData.data = input.labelsDataMap[q].labels.map((answerLabel, index) => {
-                    return {
-                        key: answerLabel,
-                        value: input.labelsDataMap[q].labelsDataMap[answerLabel],
-                        svg: { fill: colors[index] }
-                    }
-                });
+                pieData.colors = colors;
 
                 allPieData.push(pieData);
             });
 
             return (
-                <View>
-                    <Text style={{ fontSize: 18, fontWeight: '500', 
-                        color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                <View padder style={{ marginBottom: 20, justifyContent: 'center', backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
+                    <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
                     {
                         allPieData.map((pieData, index) => {
-                            return this.renderPromptPieChart(index, pieData.data, pieData.title);
+                            return this.renderPromptStackedBarChart(index, pieData.data, pieData.colors, pieData.title);
                         })
                     }
                 </View>
@@ -347,14 +346,23 @@ export default class StatisticsScreen extends Component {
         }
     }
 
-    renderPromptPieChart(key, data, chartTitle) {
+    renderPromptStackedBarChart(key, data, colors, chartTitle) {
         return (
-            <View key={key} style={{ marginBottom: 20, justifyContent: 'center' }}>
-                <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
-                <PieChart
-                    data={data}
-                    style={{ height: 200 }}
-                />
+            <View key={key} style={{ display: 'flex', flexDirection: 'row', marginBottom: 20}}>
+                <View style={{ display: 'flex', flex: 1 }}>
+                    <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>
+                        {chartTitle}
+                    </Text>
+                </View>
+                <View style={{ display: 'flex', flex: 1 }}>
+                    <StackedBarChart
+                        style={{ height: 200 }}
+                        keys={Object.keys(data)}
+                        colors={colors}
+                        data={[data]}
+                        showGrid={false}
+                    />
+                </View>
             </View>
         );
     }
@@ -383,7 +391,7 @@ export default class StatisticsScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
+            // console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log('[StatisticsScreen] updating state.allStats');
                 this.setState({ allStats: json });

@@ -329,7 +329,7 @@ export default class DayScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[DayScreen] json: ${JSON.stringify(json)}`);
+            // console.log(`[DayScreen] json: ${JSON.stringify(json)}`);
             if (this.state.loadedDayData) {
                 console.log('[DayScreen] updating state.daysData');
                 this.setState({ daysData: json });
