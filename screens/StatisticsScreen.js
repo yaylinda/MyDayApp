@@ -44,15 +44,16 @@ export default class StatisticsScreen extends Component {
                 <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Statistics</Text>
+                    <Text style={{ fontSize: 24, fontWeight: '900', color: COLORS.TEXT_MAIN }}>Statistics</Text>
                 </View>
 
-                <Tabs tabBarUnderlineStyle={{ backgroundColor: '#52e3c2' }}>
+                <Tabs tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}>
                     <Tab heading="Summary"
                         tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: '#52e3c2' }}
+                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderSummaryStats()}
@@ -62,7 +63,8 @@ export default class StatisticsScreen extends Component {
                         tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: '#52e3c2' }}
+                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderScoreStats(SCORE_KEY, DAY_KEY, 'Today')}
@@ -75,7 +77,8 @@ export default class StatisticsScreen extends Component {
                         tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: '#52e3c2' }}
+                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderActivityStats(ACTIVITY_KEY, DAY_KEY, 'Today')}
@@ -88,7 +91,8 @@ export default class StatisticsScreen extends Component {
                         tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: '#52e3c2' }}
+                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
                         <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
                             {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today')}
@@ -131,7 +135,7 @@ export default class StatisticsScreen extends Component {
         return (
             <View padder style={{ display: 'flex', flexDirection: 'row', marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                 <View style={{ display: 'flex', flex: 1, justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10}}>
+                    <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10}}>
                         Recorded 
                         <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType} </Text> 
                         data
@@ -158,7 +162,7 @@ export default class StatisticsScreen extends Component {
         const extremeTypeColor = showHighestColor ? '#0781ff' : '#ff4b12';
         return (
             <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10, marginTop: 10 }}>
                     <Text style={{fontWeight: '600', color: extremeTypeColor}}>{extremeType}</Text> average 
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>. 
@@ -172,7 +176,7 @@ export default class StatisticsScreen extends Component {
     renderMostCommonText(dataType, value, count) {
         return (
             <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10, marginTop: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10, marginTop: 10 }}>
                     Most common
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>, with
@@ -205,7 +209,7 @@ export default class StatisticsScreen extends Component {
 
             return (
                 <View padder style={{ marginBottom: 20, justifyContent: 'center', backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10 }}>{chartTitle}</Text>
                     <View style={{ flexDirection: 'row', display: "flex" }}>
                         <YAxis
                             contentInset={{ top: 10, bottom: 10 }}
@@ -278,7 +282,7 @@ export default class StatisticsScreen extends Component {
 
             return (
                 <View padder style={{ marginBottom: 20, justifyContent: 'center', backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10 }}>{chartTitle}</Text>
                     <View style={{ flexDirection: 'row', display: "flex" }}>
                         <YAxis
                             data={y}
@@ -335,7 +339,7 @@ export default class StatisticsScreen extends Component {
 
             return (
                 <View padder style={{ marginBottom: 20, justifyContent: 'center', backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                    <Text style={{ fontSize: 18, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>{chartTitle}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10 }}>{chartTitle}</Text>
                     {
                         allPieData.map((pieData, index) => {
                             return this.renderPromptStackedBarChart(index, pieData.data, pieData.colors, pieData.title);
@@ -350,7 +354,7 @@ export default class StatisticsScreen extends Component {
         return (
             <View key={key} style={{ display: 'flex', flexDirection: 'row', marginBottom: 20}}>
                 <View style={{ display: 'flex', flex: 1 }}>
-                    <Text style={{ fontSize: 16, fontWeight: '500', color: '#52e3c2', marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10 }}>
                         {chartTitle}
                     </Text>
                 </View>

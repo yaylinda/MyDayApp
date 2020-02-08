@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {
-    Card, CardItem, Button, Text, Form, Item, Label, Input, Accordion, View, Icon, List, ListItem, Content,
+    Card, CardItem, Button, Text, Form, Item, Label, Input, Accordion, View, Icon, List, ListItem, Content, Tabs, Tab,
 } from 'native-base';
 import { HOST, COLORS } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
 import Modal from "react-native-modal";
+import ActionButton from 'react-native-action-button';
+
+const CATALOG_TYPES = ['ACTIVITY', 'PROMPT'];
 
 export default class CatalogScreen extends Component {
 
@@ -21,7 +24,8 @@ export default class CatalogScreen extends Component {
             newIcon: '',
             newQuestion: '',
             newAnswers: [''],
-            newAllowMultiSelect: false
+            newAllowMultiSelect: false,
+            activeTabIndex: 0,
         }
     }
 
@@ -31,46 +35,37 @@ export default class CatalogScreen extends Component {
 
     render() {
         return (
-            <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
+            <View style={{ flex: 1,  backgroundColor: COLORS.BACKGROUND_MAIN }}>            
+            <Content padder style={{ flex: 1,  backgroundColor: COLORS.BACKGROUND_MAIN,}}>
+                
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
                 </View>
 
-                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                    <CardItem header bordered style={{
-                        backgroundColor: COLORS.BACKGROUND_MAIN,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Activities Catalog</Text>
-                        <Button small rounded
-                            onPress={() => this.setState({ showAddModal: true, newType: 'ACTIVITY' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" />
-                        </Button>
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                <Tabs 
+                    tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }} 
+                    style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
+                    onChangeTab={(ref) => this.updateActiveTab(ref)}
+                >
+                    <Tab heading="Activities"
+                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN,}}
+                        textStyle={{ color: 'white' }}
+                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                        style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN,}}
+                    >
                         {this.renderCatalogData('ACTIVITY')}
-                    </CardItem>
-                </Card>
-
-                <Card transparent style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                    <CardItem header bordered style={{
-                        backgroundColor: COLORS.BACKGROUND_MAIN,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Prompts Catalog</Text>
-                        <Button small rounded
-                            onPress={() => this.setState({ showAddModal: true, newType: 'PROMPT' })}
-                            style={{ backgroundColor: '#ff4495' }}>
-                            <Icon name="add-circle" />
-                        </Button>
-                    </CardItem>
-                    <CardItem style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                    </Tab>
+                    <Tab heading="Prompts"
+                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        textStyle={{ color: 'white' }}
+                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                        style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN,}}
+                    >
                         {this.renderCatalogData('PROMPT')}
-                    </CardItem>
-                </Card>
+                    </Tab>
+                </Tabs>
 
                 <Modal isVisible={this.state.showAddModal}>
                     <View style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
@@ -93,8 +88,14 @@ export default class CatalogScreen extends Component {
                         </View>
                     </View>
                 </Modal>
-
             </Content>
+            <ActionButton
+                    style={{ bottom: 0 }}
+                    buttonColor="#ff4495"
+                    renderIcon={() => <Icon name="add" style={{ fontSize: 18, color: 'white' }} />}
+                    onPress={() => this.fabPress()}
+            />
+            </View>
         );
     }
 
@@ -255,6 +256,16 @@ export default class CatalogScreen extends Component {
                 </View>
             );
         }
+    }
+
+    updateActiveTab(ref) {
+        console.log(`[CatalogScreen] updateActiveTab, activeTabIndex=${ref.i}`);
+        this.setState({ activeTabIndex: ref.i });
+    }
+
+    fabPress() {
+        console.log(`[CatalogScreen] press add fab`);
+        this.setState({ showAddModal: true, newType: CATALOG_TYPES[this.state.activeTabIndex] });
     }
 
     cancelAdd() {
