@@ -84,21 +84,17 @@ export default class DayInfo extends Component {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                         width: 110,
-                                        backgroundColor: '#40c4ff',
-                                        borderColor: '#40c4ff',
-                                        borderWidth: 3,
-                                        borderTopLeftRadius: 5,
-                                        borderBottomLeftRadius: 5
+                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                        borderTopLeftRadius: 10,
+                                        borderBottomLeftRadius: 10
                                     }}>
-                                        <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
+                                        <Text style={{ color: 'white', fontWeight: "500" }}>{item.startTime}</Text>
                                     </View>
                                     <View padder style={{
                                         flexGrow: 1,
-                                        backgroundColor: 'white',
-                                        borderColor: '#40c4ff',
-                                        borderWidth: 3,
-                                        borderTopRightRadius: 5,
-                                        borderBottomRightRadius: 5
+                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                        borderTopRightRadius: 10,
+                                        borderBottomRightRadius: 10
                                     }}>
                                         <View style={{ flexDirection: 'row' }}>
                                             {this.renderDayScore(item.emotionScore)}
@@ -133,25 +129,19 @@ export default class DayInfo extends Component {
                                     flexDirection: 'row',
                                     justifyContent: 'center',
                                     width: 110,
-                                    backgroundColor: '#40c4ff',
-                                    borderColor: '#40c4ff',
-                                    borderWidth: 3,
-                                    borderTopLeftRadius: 5,
-                                    borderBottomLeftRadius: 5
+                                    backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                    borderTopLeftRadius: 10,
+                                    borderBottomLeftRadius: 10
                                 }}>
-                                    <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
+                                    <Text style={{ color: 'white', fontWeight: "500" }}>{item.startTime}</Text>
                                 </View>
                                 <View padder style={{
                                     flexGrow: 1,
-                                    backgroundColor: 'white',
-                                    borderColor: '#40c4ff',
-                                    borderWidth: 3,
-                                    borderTopRightRadius: 5,
-                                    borderBottomRightRadius: 5
+                                    backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                    borderTopRightRadius: 10,
+                                    borderBottomRightRadius: 10
                                 }}>
-                                    <Text>
-                                        {item.name}
-                                    </Text>
+                                    <Text style={{ color: 'white' }}>{item.name}</Text>
                                 </View>
                             </View>
                         );
@@ -175,30 +165,26 @@ export default class DayInfo extends Component {
                                         flexDirection: 'row',
                                         justifyContent: 'center',
                                         width: 110,
-                                        backgroundColor: '#40c4ff',
-                                        borderColor: '#40c4ff',
-                                        borderWidth: 3,
-                                        borderTopLeftRadius: 5,
-                                        borderBottomLeftRadius: 5
+                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                        borderTopLeftRadius: 10,
+                                        borderBottomLeftRadius: 10
                                     }}>
                                         <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
                                     </View>
                                     <View padder style={{
                                         flexGrow: 1,
-                                        backgroundColor: 'white',
-                                        borderColor: '#40c4ff',
-                                        borderWidth: 3,
-                                        borderTopRightRadius: 5,
-                                        borderBottomRightRadius: 5
+                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                        borderTopRightRadius: 10,
+                                        borderBottomRightRadius: 10
                                     }}>
                                         <View>
                                             <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ fontWeight: '600' }}>Q: </Text>
-                                                <Text>{item.question}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500' }}>Q: </Text>
+                                                <Text style={{ color: 'white'}}>{item.question}</Text>
                                             </View>
                                             <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ fontWeight: '600' }}>A: </Text>
-                                                <Text>{item.selectedAnswer}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500' }}>A: </Text>
+                                                <Text style={{ color: 'white'}}>{item.selectedAnswer}</Text>
                                             </View>
                                         </View>
                                     </View>

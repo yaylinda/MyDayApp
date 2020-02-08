@@ -4,7 +4,7 @@ import {
 } from 'native-base';
 import { HOST, COLORS } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
-import Modal from "react-native-modal";
+import Modal from 'react-native-modal';
 import ActionButton from 'react-native-action-button';
 
 const CATALOG_TYPES = ['ACTIVITY', 'PROMPT'];
@@ -35,66 +35,66 @@ export default class CatalogScreen extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1,  backgroundColor: COLORS.BACKGROUND_MAIN }}>            
-            <Content padder style={{ flex: 1,  backgroundColor: COLORS.BACKGROUND_MAIN,}}>
-                
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
-                </View>
+            <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}>
 
-                <Tabs 
-                    tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }} 
-                    style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
-                    onChangeTab={(ref) => this.updateActiveTab(ref)}
-                >
-                    <Tab heading="Activities"
-                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN,}}
-                        textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
-                        style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN,}}
-                    >
-                        {this.renderCatalogData('ACTIVITY')}
-                    </Tab>
-                    <Tab heading="Prompts"
-                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
-                        style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN,}}
-                    >
-                        {this.renderCatalogData('PROMPT')}
-                    </Tab>
-                </Tabs>
-
-                <Modal isVisible={this.state.showAddModal}>
-                    <View style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
-
-                        <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>Add to Catalog</Text>
-                        </View>
-
-                        <View padder>
-                            {this.renderForm()}
-                        </View>
-
-                        <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Cancel</Text>
-                            </Button>
-                            <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
-                                <Text>Save</Text>
-                            </Button>
-                        </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Catalog</Text>
                     </View>
-                </Modal>
-            </Content>
-            <ActionButton
+
+                    <Tabs
+                        tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}
+                        style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        onChangeTab={(ref) => this.updateActiveTab(ref)}
+                    >
+                        <Tab heading='Activities'
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN, }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}
+                        >
+                            {this.renderCatalogData('ACTIVITY')}
+                        </Tab>
+                        <Tab heading='Prompts'
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}
+                        >
+                            {this.renderCatalogData('PROMPT')}
+                        </Tab>
+                    </Tabs>
+
+                    <Modal isVisible={this.state.showAddModal}>
+                        <View style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
+
+                            <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
+                                <Text style={{ fontSize: 18, fontWeight: '600', color: '#52e3c2' }}>Add to Catalog</Text>
+                            </View>
+
+                            <View padder>
+                                {this.renderForm()}
+                            </View>
+
+                            <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
+                                    <Text>Cancel</Text>
+                                </Button>
+                                <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
+                                    <Text>Save</Text>
+                                </Button>
+                            </View>
+                        </View>
+                    </Modal>
+                </Content>
+                <ActionButton
                     style={{ bottom: 0 }}
-                    buttonColor="#ff4495"
-                    renderIcon={() => <Icon name="add" style={{ fontSize: 18, color: 'white' }} />}
+                    buttonColor='#ff4495'
+                    renderIcon={() => <Icon name='add' style={{ fontSize: 18, color: 'white' }} />}
                     onPress={() => this.fabPress()}
-            />
+                />
             </View>
         );
     }
@@ -132,54 +132,53 @@ export default class CatalogScreen extends Component {
     renderActivityCatalogDataHeader(item, expanded) {
         return (
             <View padder style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                backgroundColor: "#40c4ff",
-                borderColor: "#40c4ff",
-                borderStyle: 'solid',
-                borderLeftWidth: 3,
-                borderRightWidth: 3,
-                marginTop: 5
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                backgroundColor: COLORS.BACKGORUND_ACCENT,
+                marginTop: 10,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                borderBottomLeftRadius: expanded ? 0 : 10,
+                borderBottomRightRadius: expanded ? 0 : 10,
             }}>
-                <Text style={{ fontWeight: "600", color: "white" }}>{item.name}</Text>
+                <Text style={{ fontWeight: '500', color: 'white' }}>{item.name}</Text>
                 {expanded
-                    ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
-                    : <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-down" />}
+                    ? <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-up' />
+                    : <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-down' />}
             </View>);
     }
 
     renderPromptCatalogDataHeader(item, expanded) {
         return (
             <View padder style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                backgroundColor: "#40c4ff",
-                borderColor: "#40c4ff",
-                borderStyle: 'solid',
-                borderLeftWidth: 3,
-                borderRightWidth: 3,
-                marginTop: 5
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                backgroundColor: COLORS.BACKGORUND_ACCENT,
+                marginTop: 10,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                borderBottomLeftRadius: expanded ? 0 : 10,
+                borderBottomRightRadius: expanded ? 0 : 10,
             }}>
-                <Text style={{ fontWeight: "600", color: "white" }}>{item.question}</Text>
+                <Text style={{ fontWeight: '500', color: 'white' }}>{item.question}</Text>
                 {expanded
-                    ? <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-up" />
-                    : <Icon style={{ fontSize: 18, color: 'white' }} name="arrow-down" />}
+                    ? <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-up' />
+                    : <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-down' />}
             </View>);
     }
 
     renderActivityCatalogDataContent(item) {
         return (
             <View padder style={{
-                backgroundColor: 'white',
-                borderColor: "#40c4ff",
-                borderStyle: 'solid',
-                borderWidth: 3
+                backgroundColor: COLORS.BACKGROUND_LIGHT,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
             }}>
                 {item.description
-                    ? <Text>{item.description}</Text>
-                    : <Text style={{ fontStyle: "italic" }}>No description available</Text>
+                    ? <Text style={{ color: 'white' }}>{item.description}</Text>
+                    : <Text style={{ color: 'white', fontStyle: 'italic' }}>No description available</Text>
                 }
             </View>);
     }
@@ -187,17 +186,16 @@ export default class CatalogScreen extends Component {
     renderPromptCatalogDataContent(item) {
         return (
             <View style={{
-                backgroundColor: 'white',
-                borderColor: "#40c4ff",
-                borderStyle: 'solid',
-                borderWidth: 3
+                backgroundColor: COLORS.BACKGROUND_LIGHT,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
             }}>
                 <List>
                     {
                         item.answers.map((answer, index) => {
                             return (
-                                <ListItem key={index}>
-                                    <Text>{answer}</Text>
+                                <ListItem key={index} style={{borderBottomWidth: 0}}>
+                                    <Text style={{ color: 'white' }}>{answer}</Text>
                                 </ListItem>
                             );
                         })
