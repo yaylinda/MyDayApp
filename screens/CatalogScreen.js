@@ -54,7 +54,9 @@ export default class CatalogScreen extends Component {
                             activeTextStyle={{ color: COLORS.TEXT_MAIN }}
                             style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}
                         >
-                            {this.renderCatalogData('ACTIVITY')}
+                            <View padder>
+                                {this.renderCatalogData('ACTIVITY')}
+                            </View>
                         </Tab>
                         <Tab heading='Prompts'
                             tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
@@ -63,7 +65,9 @@ export default class CatalogScreen extends Component {
                             activeTextStyle={{ color: COLORS.TEXT_MAIN }}
                             style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}
                         >
-                            {this.renderCatalogData('PROMPT')}
+                            <View padder>
+                                {this.renderCatalogData('PROMPT')}
+                            </View>
                         </Tab>
                     </Tabs>
 
@@ -136,11 +140,11 @@ export default class CatalogScreen extends Component {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 backgroundColor: COLORS.BACKGORUND_ACCENT,
-                marginTop: 10,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
                 borderBottomLeftRadius: expanded ? 0 : 10,
                 borderBottomRightRadius: expanded ? 0 : 10,
+                marginBottom: expanded ? 0 : 10,
             }}>
                 <Text style={{ fontWeight: '500', color: 'white' }}>{item.name}</Text>
                 {expanded
@@ -156,11 +160,11 @@ export default class CatalogScreen extends Component {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 backgroundColor: COLORS.BACKGORUND_ACCENT,
-                marginTop: 10,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
                 borderBottomLeftRadius: expanded ? 0 : 10,
                 borderBottomRightRadius: expanded ? 0 : 10,
+                marginBottom: expanded ? 0 : 10,
             }}>
                 <Text style={{ fontWeight: '500', color: 'white' }}>{item.question}</Text>
                 {expanded
@@ -175,6 +179,7 @@ export default class CatalogScreen extends Component {
                 backgroundColor: COLORS.BACKGROUND_LIGHT,
                 borderBottomLeftRadius: 10,
                 borderBottomRightRadius: 10,
+                marginBottom: 10,
             }}>
                 {item.description
                     ? <Text style={{ color: 'white' }}>{item.description}</Text>
@@ -189,6 +194,7 @@ export default class CatalogScreen extends Component {
                 backgroundColor: COLORS.BACKGROUND_LIGHT,
                 borderBottomLeftRadius: 10,
                 borderBottomRightRadius: 10,
+                marginBottom: 10,
             }}>
                 <List>
                     {

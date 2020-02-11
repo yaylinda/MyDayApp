@@ -164,7 +164,7 @@ export default class DayInfo extends Component {
                                     <View padder style={{
                                         flexDirection: 'row',
                                         justifyContent: 'center',
-                                        width: 110,
+                                        maxWidth: 110,
                                         backgroundColor: COLORS.BACKGORUND_ACCENT,
                                         borderTopLeftRadius: 10,
                                         borderBottomLeftRadius: 10

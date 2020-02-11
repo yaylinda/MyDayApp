@@ -121,11 +121,35 @@ export default class StatisticsScreen extends Component {
                     { this.renderProgressCircle(counts.numDaysWithScore, counts.numDaysTotal, 'SCORE')}
                     { this.renderProgressCircle(counts.numDaysWithActivity, counts.numDaysTotal, 'ACTIVITY')}
                     { this.renderProgressCircle(counts.numPromptsTotal, counts.numDaysTotal, 'PROMPT')}
-                    { this.renderScoreRecordsText('HIGHEST', true, 'SCORE', records.highestAvgDayScore, records.highestAvgDayScoreDate) }
-                    { this.renderScoreRecordsText('LOWEST', false, 'SCORE', records.lowestAvgDayScore, records.lowestAvgDayScoreDate) }
-                    { this.renderMostCommonText('SCORE', records.mostCommonScore, records.mostCommonScoreCount) }
-                    { this.renderMostCommonText('ACTIVITY', records.mostCommonActivity, records.mostCommonActivityCount) }
-                    { this.renderMostCommonText('PROMPT', records.mostCommonPrompt, records.mostCommonPromptCount) }
+                    { counts.numDaysWithScore ? 
+                        this.renderScoreRecordsText(
+                            'HIGHEST', 
+                            true, 
+                            'SCORE', 
+                            records.highestAvgDayScore, 
+                            records.highestAvgDayScoreDate) : null }
+                    { counts.numDaysWithScore ? 
+                        this.renderScoreRecordsText(
+                            'LOWEST', 
+                            false, 
+                            'SCORE', 
+                            records.lowestAvgDayScore, 
+                            records.lowestAvgDayScoreDate) : null }
+                    { counts.numDaysWithScore ? 
+                        this.renderMostCommonText(
+                            'SCORE', 
+                            records.mostCommonScore, 
+                            records.mostCommonScoreCount) : null }
+                    { counts.numDaysWithActivity ? 
+                        this.renderMostCommonText(
+                            'ACTIVITY', 
+                            records.mostCommonActivity, 
+                            records.mostCommonActivityCount) : null }
+                    { counts.numPromptsTotal ? 
+                        this.renderMostCommonText(
+                            'PROMPT', 
+                            records.mostCommonPrompt, 
+                            records.mostCommonPromptCount) : null }
                 </View>
             );
         }
@@ -135,7 +159,7 @@ export default class StatisticsScreen extends Component {
         return (
             <View padder style={{ display: 'flex', flexDirection: 'row', marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                 <View style={{ display: 'flex', flex: 1, justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10}}>
+                    <Text style={{ fontSize: 16, color: 'white', marginBottom: 10}}>
                         Recorded 
                         <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType} </Text> 
                         data
@@ -162,7 +186,7 @@ export default class StatisticsScreen extends Component {
         const extremeTypeColor = showHighestColor ? '#0781ff' : '#ff4b12';
         return (
             <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10, marginTop: 10 }}>
+                <Text style={{ fontSize: 16, color: 'white', marginBottom: 10, marginTop: 10 }}>
                     <Text style={{fontWeight: '600', color: extremeTypeColor}}>{extremeType}</Text> average 
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>. 
@@ -176,7 +200,7 @@ export default class StatisticsScreen extends Component {
     renderMostCommonText(dataType, value, count) {
         return (
             <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10, marginTop: 10 }}>
+                <Text style={{ fontSize: 16, color: 'white', marginBottom: 10, marginTop: 10 }}>
                     Most common
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
                     <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>, with

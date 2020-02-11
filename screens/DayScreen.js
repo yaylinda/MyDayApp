@@ -309,6 +309,7 @@ export default class DayScreen extends Component {
 
     async loadDayData() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         const endpoint = `${HOST}/days`;
         console.log(`[DayScreen] calling ${endpoint}`);
@@ -317,7 +318,8 @@ export default class DayScreen extends Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Session-Token': sessionToken
+                'Session-Token': sessionToken,
+                'Timezone': timezone,
             },
         }).then((response) => {
             if (response.ok) {
@@ -383,11 +385,13 @@ export default class DayScreen extends Component {
         const currentDay = this.state.daysData[this.state.activeSlide];
 
         const sessionToken = await AsyncStorage.getItem('sessionToken');
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const endpoint = `${HOST}/days/${currentDay.dayId}/${this.state.addType}`;
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'Session-Token': sessionToken
+            'Session-Token': sessionToken,
+            'Timezone': timezone,
         };
 
         let body = {};

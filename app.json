@@ -26,6 +26,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "yay.linda.mydayapp"
+    },
+    "android": {
+      "package": "yay.linda.mydayapp",
+      "versionCode": 1
     }
   }
 }
