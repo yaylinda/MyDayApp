@@ -32,7 +32,7 @@ export default class DayInfo extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Scores</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Scores</Text>
 
                     </CardItem>
                     <CardItem style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
@@ -46,7 +46,7 @@ export default class DayInfo extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Activities</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Activities</Text>
 
                     </CardItem>
                     <CardItem style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
@@ -60,7 +60,7 @@ export default class DayInfo extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}>
-                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Day Prompts</Text>
+                        <Text style={{ color: '#ff4495', fontSize: 18 }}>Prompts</Text>
 
                     </CardItem>
                     <CardItem style={{ backgroundColor: COLORS.BACKGROUND_LIGHT }}>
@@ -178,13 +178,11 @@ export default class DayInfo extends Component {
                                         borderBottomRightRadius: 10
                                     }}>
                                         <View>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ color: 'white', fontWeight: '500' }}>Q: </Text>
-                                                <Text style={{ color: 'white'}}>{item.question}</Text>
+                                            <View style={{ flexDirection: 'row', borderBottomColor: '#b4b8cd', borderBottomWidth: 1, paddingBottom: 5 }}>
+                                                <Text style={{ flex: 1, color: 'white' }}>{item.question}</Text>
                                             </View>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ color: 'white', fontWeight: '500' }}>A: </Text>
-                                                <Text style={{ color: 'white'}}>{item.selectedAnswer}</Text>
+                                            <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                                                <Text style={{ flex: 1, color: 'white'}}>{item.selectedAnswer}</Text>
                                             </View>
                                         </View>
                                     </View>

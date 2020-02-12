@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  AsyncStorage
+  AsyncStorage, Alert
 } from 'react-native';
 import {
   Container,
@@ -26,7 +26,8 @@ export default class RegisterScreen extends Component {
       password: '',
       passwordConf: '',
       errorMessage: '',
-      loginSuccessful: false
+      loginSuccessful: false,
+      isDisabled: true,
     }
   }
 
@@ -38,35 +39,43 @@ export default class RegisterScreen extends Component {
         </View>
         <Form style={{ marginBottom: 20 }}>
           <Item floatingLabel>
-            <Label style={{ color: 'white' }}>Username</Label>
+            <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Username</Label>
             <Input style={{ color: 'white' }} autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
           </Item>
           <Item floatingLabel>
-            <Label style={{ color: 'white' }}>Password</Label>
-            <Input style={{ color: 'white' }} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
+            <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Password</Label>
+            <Input style={{ color: 'white' }} secureTextEntry={true} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
           </Item>
           <Item floatingLabel>
-            <Label style={{ color: 'white' }}>Confirm Password</Label>
-            <Input style={{ color: 'white' }} autoCapitalize='none' onChangeText={passwordConf => this.onPasswordConfInputChange(passwordConf)} />
+            <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Confirm Password</Label>
+            <Input style={{ color: 'white' }} secureTextEntry={true} autoCapitalize='none' onChangeText={passwordConf => this.onPasswordConfInputChange(passwordConf)} />
           </Item>
         </Form>
-        <Button style={{ backgroundColor: '#52e3c2', justifyContent: 'center' }} onPress={() => this.register()}><Text> Register </Text></Button>
+        <Button disabled={ this.state.isDisabled } style={ this.state.isDisabled ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } : { backgroundColor: '#52e3c2', justifyContent: 'center' }} onPress={() => this.register()}><Text> Register </Text></Button>
         <Button transparent style={{ justifyContent: 'center' }} onPress={() => this.goToSignInScreen()}><Text style={{color: '#ff4495'}}> Go To Sign In </Text></Button>
       </Container>
     );
   }
 
   onUsernameInputChange(username) {
-    this.state.username = username;
+    this.setState({ 
+      username: username,
+      isDisabled: username.length === 0 || this.state.password.length === 0 || this.state.passwordConf.length === 0
+     });
   }
 
   onPasswordInputChange(password) {
-    this.state.password = password;
+    this.setState({ 
+      password: password,
+      isDisabled: this.state.username.length === 0 || password.length === 0 || this.state.passwordConf.length === 0
+     });
   }
 
   onPasswordConfInputChange(passwordConf) {
-    this.state.passwordConf = passwordConf;
-  }
+    this.setState({ 
+      passwordConf: passwordConf,
+      isDisabled: this.state.username.length === 0 || this.state.password.length === 0 || passwordConf.length === 0
+     });  }
 
   async register() {
     console.log(`[RegisterScreen] registering with username=${this.state.username}, password=${this.state.password}`);
@@ -74,37 +83,44 @@ export default class RegisterScreen extends Component {
     const endpoint = `${HOST}/users/register`;
     console.log(`[RegisterScreen] calling ${endpoint}`);
 
-    return fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      })
-    }).then((response) => {
-      if (response.ok) {
-        console.log(`[RegisterScreen] successfully registered`);
-        this.loginSuccessful = true;
-      } else {
-        console.log(`[RegisterScreen] error registering`);
-        this.loginSuccessful = false;
-      }
-      return response.json();
-    }).then((json) => {
-      console.log(`[RegisterScreen] json: ${JSON.stringify(json)}`);
-      if (this.loginSuccessful) {
-        console.log(`[RegisterScreen] sessionToken: ${json.sessionToken}`);
-        AsyncStorage.setItem('sessionToken', json.sessionToken);
-        this.props.navigation.navigate('App');
-      } else {
-        console.log(`[RegisterScreen] login error message: ${json.message}`);
-        this.errorMessage = json.message;
-        // TODO - show error message on screen
-      }
-    });
+      return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: this.state.username,
+          password: this.state.password,
+        })
+      }).then((response) => {
+        if (response.ok) {
+          console.log(`[RegisterScreen] successfully registered`);
+          this.loginSuccessful = true;
+        } else {
+          console.log(`[RegisterScreen] error registering`);
+          this.loginSuccessful = false;
+        }
+        return response.json();
+      }).then((json) => {
+        console.log(`[RegisterScreen] json: ${JSON.stringify(json)}`);
+        if (this.loginSuccessful) {
+          console.log(`[RegisterScreen] sessionToken: ${json.sessionToken}`);
+          AsyncStorage.setItem('sessionToken', json.sessionToken);
+          this.state = {
+            username: '',
+            password: '',
+            passwordConf: '',
+            errorMessage: '',
+            loginSuccessful: false
+          }
+          this.props.navigation.navigate('App');
+        } else {
+          console.log(`[RegisterScreen] login error message: ${json.message}`);
+          this.errorMessage = json.message;
+          Alert.alert('Error', this.errorMessage);
+        }
+      });
   }
 
   goToSignInScreen() {
