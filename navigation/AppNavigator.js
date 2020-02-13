@@ -10,6 +10,47 @@ import SettingsScreen from '../screens/SettingsScreen';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { HOST, COLORS } from '../util/Constants';
+import { createStackNavigator } from 'react-navigation-stack';
+import CatalogFormScreen from '../screens/CatalogFormScreen';
+
+
+const CatalogStack = createStackNavigator(
+  {
+    CatalogList: {
+      screen: CatalogScreen,
+      navigationOptions: {
+        title: 'Catalog',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN,
+          borderBottomWidth: 0,
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
+      }
+    },
+    CatalogForm: {
+      screen: CatalogFormScreen,
+      navigationOptions: {
+        title: 'Add to Catalog',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN,
+          borderBottomWidth: 0,
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
+      }
+    }
+  },
+  {
+    initialRouteName: "CatalogList",
+  }
+);
 
 const AppStack = createBottomTabNavigator(
   {
@@ -32,7 +73,7 @@ const AppStack = createBottomTabNavigator(
       }
     },
     Catalog: {
-      screen: CatalogScreen,
+      screen: CatalogStack,
       navigationOptions: {
         tabBarLabel: 'Catalog',
         tabBarIcon: ({ focused }) => (
@@ -52,6 +93,15 @@ const AppStack = createBottomTabNavigator(
     Stats: {
       screen: StatisticsScreen,
       navigationOptions: {
+        title: 'Statistics',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
         tabBarLabel: 'Statistics',
         tabBarIcon: ({ focused }) => (
           <Ionicons
@@ -70,6 +120,15 @@ const AppStack = createBottomTabNavigator(
     Settings: {
       screen: SettingsScreen,
       navigationOptions: {
+        title: 'Settings',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
         tabBarLabel: 'Settings',
         tabBarIcon: ({ focused }) => (
           <Ionicons

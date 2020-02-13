@@ -466,6 +466,7 @@ export default class DayScreen extends Component {
             const latestDate = moment(this.state.daysData[0].date);
             if (latestDate.isBefore(moment(new Date()).startOf('day'))) {
                 console.log('need to refresh days');
+                AsyncStorage.setItem('doStatsUpdate', true);
                 this.loadDayData();
             }
         }

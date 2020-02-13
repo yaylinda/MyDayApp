@@ -40,19 +40,47 @@ export default class RegisterScreen extends Component {
         <Form style={{ marginBottom: 20 }}>
           <Item floatingLabel>
             <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Username</Label>
-            <Input style={{ color: 'white' }} autoCapitalize='none' onChangeText={username => this.onUsernameInputChange(username)} />
+            <Input 
+              style={{ color: 'white' }} 
+              autoCapitalize='none' 
+              onChangeText={username => this.onUsernameInputChange(username)} 
+            />
           </Item>
           <Item floatingLabel>
             <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Password</Label>
-            <Input style={{ color: 'white' }} secureTextEntry={true} autoCapitalize='none' onChangeText={password => this.onPasswordInputChange(password)} />
+            <Input 
+              style={{ color: 'white' }} 
+              secureTextEntry={true} 
+              autoCapitalize='none' 
+              onChangeText={password => this.onPasswordInputChange(password)} 
+            />
           </Item>
           <Item floatingLabel>
             <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Confirm Password</Label>
-            <Input style={{ color: 'white' }} secureTextEntry={true} autoCapitalize='none' onChangeText={passwordConf => this.onPasswordConfInputChange(passwordConf)} />
+            <Input 
+              style={{ color: 'white' }} 
+              secureTextEntry={true} 
+              autoCapitalize='none' 
+              onChangeText={passwordConf => this.onPasswordConfInputChange(passwordConf)} 
+            />
           </Item>
         </Form>
-        <Button disabled={ this.state.isDisabled } style={ this.state.isDisabled ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } : { backgroundColor: '#52e3c2', justifyContent: 'center' }} onPress={() => this.register()}><Text> Register </Text></Button>
-        <Button transparent style={{ justifyContent: 'center' }} onPress={() => this.goToSignInScreen()}><Text style={{color: '#ff4495'}}> Go To Sign In </Text></Button>
+        <Button 
+          disabled={ this.state.isDisabled } 
+          style={ this.state.isDisabled 
+            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } 
+            : { backgroundColor: '#52e3c2', justifyContent: 'center' }}
+           onPress={() => this.register()}
+          >
+             <Text> Register </Text>
+          </Button>
+        <Button 
+          transparent 
+          style={{ justifyContent: 'center' }} 
+          onPress={() => this.goToSignInScreen()}
+        >
+          <Text style={{color: '#ff4495'}}> Go To Sign In </Text>
+        </Button>
       </Container>
     );
   }
