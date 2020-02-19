@@ -40,76 +40,77 @@ export default class StatisticsScreen extends Component {
 
     render() {
         return (
-            <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
+            <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                    <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    {/* <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Text style={{ fontSize: 24, fontWeight: '900', color: COLORS.TEXT_MAIN }}>Statistics</Text>
-                </View>
+                </View> */}
 
-                <Tabs tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}>
-                    <Tab heading="Summary"
-                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
-                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                    >
-                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderSummaryStats()}
-                        </View>
-                    </Tab>
-                    <Tab heading="Scores"
-                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
-                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                    >
-                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderScoreStats(SCORE_KEY, DAY_KEY, 'Today')}
-                            {this.renderScoreStats(SCORE_KEY, WEEK_KEY, 'Last 7 Days')}
-                            {this.renderScoreStats(SCORE_KEY, MONTH_KEY, 'This Month')}
-                            {this.renderScoreStats(SCORE_KEY, YEAR_KEY, 'This Year')}
-                        </View>
-                    </Tab>
-                    <Tab heading="Activities"
-                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
-                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                    >
-                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderActivityStats(ACTIVITY_KEY, DAY_KEY, 'Today')}
-                            {this.renderActivityStats(ACTIVITY_KEY, WEEK_KEY, 'Last 7 Days')}
-                            {this.renderActivityStats(ACTIVITY_KEY, MONTH_KEY, 'This Month')}
-                            {this.renderActivityStats(ACTIVITY_KEY, YEAR_KEY, 'This Year')}
-                        </View>
-                    </Tab>
-                    <Tab heading="Prompts"
-                        tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                        textStyle={{ color: 'white' }}
-                        activeTextStyle={{ color: COLORS.TEXT_MAIN }}
-                        style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
-                    >
-                        <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                            {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today')}
-                            {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'Last 7 Days')}
-                            {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month')}
-                            {this.renderPromptStats(PROMPT_KEY, YEAR_KEY, 'This Year')}
-                        </View>
-                    </Tab>
-                </Tabs>
-
-            </Content>
+                    <Tabs tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}>
+                        <Tab heading="Summary"
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        >
+                            <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                                {this.renderSummaryStats()}
+                            </View>
+                        </Tab>
+                        <Tab heading="Scores"
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        >
+                            <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                                {this.renderScoreStats(SCORE_KEY, DAY_KEY, 'Today')}
+                                {this.renderScoreStats(SCORE_KEY, WEEK_KEY, 'Last 7 Days')}
+                                {this.renderScoreStats(SCORE_KEY, MONTH_KEY, 'This Month')}
+                                {this.renderScoreStats(SCORE_KEY, YEAR_KEY, 'This Year')}
+                            </View>
+                        </Tab>
+                        <Tab heading="Activities"
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        >
+                            <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                                {this.renderActivityStats(ACTIVITY_KEY, DAY_KEY, 'Today')}
+                                {this.renderActivityStats(ACTIVITY_KEY, WEEK_KEY, 'Last 7 Days')}
+                                {this.renderActivityStats(ACTIVITY_KEY, MONTH_KEY, 'This Month')}
+                                {this.renderActivityStats(ACTIVITY_KEY, YEAR_KEY, 'This Year')}
+                            </View>
+                        </Tab>
+                        <Tab heading="Prompts"
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        >
+                            <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                                {this.renderPromptStats(PROMPT_KEY, DAY_KEY, 'Today')}
+                                {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'Last 7 Days')}
+                                {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month')}
+                                {this.renderPromptStats(PROMPT_KEY, YEAR_KEY, 'This Year')}
+                            </View>
+                        </Tab>
+                    </Tabs>
+                </Content>
+            </View>
         );
     }
 
     renderSummaryStats() {
-        if (this.state.allStats[SUMMARY_KEY] 
-            && this.state.allStats[SUMMARY_KEY][COUNTS_KEY] 
+        if (this.state.allStats[SUMMARY_KEY]
+            && this.state.allStats[SUMMARY_KEY][COUNTS_KEY]
             && this.state.allStats[SUMMARY_KEY][RECORDS_KEY]) {
 
             const counts = this.state.allStats[SUMMARY_KEY][COUNTS_KEY][LABELS_DATA_MAP_KEY];
@@ -117,39 +118,39 @@ export default class StatisticsScreen extends Component {
 
             return (
                 <View style={{ justifyContent: 'center' }}>
-                    { this.renderProgressCircle(counts.numDaysWithRecords, counts.numDaysTotal, 'ANY')}
-                    { this.renderProgressCircle(counts.numDaysWithScore, counts.numDaysTotal, 'SCORE')}
-                    { this.renderProgressCircle(counts.numDaysWithActivity, counts.numDaysTotal, 'ACTIVITY')}
-                    { this.renderProgressCircle(counts.numPromptsTotal, counts.numDaysTotal, 'PROMPT')}
-                    { counts.numDaysWithScore ? 
+                    {this.renderProgressCircle(counts.numDaysWithRecords, counts.numDaysTotal, 'ANY')}
+                    {this.renderProgressCircle(counts.numDaysWithScore, counts.numDaysTotal, 'SCORE')}
+                    {this.renderProgressCircle(counts.numDaysWithActivity, counts.numDaysTotal, 'ACTIVITY')}
+                    {this.renderProgressCircle(counts.numPromptsTotal, counts.numDaysTotal, 'PROMPT')}
+                    {counts.numDaysWithScore ?
                         this.renderScoreRecordsText(
-                            'HIGHEST', 
-                            true, 
-                            'SCORE', 
-                            records.highestAvgDayScore, 
-                            records.highestAvgDayScoreDate) : null }
-                    { counts.numDaysWithScore ? 
+                            'HIGHEST',
+                            true,
+                            'SCORE',
+                            records.highestAvgDayScore,
+                            records.highestAvgDayScoreDate) : null}
+                    {counts.numDaysWithScore ?
                         this.renderScoreRecordsText(
-                            'LOWEST', 
-                            false, 
-                            'SCORE', 
-                            records.lowestAvgDayScore, 
-                            records.lowestAvgDayScoreDate) : null }
-                    { counts.numDaysWithScore ? 
+                            'LOWEST',
+                            false,
+                            'SCORE',
+                            records.lowestAvgDayScore,
+                            records.lowestAvgDayScoreDate) : null}
+                    {counts.numDaysWithScore ?
                         this.renderMostCommonText(
-                            'SCORE', 
-                            records.mostCommonScore, 
-                            records.mostCommonScoreCount) : null }
-                    { counts.numDaysWithActivity ? 
+                            'SCORE',
+                            records.mostCommonScore,
+                            records.mostCommonScoreCount) : null}
+                    {counts.numDaysWithActivity ?
                         this.renderMostCommonText(
-                            'ACTIVITY', 
-                            records.mostCommonActivity, 
-                            records.mostCommonActivityCount) : null }
-                    { counts.numPromptsTotal ? 
+                            'ACTIVITY',
+                            records.mostCommonActivity,
+                            records.mostCommonActivityCount) : null}
+                    {counts.numPromptsTotal ?
                         this.renderMostCommonText(
-                            'PROMPT', 
-                            records.mostCommonPrompt, 
-                            records.mostCommonPromptCount) : null }
+                            'PROMPT',
+                            records.mostCommonPrompt,
+                            records.mostCommonPromptCount) : null}
                 </View>
             );
         }
@@ -158,23 +159,23 @@ export default class StatisticsScreen extends Component {
     renderProgressCircle(value, outOf, dataType) {
         return (
             <View padder style={{ display: 'flex', flexDirection: 'row', marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
-                <View style={{ display: 'flex', flex: 1, justifyContent: 'center'}}>
-                    <Text style={{ fontSize: 16, color: 'white', marginBottom: 10}}>
-                        Recorded 
-                        <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType} </Text> 
+                <View style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 16, color: 'white', marginBottom: 10 }}>
+                        Recorded
+                        <Text style={{ fontWeight: '600', color: '#d211fe' }}> {dataType} </Text>
                         data
-                        <Text style={{fontWeight: '600', color: '#d211fe'}}> {value} </Text> 
-                        out of 
-                        <Text style={{fontWeight: '600', color: '#d211fe'}}> {outOf} </Text> 
-                         days
+                        <Text style={{ fontWeight: '600', color: '#d211fe' }}> {value} </Text>
+                        out of
+                        <Text style={{ fontWeight: '600', color: '#d211fe' }}> {outOf} </Text>
+                        days
                     </Text>
                 </View>
-                <View style={{ flex: 1, display: 'flex', justifyContent: 'flex-end'}}>
-                    <ProgressCircle 
-                        style={{ flex: 1, height: 100 }} 
-                        progress={ value / outOf } 
-                        progressColor={'#d211fe'} 
-                        strokeWidth={10} 
+                <View style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                    <ProgressCircle
+                        style={{ flex: 1, height: 100 }}
+                        progress={value / outOf}
+                        progressColor={'#d211fe'}
+                        strokeWidth={10}
                         cornerRadius={0}
                     />
                 </View>
@@ -187,13 +188,13 @@ export default class StatisticsScreen extends Component {
         return (
             <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                 <Text style={{ fontSize: 16, color: 'white', marginBottom: 10, marginTop: 10 }}>
-                    <Text style={{fontWeight: '600', color: extremeTypeColor}}>{extremeType}</Text> average 
-                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
-                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>. 
+                    <Text style={{ fontWeight: '600', color: extremeTypeColor }}>{extremeType}</Text> average
+                    <Text style={{ fontWeight: '600', color: '#d211fe' }}> {dataType}</Text> is
+                    <Text style={{ fontWeight: '600', color: '#d211fe' }}> {value}</Text>.
                     Recorded on {this.formatDate(date)}.
                 </Text>
             </View>
-            
+
         );
     }
 
@@ -202,9 +203,9 @@ export default class StatisticsScreen extends Component {
             <View padder style={{ marginBottom: 20, backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10 }}>
                 <Text style={{ fontSize: 16, color: 'white', marginBottom: 10, marginTop: 10 }}>
                     Most common
-                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {dataType}</Text> is 
-                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {value}</Text>, with
-                    <Text style={{fontWeight: '600', color: '#d211fe'}}> {count}</Text> occurrances.
+                    <Text style={{ fontWeight: '600', color: '#d211fe' }}> {dataType}</Text> is
+                    <Text style={{ fontWeight: '600', color: '#d211fe' }}> {value}</Text>, with
+                    <Text style={{ fontWeight: '600', color: '#d211fe' }}> {count}</Text> occurrances.
                 </Text>
             </View>
         );
@@ -351,7 +352,7 @@ export default class StatisticsScreen extends Component {
                     title: q,
                     data: input.labelsDataMap[q].labelsDataMap,
                     colors: [],
-                
+
                 };
 
                 let colors = palette('mpn65', input.labelsDataMap[q].labels.length);
@@ -376,7 +377,7 @@ export default class StatisticsScreen extends Component {
 
     renderPromptStackedBarChart(key, data, colors, chartTitle) {
         return (
-            <View key={key} style={{ display: 'flex', flexDirection: 'row', marginBottom: 20}}>
+            <View key={key} style={{ display: 'flex', flexDirection: 'row', marginBottom: 20 }}>
                 <View style={{ display: 'flex', flex: 1 }}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: COLORS.TEXT_MAIN, marginBottom: 10 }}>
                         {chartTitle}

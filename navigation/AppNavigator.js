@@ -52,6 +52,29 @@ const CatalogStack = createStackNavigator(
   }
 );
 
+const StatisticsStack = createStackNavigator(
+  {
+    StatisticsPage: {
+      screen: StatisticsScreen,
+      navigationOptions: {
+        title: 'Statistics',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN,
+          borderBottomWidth: 0,
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
+      }
+    }
+  },
+  {
+    initialRouteName: "StatisticsPage",
+  }
+);
+
 const AppStack = createBottomTabNavigator(
   {
     Day: {
@@ -91,17 +114,8 @@ const AppStack = createBottomTabNavigator(
       }
     },
     Stats: {
-      screen: StatisticsScreen,
+      screen: StatisticsStack,
       navigationOptions: {
-        title: 'Statistics',
-        headerStyle: {
-          backgroundColor: COLORS.BACKGROUND_MAIN
-        },
-        headerTitleStyle: {
-          fontSize: 24,
-          fontWeight: '900',
-          color: COLORS.TEXT_MAIN,
-        },
         tabBarLabel: 'Statistics',
         tabBarIcon: ({ focused }) => (
           <Ionicons

@@ -6,6 +6,7 @@ import { HOST, COLORS } from '../util/Constants';
 import { AsyncStorage } from 'react-native';
 import Modal from 'react-native-modal';
 import ActionButton from 'react-native-action-button';
+import { NavigationEvents } from 'react-navigation';
 
 const CATALOG_TYPES = ['ACTIVITY', 'PROMPT'];
 
@@ -16,14 +17,6 @@ export default class CatalogScreen extends Component {
         this.state = {
             catalogData: { 'ACTIVITY': [], 'PROMPT': [] },
             errorMessage: '',
-            newType: '',
-            newName: '',
-            newDescription: '',
-            newColor: '',
-            newIcon: '',
-            newQuestion: '',
-            newAnswers: [''],
-            newAllowMultiSelect: false,
             activeTabIndex: 0,
         }
     }
@@ -35,8 +28,9 @@ export default class CatalogScreen extends Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
+                
                 <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}>
-
                     <Tabs
                         tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}
                         style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
@@ -70,9 +64,22 @@ export default class CatalogScreen extends Component {
                 <ActionButton
                     style={{ bottom: 0 }}
                     buttonColor='#ff4495'
-                    renderIcon={() => <Icon name='add' style={{ fontSize: 18, color: 'white' }} />}
-                    onPress={() => this.fabPress()}
-                />
+                    renderIcon={() => <Icon name='add' style={{ fontSize: 18, color: 'white' }} />}>
+                    <ActionButton.Item
+                        size={40}
+                        title={'Activity'}
+                        onPress={() => this.props.navigation.navigate('CatalogForm', { formType: 'ACTIVITY' })}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="apps" style={{ fontSize: 18, color: 'white' }} />
+                    </ActionButton.Item>
+                    <ActionButton.Item
+                        size={40}
+                        title={'Prompt'}
+                        onPress={() => this.props.navigation.navigate('CatalogForm', { formType: 'PROMPT' })}
+                        style={{ backgroundColor: '#ff4495' }}>
+                        <Icon name="help" style={{ fontSize: 18, color: 'white' }} />
+                    </ActionButton.Item>
+                </ActionButton>
             </View>
         );
     }
@@ -189,13 +196,6 @@ export default class CatalogScreen extends Component {
         this.setState({ activeTabIndex: ref.i });
     }
 
-    fabPress() {
-        console.log(`[CatalogScreen] press add fab`);
-        this.setState({ newType: CATALOG_TYPES[this.state.activeTabIndex] });
-        this.props.navigation.navigate('CatalogForm', { formType: CATALOG_TYPES[this.state.activeTabIndex] });
-
-    }
-
     async loadCatalogData() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
@@ -224,6 +224,7 @@ export default class CatalogScreen extends Component {
             if (requestSuccess) {
                 console.log('[CatalogScreen] updating state.catalogData');
                 this.setState({ catalogData: json });
+                AsyncStorage.setItem('doCatalogUpdate_CatalogScreen', '');
             } else {
                 console.log(`[CatalogScreen] retrieving day event catalog data error message: ${json.message}`);
                 this.errorMessage = json.message;
@@ -232,17 +233,12 @@ export default class CatalogScreen extends Component {
         })
     }
 
-    resetState() {
-        this.setState({
-            newType: '',
-            newName: '',
-            newDescription: '',
-            newColor: '',
-            newIcon: '',
-            newQuestion: '',
-            newAnswers: [''],
-            newAllowMultiSelect: false
-        });
+    async checkForUpdates() {
+        console.log('[CatalogScreen] [onWillFocus] - checkForUpdates');
+        const doCatalogUpdate = await AsyncStorage.getItem('doCatalogUpdate_CatalogScreen');
+        if (doCatalogUpdate) {
+            console.log('[DayScreen] [onWillFocus] - checkForUpdates: doCatalogUpdate_CatalogScreen=true');
+            this.loadCatalogData();
+        }
     }
-
 }

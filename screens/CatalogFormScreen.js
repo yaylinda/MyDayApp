@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, Form, Label, Input, Button, Item } from 'native-base';
-import { COLORS } from '../util/Constants';
+import { COLORS, HOST } from '../util/Constants';
+import { Alert, AsyncStorage } from 'react-native';
 
 export default class CatalogFormScreen extends Component {
 
@@ -8,6 +9,12 @@ export default class CatalogFormScreen extends Component {
         super(props);
         this.state = {
             formType: this.props.navigation.state.params.formType,
+            newName: '',
+            newDescription: '',
+            newIcon: '',
+            newColor: '',
+            newQuestion: '',
+            newAnswers: [''],
         }
     }
 
@@ -20,8 +27,9 @@ export default class CatalogFormScreen extends Component {
                         : this.renderPromptForm()}
                 </View>
 
-                <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
+                        {/* TODO - validation to disable button */}
                         <Text>Save</Text>
                     </Button>
                 </View>
@@ -30,50 +38,54 @@ export default class CatalogFormScreen extends Component {
     }
 
     renderActivityForm() {
-
         return (
-            <Form style={{ marginBottom: 20 }}>
-                <Item floatingLabel>
-                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Name</Label>
-                    <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newName: value })} />
+            <View padder>
+                <Item floatingLabel style={{ marginBottom: 10 }}>
+                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
+                    <Input
+                        style={{ color: 'white' }}
+                        onChangeText={value => this.setState({ newName: value })}
+                    />
                 </Item>
-                <Item floatingLabel>
+                <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Description</Label>
-                    <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newDescription: value })} />
+                    <Input
+                        style={{ color: 'white' }}
+                        onChangeText={value => this.setState({ newDescription: value })}
+                    />
                 </Item>
-                <Item floatingLabel>
-                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Icon</Label>
-                    <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newIcon: value })} />
-                </Item>
-                <Item floatingLabel>
-                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Color</Label>
-                    <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newColor: value })} />
-                </Item>
-            </Form>
+            </View>
         );
     }
+
     renderPromptForm() {
         return (
-            <View>
-                <Form style={{ marginBottom: 20 }}>
-                    <Item padder floatingLabel>
-                        <Label style={{ color: 'white' }}>Question</Label>
-                        <Input style={{ color: 'white' }} onChangeText={value => this.setState({ newQuestion: value })} />
-                    </Item>
-                    {
-                        this.state.newAnswers.map((answer, index) => {
-                            return (
-                                <Item floatingLabel key={index}>
-                                    <Label style={{ color: 'white' }}>Answer Option #{index + 1}</Label>
-                                    <Input style={{ color: 'white' }} onChangeText={value => this.updateAnswers(index, value)} />
-                                </Item>
-                            );
-                        })
-                    }
-
-                </Form>
+            <View padder>
+                <Item floatingLabel style={{ marginBottom: 10 }}>
+                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Question</Label>
+                    <Input
+                        style={{ color: 'white' }} 
+                        onChangeText={value => this.setState({ newQuestion: value })} 
+                    />
+                </Item>
+                {
+                    this.state.newAnswers.map((answer, index) => {
+                        return (
+                            <Item floatingLabel key={index} style={{ marginBottom: 10 }}>
+                                <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Answer Option #{index + 1}</Label>
+                                <Input 
+                                    style={{ color: 'white' }} 
+                                    onChangeText={value => this.updateAnswers(index, value)} 
+                                />
+                            </Item>
+                        );
+                    })
+                }
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button small rounded onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat('') })} style={{ backgroundColor: '#52e3c2' }}>
+                    <Button small rounded 
+                        onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat('') })} 
+                        style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
+                    >
                         <Text style={{ color: 'white' }}>Add Answer Option</Text>
                     </Button>
                 </View>
@@ -81,67 +93,78 @@ export default class CatalogFormScreen extends Component {
         );
     }
 
-updateAnswers(index, value) {
-    const tempAnswers = this.state.newAnswers;
-    tempAnswers[index] = value;
-    this.setState({ newAnswers: tempAnswers });
-}
+    updateAnswers(index, value) {
+        const tempAnswers = this.state.newAnswers;
+        tempAnswers[index] = value;
+        this.setState({ newAnswers: tempAnswers });
+    }
 
-async persistNew() {
-    console.log(`[CatalogScreen] persist new`);
-    const sessionToken = await AsyncStorage.getItem('sessionToken');
-    const endpoint = `${HOST}/catalog/events/${this.state.newType}`;
-    const body = {
-        dayEventCatalogId: '',
-        belongsTo: '',
-        type: this.state.newType,
-        name: this.state.newName,
-        color: this.state.newColor,
-        icon: this.state.newIcon,
-        description: this.state.newDescription,
-        question: this.state.newQuestion,
-        answers: this.state.newAnswers,
-        allowMultiSelect: this.state.newAllowMultiSelect
-    };
-    const headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Session-Token': sessionToken
-    };
+    async persistNew() {
+        console.log(`[CatalogFormScreen] persist new`);
+        const sessionToken = await AsyncStorage.getItem('sessionToken');
+        const endpoint = `${HOST}/catalog/events/${this.state.formType}`;
+        const body = {
+            dayEventCatalogId: '',
+            belongsTo: '',
+            type: this.state.formType,
+            name: this.state.newName,
+            color: this.state.newColor, // TODO - this is not getting set from input
+            icon: this.state.newIcon, // TODO - this is not getting set from input
+            description: this.state.newDescription,
+            question: this.state.newQuestion,
+            answers: this.state.newAnswers,
+            allowMultiSelect: this.state.newAllowMultiSelect // TODO - this is not getting set from input
+        };
+        const headers = {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Session-Token': sessionToken
+        };
 
-    console.log(`[CatalogScreen] calling ${endpoint}, with ${JSON.stringify(body)}`);
+        console.log(`[CatalogFormScreen] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
-    let requestSuccess = false;
+        let requestSuccess = false;
 
-    fetch(endpoint, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body)
-    }).then((response) => {
-        if (response.ok) {
-            requestSuccess = true;
-            console.log(`[CatalogScreen] successfully posted new`);
-            AsyncStorage.setItem('doCatalogUpdate', 'doCatalogUpdate');
-        } else {
-            requestSuccess = false;
-            console.log(`[CatalogScreen] error posting new`);
-        }
-        return response.json();
-    }).then((json) => {
-        console.log(`[CatalogScreen] json: ${JSON.stringify(json)}`);
-        if (requestSuccess) {
-            console.log(`[CatalogScreen] updating this.state.catalogData`);
-            let tempCatalogData = this.state.catalogData;
-            tempCatalogData[this.state.newType] = json;
-            this.setState({ catalogData: tempCatalogData });
+        fetch(endpoint, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body)
+        }).then((response) => {
+            if (response.ok) {
+                requestSuccess = true;
+                console.log(`[CatalogFormScreen] successfully posted new`);
+                AsyncStorage.setItem('doCatalogUpdate_DayScreen', 'doCatalogUpdate_DayScreen');
+                AsyncStorage.setItem('doCatalogUpdate_CatalogScreen', 'doCatalogUpdate_CatalogScreen');
+            } else {
+                requestSuccess = false;
+                console.log(`[CatalogFormScreen] error posting new`);
+            }
+            return response.json();
+        }).then((json) => {
+            console.log(`[CatalogFormScreen] json: ${JSON.stringify(json)}`);
+            if (requestSuccess) {
+                console.log(`[CatalogFormScreen] successfully saved new catalog data, navigating back`);
+                this.props.navigation.goBack();
+            } else {
+                console.log(`[CatalogFormScreen] error posting new event with error message: ${json.message}`);
+                this.errorMessage = json.message;
+                Alert.alert('Error', this.errorMessage);
+            }
 
-            // TODO - make sure to navigate back to previous catalog page
-        } else {
-            console.log(`[CatalogScreen] error posting new event with error message: ${json.message}`);
-            this.errorMessage = json.message;
-        }
+            this.resetState();
+        });
+    }
 
-        this.resetState();
-    });
-}
+    resetState() {
+        this.setState({
+            newType: '',
+            newName: '',
+            newDescription: '',
+            newColor: '',
+            newIcon: '',
+            newQuestion: '',
+            newAnswers: [''],
+            newAllowMultiSelect: false
+        });
+    }
 }

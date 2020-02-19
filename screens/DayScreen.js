@@ -371,7 +371,7 @@ export default class DayScreen extends Component {
             if (requestSuccess) {
                 console.log('[CatalogScreen] updating state.catalogData');
                 this.setState({ catalogData: json });
-                AsyncStorage.setItem('doCatalogUpdate', '');
+                AsyncStorage.setItem('doCatalogUpdate_DayScreen', '');
             } else {
                 console.log(`[CatalogScreen] retrieving day event catalog data error message: ${json.message}`);
                 this.errorMessage = json.message;
@@ -456,9 +456,9 @@ export default class DayScreen extends Component {
 
     async checkForUpdates() {
         console.log('[DayScreen] [onWillFocus] - checkForUpdates');
-        const doCatalogUpdate = await AsyncStorage.getItem('doCatalogUpdate');
+        const doCatalogUpdate = await AsyncStorage.getItem('doCatalogUpdate_DayScreen');
         if (doCatalogUpdate) {
-            console.log('[DayScreen] [onWillFocus] - checkForUpdates: doCatalogUpdate=true');
+            console.log('[DayScreen] [onWillFocus] - checkForUpdates: doCatalogUpdate_DayScreen=true');
             this.loadCatalogData();
         }
 
