@@ -166,11 +166,11 @@ export default class DayScreen extends Component {
 
     renderModalTitle() {
         if (this.state.addType === 'EMOTION') {
-            return ('New Day Score');
+            return ('Rate Today');
         } else if (this.state.addType === 'ACTIVITY') {
-            return ('New Day Activity');
+            return ('Select Activity');
         } else if (this.state.addType === 'PROMPT') {
-            return ('New Day Prompt');
+            return ('Answer Prompt');
         }
     }
 
@@ -221,7 +221,6 @@ export default class DayScreen extends Component {
     renderActivityModal() {
         return (
             <View padder>
-                <Text style={{ color: 'white' }}>Select activity</Text>
                 <List>
                     {
                         this.state.catalogData['ACTIVITY'].map((item, index) => {
