@@ -29,7 +29,8 @@ export default class DayScreen extends Component {
             selectedHearts: [false, false, false, false, false],
             heartLabels: ['Bad', 'Kind of bad', 'Okay', 'Pretty good', 'Good'],
             randomPromptIndex: -1,
-            selectedPromptAnswerIndex: -1
+            selectedPromptAnswerIndex: -1,
+            isDisabled: true,
         }
         console.log('[DayScreen] constructor');
     }
@@ -141,20 +142,23 @@ export default class DayScreen extends Component {
 
     renderModal() {
         return (
-            <Modal isVisible={this.state.showAddModal}>
+            <Modal isVisible={this.state.showAddModal} onBackdropPress={() => this.cancelAdd()}>
                 <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
 
                     <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 18, fontWeight: "600", color: '#52e3c2' }}>{this.renderModalTitle()}</Text>
+                        <Text style={{ fontSize: 18, fontWeight: "600", color: COLORS.TEXT_MAIN }}>{this.renderModalTitle()}</Text>
                     </View>
 
                     {this.renderModalContent()}
 
-                    <View padder style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Button onPress={() => this.cancelAdd()} style={{ backgroundColor: '#52e3c2' }}>
-                            <Text>Cancel</Text>
-                        </Button>
-                        <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
+                    <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button 
+                            disabled={ this.state.isDisabled } 
+                            style={ this.state.isDisabled 
+                                ? { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 } 
+                                : { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center' } } 
+                            onPress={ () => this.persistNew() }
+                        >
                             <Text>Save</Text>
                         </Button>
                     </View>
@@ -228,7 +232,10 @@ export default class DayScreen extends Component {
                                 <ListItem key={index}>
                                     <CheckBox
                                         checked={this.state.selectedActivityIndex === index}
-                                        onPress={() => this.setState({ selectedActivityIndex: index })}
+                                        onPress={() => this.setState({
+                                            selectedActivityIndex: index,
+                                            isDisabled: false 
+                                        })}
                                     />
                                     <Body>
                                         <Text style={{ color: 'white' }}>{item.name}</Text>
@@ -262,7 +269,10 @@ export default class DayScreen extends Component {
                                     <ListItem key={index}>
                                         <CheckBox
                                             checked={this.state.selectedPromptAnswerIndex === index}
-                                            onPress={() => this.setState({ selectedPromptAnswerIndex: index })}
+                                            onPress={() => this.setState({
+                                                selectedPromptAnswerIndex: index,
+                                                isDisabled: false  
+                                            })}
                                         />
                                         <Body>
                                             <Text style={{ color: 'white' }}>{answer}</Text>
@@ -292,8 +302,11 @@ export default class DayScreen extends Component {
             }
         }
 
-        this.setState({ selectedHearts: tempHearts });
-        this.setState({ selectedEmotionScore: heartIndex + 1 });
+        this.setState({ 
+            selectedHearts: tempHearts, 
+            selectedEmotionScore: heartIndex + 1, 
+            isDisabled: false 
+        });
     }
 
     handleAddRandomPrompt() {
@@ -450,7 +463,8 @@ export default class DayScreen extends Component {
             selectedEmotionScore: 0,
             selectedHearts: [false, false, false, false, false],
             randomPromptIndex: -1,
-            selectedPromptAnswerIndex: -1
+            selectedPromptAnswerIndex: -1,
+            isDisabled: true,
         });
     }
 
