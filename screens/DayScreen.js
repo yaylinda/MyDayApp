@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Content, Button, Icon, Text, View, List, ListItem, CheckBox, Body } from 'native-base';
 import { HOST, COLORS } from '../util/Constants';
-import { AsyncStorage, Dimensions } from 'react-native';
+import { AsyncStorage, Dimensions, Alert } from 'react-native';
 import DayInfo from './DayInfoScreen';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Modal from "react-native-modal";
@@ -385,7 +385,7 @@ export default class DayScreen extends Component {
 
         const sessionToken = await AsyncStorage.getItem('sessionToken');
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const endpoint = `${HOST}/days/${currentDay.dayId}/${this.state.addType}`;
+        const endpoint = `${HOST}/days/${currentDay.dayId}/events/${this.state.addType}`;
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
@@ -435,6 +435,7 @@ export default class DayScreen extends Component {
             } else {
                 console.log(`[DayInfo] error posting new event with error message: ${json.message}`);
                 this.errorMessage = json.message;
+                Alert.alert('Error', this.errorMessage);
             }
 
             this.resetState();

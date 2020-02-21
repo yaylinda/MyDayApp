@@ -15,6 +15,7 @@ export default class CatalogFormScreen extends Component {
             newColor: '',
             newQuestion: '',
             newAnswers: [''],
+            isDisabled: true,
         }
     }
 
@@ -28,8 +29,13 @@ export default class CatalogFormScreen extends Component {
                 </View>
 
                 <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button onPress={() => this.persistNew()} style={{ backgroundColor: '#52e3c2' }}>
-                        {/* TODO - validation to disable button */}
+                    <Button 
+                        disabled={ this.state.isDisabled } 
+                        style={ this.state.isDisabled 
+                            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } 
+                            : { backgroundColor: '#52e3c2', justifyContent: 'center' } } 
+                        onPress={ () => this.persistNew() }
+                    >
                         <Text>Save</Text>
                     </Button>
                 </View>
@@ -44,7 +50,10 @@ export default class CatalogFormScreen extends Component {
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
                     <Input
                         style={{ color: 'white' }}
-                        onChangeText={value => this.setState({ newName: value })}
+                        onChangeText={value => this.setState({
+                            newName: value, 
+                            isDisabled: value.length === 0
+                        })}
                     />
                 </Item>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
@@ -65,7 +74,10 @@ export default class CatalogFormScreen extends Component {
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Question</Label>
                     <Input
                         style={{ color: 'white' }} 
-                        onChangeText={value => this.setState({ newQuestion: value })} 
+                        onChangeText={value => this.setState({
+                            newQuestion: value, 
+                            isDisabled: value.length === 0 || this.state.newAnswers[0].length === 0
+                        })} 
                     />
                 </Item>
                 {
@@ -96,7 +108,7 @@ export default class CatalogFormScreen extends Component {
     updateAnswers(index, value) {
         const tempAnswers = this.state.newAnswers;
         tempAnswers[index] = value;
-        this.setState({ newAnswers: tempAnswers });
+        this.setState({ newAnswers: tempAnswers, isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].length === 0 });
     }
 
     async persistNew() {
@@ -164,7 +176,7 @@ export default class CatalogFormScreen extends Component {
             newIcon: '',
             newQuestion: '',
             newAnswers: [''],
-            newAllowMultiSelect: false
+            isDisabled: true,
         });
     }
 }

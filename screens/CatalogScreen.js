@@ -65,20 +65,22 @@ export default class CatalogScreen extends Component {
                     style={{ bottom: 0 }}
                     buttonColor='#ff4495'
                     renderIcon={() => <Icon name='add' style={{ fontSize: 18, color: 'white' }} />}>
-                    <ActionButton.Item
-                        size={40}
-                        title={'Activity'}
-                        onPress={() => this.props.navigation.navigate('CatalogForm', { formType: 'ACTIVITY' })}
-                        style={{ backgroundColor: '#ff4495' }}>
-                        <Icon name="apps" style={{ fontSize: 18, color: 'white' }} />
-                    </ActionButton.Item>
-                    <ActionButton.Item
-                        size={40}
-                        title={'Prompt'}
-                        onPress={() => this.props.navigation.navigate('CatalogForm', { formType: 'PROMPT' })}
-                        style={{ backgroundColor: '#ff4495' }}>
-                        <Icon name="help" style={{ fontSize: 18, color: 'white' }} />
-                    </ActionButton.Item>
+                        {
+                            this.state.activeTabIndex === 0 ? 
+                            <ActionButton.Item
+                                size={40}
+                                title={'Activity'}
+                                onPress={() => this.props.navigation.navigate('CatalogForm', { formType: 'ACTIVITY' })}
+                                style={{ backgroundColor: '#ff4495' }}>
+                                <Icon name="apps" style={{ fontSize: 18, color: 'white' }} />
+                            </ActionButton.Item> : <ActionButton.Item
+                                size={40}
+                                title={'Prompt'}
+                                onPress={() => this.props.navigation.navigate('CatalogForm', { formType: 'PROMPT' })}
+                                style={{ backgroundColor: '#ff4495' }}>
+                                <Icon name="help" style={{ fontSize: 18, color: 'white' }} />
+                            </ActionButton.Item>
+                        }
                 </ActionButton>
             </View>
         );
