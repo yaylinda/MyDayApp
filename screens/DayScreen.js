@@ -8,6 +8,7 @@ import Modal from "react-native-modal";
 import moment from 'moment'
 import ActionButton from 'react-native-action-button';
 import { NavigationEvents } from 'react-navigation';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default class DayScreen extends Component {
 
@@ -23,7 +24,9 @@ export default class DayScreen extends Component {
             // states for FAB / modal actions
             addFabActive: false,
             showAddModal: false,
+            showDatePicker: false,
             addType: '',
+            customTime: null,
             selectedActivityIndex: -1,
             selectedEmotionScore: 0,
             selectedHearts: [false, false, false, false, false],
@@ -150,6 +153,27 @@ export default class DayScreen extends Component {
                     </View>
 
                     {this.renderModalContent()}
+
+                    <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Button small rounded 
+                            onPress={() => this.setState({ showDatePicker: true })} 
+                            style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
+                        >
+                            <Text style={{ color: 'white' }}>
+                                {this.state.customTime 
+                                    ? moment(this.state.customTime).format('hh:mm A') 
+                                    : 'Pick a Time'}
+                            </Text>
+                        </Button>
+                    </View>
+
+                    <DateTimePickerModal
+                        headerTextIOS='Pick a time'
+                        isVisible={this.state.showDatePicker}
+                        mode='time'
+                        onConfirm={(time) => this.setState({ customTime: time, showDatePicker: false })}
+                        onCancel={() => this.setState({ customTime: null, showDatePicker: false })} 
+                    />
 
                     <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Button 
@@ -417,7 +441,13 @@ export default class DayScreen extends Component {
             body['question'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question;
             body['selectedAnswer'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers[this.state.selectedPromptAnswerIndex];
         }
-        body['startTime'] = moment().format('hh:mm A');
+
+        if (this.state.customTime) {
+            body['startTime'] = moment(this.state.customTime).format('hh:mm A');
+        } else {
+            body['startTime'] = moment().format('hh:mm A');
+        }
+        
         body['endTime'] = '';
 
         console.log(`[DayInfo] calling ${endpoint}, with ${JSON.stringify(body)}`);
@@ -458,7 +488,9 @@ export default class DayScreen extends Component {
     resetState() {
         this.setState({
             showAddModal: false,
+            showDatePicker: false,
             addType: '',
+            customTime: null,
             selectedActivityIndex: -1,
             selectedEmotionScore: 0,
             selectedHearts: [false, false, false, false, false],

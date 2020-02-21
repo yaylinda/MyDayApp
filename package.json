@@ -14,6 +14,7 @@
   "dependencies": {
     "@expo/samples": "~36.0.0",
     "@expo/vector-icons": "^10.0.0",
+    "@react-native-community/datetimepicker": "2.1.0",
     "@react-navigation/web": "~1.0.0-alpha.9",
     "d3-scale": "^3.2.1",
     "expo": "~36.0.0",
@@ -30,6 +31,7 @@
     "react-native-action-button": "^2.8.5",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-modal": "^11.5.3",
+    "react-native-modal-datetime-picker": "^8.3.0",
     "react-native-paper": "^3.4.0",
     "react-native-ratings": "^6.5.0",
     "react-native-reanimated": "~1.4.0",

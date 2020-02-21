@@ -22,7 +22,7 @@ export default class CatalogFormScreen extends Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                <View padder style={{ flex: 1 }}>
+                <View padder>
                     {this.state.formType === 'ACTIVITY'
                         ? this.renderActivityForm()
                         : this.renderPromptForm()}
@@ -45,7 +45,7 @@ export default class CatalogFormScreen extends Component {
 
     renderActivityForm() {
         return (
-            <View style={{ flex: 1 }}>
+            <View>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
                     <Input
@@ -120,7 +120,7 @@ export default class CatalogFormScreen extends Component {
 
     cleanEmojiInput(value) {
         console.log('value: ' + value);
-        
+
         let matches = value.match(EMOJI_REGEX_PATTERN);
         let cleanedInput = matches ? matches[0] : ''
 
