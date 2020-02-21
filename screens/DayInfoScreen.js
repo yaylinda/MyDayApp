@@ -141,7 +141,7 @@ export default class DayInfo extends Component {
                                     borderTopRightRadius: 10,
                                     borderBottomRightRadius: 10
                                 }}>
-                                    <Text style={{ color: 'white' }}>{item.name}</Text>
+                                    <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
                                 </View>
                             </View>
                         );

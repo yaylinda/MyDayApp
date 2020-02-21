@@ -238,7 +238,7 @@ export default class DayScreen extends Component {
                                         })}
                                     />
                                     <Body>
-                                        <Text style={{ color: 'white' }}>{item.name}</Text>
+                                    <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
                                     </Body>
                                 </ListItem>
                             );

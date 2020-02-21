@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, Form, Label, Input, Button, Item } from 'native-base';
-import { COLORS, HOST } from '../util/Constants';
+import { COLORS, HOST, EMOJI_REGEX_PATTERN } from '../util/Constants';
 import { Alert, AsyncStorage } from 'react-native';
 
 export default class CatalogFormScreen extends Component {
@@ -22,7 +22,7 @@ export default class CatalogFormScreen extends Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                <View padder>
+                <View padder style={{ flex: 1 }}>
                     {this.state.formType === 'ACTIVITY'
                         ? this.renderActivityForm()
                         : this.renderPromptForm()}
@@ -45,19 +45,26 @@ export default class CatalogFormScreen extends Component {
 
     renderActivityForm() {
         return (
-            <View padder>
+            <View style={{ flex: 1 }}>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
                     <Input
                         style={{ color: 'white' }}
                         onChangeText={value => this.setState({
                             newName: value, 
-                            isDisabled: value.length === 0
+                            isDisabled: value.length === 0 || this.state.newIcon.length === 0
                         })}
                     />
                 </Item>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
-                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Description</Label>
+                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Icon (emoji)</Label>
+                    <Input
+                        onChangeText={value => this.cleanEmojiInput(value)}
+                        value={this.state.newIcon}
+                    />
+                </Item>
+                <Item floatingLabel style={{ marginBottom: 10 }}>
+                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Description (optional)</Label>
                     <Input
                         style={{ color: 'white' }}
                         onChangeText={value => this.setState({ newDescription: value })}
@@ -109,6 +116,20 @@ export default class CatalogFormScreen extends Component {
         const tempAnswers = this.state.newAnswers;
         tempAnswers[index] = value;
         this.setState({ newAnswers: tempAnswers, isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].length === 0 });
+    }
+
+    cleanEmojiInput(value) {
+        console.log('value: ' + value);
+        
+        let matches = value.match(EMOJI_REGEX_PATTERN);
+        let cleanedInput = matches ? matches[0] : ''
+
+        console.log('cleanedInput: ' + cleanedInput);
+
+        this.setState({
+            newIcon: cleanedInput, 
+            isDisabled: cleanedInput.length === 0 || this.state.newName.length === 0
+        })
     }
 
     async persistNew() {

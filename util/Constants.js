@@ -1,5 +1,6 @@
 export const HOST = 'http://localhost:8080/my-day-backend';
 // export const HOST = 'https://api.lindazheng.me/my-day-backend';
+
 export const COLORS = {
     BACKGROUND_MAIN: '#282833',
     BACKGROUND_LIGHT: '#32323e',
@@ -7,6 +8,9 @@ export const COLORS = {
     TEXT_MAIN: '#52e3c2',
     TEXT_LIGHT_WHITE: '#b4b8cd',
 }
+
+export const EMOJI_REGEX_PATTERN = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
+// export const EMOJI_RE = new RegExp(EMOJI_REGEX_PATTERN);
 
 /**
  * --atom-red: #ff4495;

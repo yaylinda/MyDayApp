@@ -44,7 +44,7 @@ export default class CatalogScreen extends Component {
                             style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}
                         >
                             <View padder>
-                                {this.renderCatalogData('ACTIVITY')}
+                                {this.renderActivityCatalogData()}
                             </View>
                         </Tab>
                         <Tab heading='Prompts'
@@ -55,7 +55,7 @@ export default class CatalogScreen extends Component {
                             style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}
                         >
                             <View padder>
-                                {this.renderCatalogData('PROMPT')}
+                                {this.renderPromptCatalogData()}
                             </View>
                         </Tab>
                     </Tabs>
@@ -86,31 +86,35 @@ export default class CatalogScreen extends Component {
         );
     }
 
-    renderCatalogData(type) {
-        if (this.state.catalogData[type] && this.state.catalogData[type].length) {
-            if (type === 'ACTIVITY') {
-                return (
-                    <Accordion
-                        dataArray={this.state.catalogData[type]}
-                        animation={true}
-                        expanded={false}
-                        renderHeader={this.renderActivityCatalogDataHeader}
-                        renderContent={this.renderActivityCatalogDataContent}
-                        style={{ borderWidth: 0 }}>
-                    </Accordion>
-                );
-            } else if (type === 'PROMPT') {
-                return (
-                    <Accordion
-                        dataArray={this.state.catalogData[type]}
-                        animation={true}
-                        expanded={false}
-                        renderHeader={this.renderPromptCatalogDataHeader}
-                        renderContent={this.renderPromptCatalogDataContent}
-                        style={{ borderWidth: 0 }}>
-                    </Accordion>
-                );
-            }
+    renderActivityCatalogData() {
+        if (this.state.catalogData['ACTIVITY'] && this.state.catalogData['ACTIVITY'].length) {
+            return (
+                <Accordion
+                    dataArray={this.state.catalogData['ACTIVITY']}
+                    animation={true}
+                    expanded={false}
+                    renderHeader={this.renderActivityCatalogDataHeader}
+                    renderContent={this.renderActivityCatalogDataContent}
+                    style={{ borderWidth: 0 }}>
+                </Accordion>
+            );
+        } else {
+            return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No catalog data yet</Text>);
+        }
+    }
+
+    renderPromptCatalogData() {
+        if (this.state.catalogData['PROMPT'] && this.state.catalogData['PROMPT'].length) {
+            return (
+                <Accordion
+                    dataArray={this.state.catalogData['PROMPT']}
+                    animation={true}
+                    expanded={false}
+                    renderHeader={this.renderPromptCatalogDataHeader}
+                    renderContent={this.renderPromptCatalogDataContent}
+                    style={{ borderWidth: 0 }}>
+                </Accordion>
+            );
         } else {
             return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No catalog data yet</Text>);
         }
@@ -129,7 +133,7 @@ export default class CatalogScreen extends Component {
                 borderBottomRightRadius: expanded ? 0 : 10,
                 marginBottom: expanded ? 0 : 10,
             }}>
-                <Text style={{ fontWeight: '500', color: 'white' }}>{item.name}</Text>
+                <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
                 {expanded
                     ? <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-up' />
                     : <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-down' />}
