@@ -105,23 +105,24 @@ export default class DayScreen extends Component {
                     size={40}
                     title={'Score'}
                     onPress={() => this.setState({ showAddModal: true, addType: 'EMOTION' })}
-                    style={{ backgroundColor: '#ff4495' }}>
+                    style={{ backgroundColor: '#ff4495' }}
+                >
                     <Icon name="star-outline" style={{ fontSize: 18, color: 'white' }} />
                 </ActionButton.Item>
-
                 <ActionButton.Item
                     size={40}
                     title={'Activity'}
                     onPress={() => this.setState({ showAddModal: true, addType: 'ACTIVITY' })}
-                    style={{ backgroundColor: '#ff4495' }}>
+                    style={{ backgroundColor: '#ff4495' }}
+                >
                     <Icon name="apps" style={{ fontSize: 18, color: 'white' }} />
                 </ActionButton.Item>
-
                 <ActionButton.Item
                     size={40}
                     title={'Prompt'}
                     onPress={() => this.handleAddRandomPrompt()}
-                    style={{ backgroundColor: '#ff4495' }}>
+                    style={{ backgroundColor: '#ff4495' }}
+                >
                     <Icon name="help" style={{ fontSize: 18, color: 'white' }} />
                 </ActionButton.Item>
             </ActionButton>
@@ -146,60 +147,16 @@ export default class DayScreen extends Component {
     renderModal() {
         return (
             <Modal isVisible={this.state.showAddModal} onBackdropPress={() => this.cancelAdd()}>
-                <View transparent style={{ backgroundColor: '#40424f', justifyContent: 'center', borderRadius: 5 }}>
-
-                    <View style={{ paddingTop: 30, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 18, fontWeight: "600", color: COLORS.TEXT_MAIN }}>{this.renderModalTitle()}</Text>
-                    </View>
-
+                <View padder transparent style={{
+                    backgroundColor: '#40424f',
+                    justifyContent: 'center',
+                    borderRadius: 5
+                }}
+                >
                     {this.renderModalContent()}
-
-                    <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button small rounded 
-                            onPress={() => this.setState({ showDatePicker: true })} 
-                            style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
-                        >
-                            <Text style={{ color: 'white' }}>
-                                {this.state.customTime 
-                                    ? moment(this.state.customTime).format('hh:mm A') 
-                                    : 'Pick a Time'}
-                            </Text>
-                        </Button>
-                    </View>
-
-                    <DateTimePickerModal
-                        headerTextIOS='Pick a time'
-                        isVisible={this.state.showDatePicker}
-                        mode='time'
-                        onConfirm={(time) => this.setState({ customTime: time, showDatePicker: false })}
-                        onCancel={() => this.setState({ customTime: null, showDatePicker: false })} 
-                    />
-
-                    <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                        <Button 
-                            disabled={ this.state.isDisabled } 
-                            style={ this.state.isDisabled 
-                                ? { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 } 
-                                : { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center' } } 
-                            onPress={ () => this.persistNew() }
-                        >
-                            <Text>Save</Text>
-                        </Button>
-                    </View>
-
                 </View>
             </Modal>
         );
-    }
-
-    renderModalTitle() {
-        if (this.state.addType === 'EMOTION') {
-            return ('Rate Today');
-        } else if (this.state.addType === 'ACTIVITY') {
-            return ('Select Activity');
-        } else if (this.state.addType === 'PROMPT') {
-            return ('Answer Prompt');
-        }
     }
 
     renderModalContent() {
@@ -212,9 +169,66 @@ export default class DayScreen extends Component {
         }
     }
 
+    renderTimePickerButton() {
+        return (
+            <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Button small rounded
+                    onPress={() => this.setState({ showDatePicker: true })}
+                    style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
+                >
+                    <Text style={{ color: 'white' }}>
+                        {this.state.customTime
+                            ? moment(this.state.customTime).format('hh:mm A')
+                            : 'Pick a Time'}
+                    </Text>
+                </Button>
+            </View>
+        );
+    }
+
+    renderTimePickerModal() {
+        return (
+            <DateTimePickerModal
+                headerTextIOS='Pick a time'
+                isVisible={this.state.showDatePicker}
+                mode='time'
+                onConfirm={(time) => this.setState({ customTime: time, showDatePicker: false })}
+                onCancel={() => this.setState({ customTime: null, showDatePicker: false })}
+            />
+        );
+    }
+
+    renderSaveDayEventButton() {
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Button
+                    disabled={this.state.isDisabled}
+                    style={this.state.isDisabled
+                        ? { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 }
+                        : { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center' }}
+                    onPress={() => this.persistNew()}
+                >
+                    <Text>Save</Text>
+                </Button>
+            </View>
+        );
+    }
+
+    renderModelTitle(titleString) {
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 18, fontWeight: "600", color: COLORS.TEXT_MAIN }}>
+                    {titleString}
+                </Text>
+            </View>
+        );
+    }
+
     renderEmotionModal() {
         return (
             <View>
+                {this.renderModelTitle('Rate Today')}
+
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                     {this.renderHearts()}
                 </View>
@@ -222,6 +236,12 @@ export default class DayScreen extends Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                     {this.renderHeartsText()}
                 </View>
+
+                {this.renderTimePickerButton()}
+
+                {this.renderTimePickerModal()}
+
+                {this.renderSaveDayEventButton()}
             </View>
         );
     }
@@ -242,33 +262,55 @@ export default class DayScreen extends Component {
 
     renderHeartsText() {
         if (this.state.selectedEmotionScore) {
-            return (<Text style={{ fontWeight: "500", color: '#ffd900' }}>{this.state.heartLabels[this.state.selectedEmotionScore - 1]}</Text>);
+            return (
+                <Text style={{ fontWeight: "500", color: '#ffd900' }}>
+                    {this.state.heartLabels[this.state.selectedEmotionScore - 1]}
+                </Text>
+            );
         }
     }
 
     renderActivityModal() {
+        if (this.state.catalogData['ACTIVITY'] && this.state.catalogData['ACTIVITY'].length) {
+            return (
+                <View>
+                    {this.renderModelTitle('Select Activity')}
+                    <List>
+                        {
+                            this.state.catalogData['ACTIVITY'].map((item, index) => {
+                                return (
+                                    <ListItem key={index}>
+                                        <CheckBox
+                                            checked={this.state.selectedActivityIndex === index}
+                                            onPress={() => this.setState({
+                                                selectedActivityIndex: index,
+                                                isDisabled: false
+                                            })}
+                                        />
+                                        <Body>
+                                            <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
+                                        </Body>
+                                    </ListItem>
+                                );
+                            })
+                        }
+                    </List>
+                    {this.renderTimePickerButton()}
+
+                    {this.renderTimePickerModal()}
+
+                    {this.renderSaveDayEventButton()}
+                </View>
+            );
+        } else {
+            return this.renderEmptyCatalogModalContent('ACTIVITY');
+        }
+    }
+
+    renderEmptyCatalogModalContent(catalogType) {
         return (
-            <View padder>
-                <List>
-                    {
-                        this.state.catalogData['ACTIVITY'].map((item, index) => {
-                            return (
-                                <ListItem key={index}>
-                                    <CheckBox
-                                        checked={this.state.selectedActivityIndex === index}
-                                        onPress={() => this.setState({
-                                            selectedActivityIndex: index,
-                                            isDisabled: false 
-                                        })}
-                                    />
-                                    <Body>
-                                    <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
-                                    </Body>
-                                </ListItem>
-                            );
-                        })
-                    }
-                </List>
+            <View>
+                {this.renderModelTitle(`Your ${catalogType} catalog is empty!`)}
             </View>
         );
     }
@@ -282,10 +324,11 @@ export default class DayScreen extends Component {
     }
 
     renderPromptModal() {
-        if (this.state.randomPromptIndex >= 0 && this.state.catalogData['PROMPT']) {
+        if (this.state.randomPromptIndex >= 0 && this.state.catalogData['PROMPT'] && this.state.catalogData['PROMPT'].length) {
             return (
-                <View padder>
-                    <Text style={{ color: 'white' }}>{this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question}</Text>
+                <View>
+                    {this.renderModelTitle(this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question)}
+
                     <List>
                         {
                             this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers.map((answer, index) => {
@@ -295,7 +338,7 @@ export default class DayScreen extends Component {
                                             checked={this.state.selectedPromptAnswerIndex === index}
                                             onPress={() => this.setState({
                                                 selectedPromptAnswerIndex: index,
-                                                isDisabled: false  
+                                                isDisabled: false
                                             })}
                                         />
                                         <Body>
@@ -306,8 +349,15 @@ export default class DayScreen extends Component {
                             })
                         }
                     </List>
+                    {this.renderTimePickerButton()}
+
+                    {this.renderTimePickerModal()}
+
+                    {this.renderSaveDayEventButton()}
                 </View>
             );
+        } else {
+            return this.renderEmptyCatalogModalContent('PROMPT');
         }
     }
 
@@ -326,10 +376,10 @@ export default class DayScreen extends Component {
             }
         }
 
-        this.setState({ 
-            selectedHearts: tempHearts, 
-            selectedEmotionScore: heartIndex + 1, 
-            isDisabled: false 
+        this.setState({
+            selectedHearts: tempHearts,
+            selectedEmotionScore: heartIndex + 1,
+            isDisabled: false
         });
     }
 
@@ -447,7 +497,7 @@ export default class DayScreen extends Component {
         } else {
             body['startTime'] = moment().format('hh:mm A');
         }
-        
+
         body['endTime'] = '';
 
         console.log(`[DayInfo] calling ${endpoint}, with ${JSON.stringify(body)}`);
