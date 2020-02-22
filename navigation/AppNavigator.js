@@ -13,6 +13,38 @@ import { HOST, COLORS } from '../util/Constants';
 import { createStackNavigator } from 'react-navigation-stack';
 import CatalogFormScreen from '../screens/CatalogFormScreen';
 
+const DayStack = createStackNavigator(
+  {
+    DayList: {
+      screen: DayScreen,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN,
+          borderBottomWidth: 0,
+          height: 0
+        },
+      }
+    },
+    CatalogForm: {
+      screen: CatalogFormScreen,
+      navigationOptions: {
+        title: 'Add to Catalog',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN,
+          borderBottomWidth: 0,
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
+      }
+    }
+  },
+  {
+    initialRouteName: "DayList",
+  }
+);
 
 const CatalogStack = createStackNavigator(
   {
@@ -78,7 +110,7 @@ const StatisticsStack = createStackNavigator(
 const AppStack = createBottomTabNavigator(
   {
     Day: {
-      screen: DayScreen,
+      screen: DayStack,
       navigationOptions: {
         tabBarLabel: 'Day',
         tabBarIcon: ({ focused }) => (

@@ -10,8 +10,10 @@ export const COLORS = {
 }
 
 export const EMOJI_REGEX_PATTERN = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
-// export const EMOJI_RE = new RegExp(EMOJI_REGEX_PATTERN);
 
+export const capitalizeFromUpper = (upper) => {
+    return upper.charAt(0) + upper.substr(1).toLowerCase();
+}
 /**
  * --atom-red: #ff4495;
     --atom-green: #52e3c2;

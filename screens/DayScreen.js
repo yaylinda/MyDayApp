@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Content, Button, Icon, Text, View, List, ListItem, CheckBox, Body } from 'native-base';
-import { HOST, COLORS } from '../util/Constants';
+import { HOST, COLORS, capitalizeFromUpper } from '../util/Constants';
 import { AsyncStorage, Dimensions, Alert } from 'react-native';
 import DayInfo from './DayInfoScreen';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
@@ -151,8 +151,7 @@ export default class DayScreen extends Component {
                     backgroundColor: '#40424f',
                     justifyContent: 'center',
                     borderRadius: 5
-                }}
-                >
+                }}>
                     {this.renderModalContent()}
                 </View>
             </Modal>
@@ -167,6 +166,151 @@ export default class DayScreen extends Component {
         } else if (this.state.addType === 'PROMPT') {
             return (this.renderPromptModal());
         }
+    }
+
+    renderEmotionModal() {
+        return (
+            <View>
+                {this.renderModelTitle('Rate Today')}
+                {this.renderHearts()}
+                {this.renderHeartsText()}
+                {this.renderTimePickerButton()}
+                {this.renderTimePickerModal()}
+                {this.renderSaveDayEventButton()}
+            </View>
+        );
+    }
+
+    renderHearts() {
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                {
+                    this.state.selectedHearts.map((h, index) => {
+                        return (
+                            <Button transparent key={index} onPress={() => this.toggleHearts(index)}>
+                                {
+                                    this.state.selectedHearts[index] ?
+                                        <Icon name="star" style={{ 
+                                            fontSize: 30, 
+                                            fontWeight: "500", 
+                                            color: '#ffd900' 
+                                        }}/> :
+                                        <Icon name="star-outline" style={{ 
+                                            fontSize: 30, 
+                                            fontWeight: "500", 
+                                            color: '#ffd900'
+                                        }}/>
+                                }
+                            </Button>
+                        );
+                    })
+                }
+            </View>
+        );
+    }
+
+    renderHeartsText() {
+        if (this.state.selectedEmotionScore) {
+            return (
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text style={{ fontWeight: "500", color: '#ffd900' }}>
+                        {this.state.heartLabels[this.state.selectedEmotionScore - 1]}
+                    </Text>
+                </View>
+            );
+        }
+    }
+
+    renderActivityModal() {
+        if (this.state.catalogData['ACTIVITY'] && this.state.catalogData['ACTIVITY'].length) {
+            return (
+                <View>
+                    {this.renderModelTitle('Select Activity')}
+                    {this.renderActivitiesList()}
+                    {this.renderTimePickerButton()}
+                    {this.renderTimePickerModal()}
+                    {this.renderSaveDayEventButton()}
+                </View>
+            );
+        } else {
+            return this.renderEmptyCatalogModalContent('ACTIVITY');
+        }
+    }
+
+    renderActivitiesList() {
+        return (
+            <List>
+                {
+                    this.state.catalogData['ACTIVITY'].map((item, index) => {
+                        return (
+                            <ListItem key={index}>
+                                <CheckBox
+                                    checked={this.state.selectedActivityIndex === index}
+                                    onPress={() => this.setState({
+                                        selectedActivityIndex: index,
+                                        isDisabled: false
+                                    })}
+                                />
+                                <Body>
+                                    <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
+                                </Body>
+                            </ListItem>
+                        );
+                    })
+                }
+            </List>
+        );
+    }
+
+    renderPromptModal() {
+        if (this.state.randomPromptIndex >= 0 && this.state.catalogData['PROMPT'] && this.state.catalogData['PROMPT'].length) {
+            return (
+                <View>
+                    {this.renderModelTitle(this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question)}
+                    {this.renderPromptOptionsList()}
+                    {this.renderTimePickerButton()}
+                    {this.renderTimePickerModal()}
+                    {this.renderSaveDayEventButton()}
+                </View>
+            );
+        } else {
+            return this.renderEmptyCatalogModalContent('PROMPT');
+        }
+    }
+
+    renderPromptOptionsList() {
+        return (
+            <List>
+                {
+                    this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers.map((answer, index) => {
+                        return (
+                            <ListItem key={index}>
+                                <CheckBox
+                                    checked={this.state.selectedPromptAnswerIndex === index}
+                                    onPress={() => this.setState({
+                                        selectedPromptAnswerIndex: index,
+                                        isDisabled: false
+                                    })}
+                                />
+                                <Body>
+                                    <Text style={{ color: 'white' }}>{answer}</Text>
+                                </Body>
+                            </ListItem>
+                        );
+                    })
+                }
+            </List>
+        );
+    }
+
+    renderModelTitle(titleString) {
+        return (
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Text style={{ fontSize: 18, fontWeight: "600", color: COLORS.TEXT_MAIN }}>
+                    {titleString}
+                </Text>
+            </View>
+        );
     }
 
     renderTimePickerButton() {
@@ -214,151 +358,25 @@ export default class DayScreen extends Component {
         );
     }
 
-    renderModelTitle(titleString) {
-        return (
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 18, fontWeight: "600", color: COLORS.TEXT_MAIN }}>
-                    {titleString}
-                </Text>
-            </View>
-        );
-    }
-
-    renderEmotionModal() {
-        return (
-            <View>
-                {this.renderModelTitle('Rate Today')}
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                    {this.renderHearts()}
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                    {this.renderHeartsText()}
-                </View>
-
-                {this.renderTimePickerButton()}
-
-                {this.renderTimePickerModal()}
-
-                {this.renderSaveDayEventButton()}
-            </View>
-        );
-    }
-
-    renderHearts() {
-        return this.state.selectedHearts.map((h, index) => {
-            return (
-                <Button transparent key={index} onPress={() => this.toggleHearts(index)}>
-                    {
-                        this.state.selectedHearts[index] ?
-                            <Icon name="star" style={{ fontSize: 30, fontWeight: "500", color: '#ffd900' }}></Icon> :
-                            <Icon name="star-outline" style={{ fontSize: 30, fontWeight: "500", color: '#ffd900' }}></Icon>
-                    }
-                </Button>
-            );
-        });
-    }
-
-    renderHeartsText() {
-        if (this.state.selectedEmotionScore) {
-            return (
-                <Text style={{ fontWeight: "500", color: '#ffd900' }}>
-                    {this.state.heartLabels[this.state.selectedEmotionScore - 1]}
-                </Text>
-            );
-        }
-    }
-
-    renderActivityModal() {
-        if (this.state.catalogData['ACTIVITY'] && this.state.catalogData['ACTIVITY'].length) {
-            return (
-                <View>
-                    {this.renderModelTitle('Select Activity')}
-                    <List>
-                        {
-                            this.state.catalogData['ACTIVITY'].map((item, index) => {
-                                return (
-                                    <ListItem key={index}>
-                                        <CheckBox
-                                            checked={this.state.selectedActivityIndex === index}
-                                            onPress={() => this.setState({
-                                                selectedActivityIndex: index,
-                                                isDisabled: false
-                                            })}
-                                        />
-                                        <Body>
-                                            <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
-                                        </Body>
-                                    </ListItem>
-                                );
-                            })
-                        }
-                    </List>
-                    {this.renderTimePickerButton()}
-
-                    {this.renderTimePickerModal()}
-
-                    {this.renderSaveDayEventButton()}
-                </View>
-            );
-        } else {
-            return this.renderEmptyCatalogModalContent('ACTIVITY');
-        }
-    }
-
     renderEmptyCatalogModalContent(catalogType) {
         return (
             <View>
-                {this.renderModelTitle(`Your ${catalogType} catalog is empty!`)}
+                {this.renderModelTitle(`${capitalizeFromUpper(catalogType)}s Catalog is empty`)}
+                <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <Button small rounded
+                    onPress={() => this.handleNavigateToCatalogForm(catalogType)}
+                    style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
+                >
+                    <Text style={{ color: 'white' }}>Add one</Text>
+                </Button>
+                </View>
             </View>
         );
     }
 
-    renderDayEventsPickerItems() {
-        if (this.state.catalogData && this.state.addType) {
-            return this.state.catalogData[this.state.addType].map((catalog, index) => {
-                return (<Picker.Item key={index} value={index} label={catalog.name}></Picker.Item>);
-            });
-        }
-    }
-
-    renderPromptModal() {
-        if (this.state.randomPromptIndex >= 0 && this.state.catalogData['PROMPT'] && this.state.catalogData['PROMPT'].length) {
-            return (
-                <View>
-                    {this.renderModelTitle(this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question)}
-
-                    <List>
-                        {
-                            this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers.map((answer, index) => {
-                                return (
-                                    <ListItem key={index}>
-                                        <CheckBox
-                                            checked={this.state.selectedPromptAnswerIndex === index}
-                                            onPress={() => this.setState({
-                                                selectedPromptAnswerIndex: index,
-                                                isDisabled: false
-                                            })}
-                                        />
-                                        <Body>
-                                            <Text style={{ color: 'white' }}>{answer}</Text>
-                                        </Body>
-                                    </ListItem>
-                                );
-                            })
-                        }
-                    </List>
-                    {this.renderTimePickerButton()}
-
-                    {this.renderTimePickerModal()}
-
-                    {this.renderSaveDayEventButton()}
-                </View>
-            );
-        } else {
-            return this.renderEmptyCatalogModalContent('PROMPT');
-        }
+    handleNavigateToCatalogForm(formType) {
+        this.setState({ showAddModal: false });
+        this.props.navigation.navigate('CatalogForm', { formType: formType });
     }
 
     cancelAdd() {
