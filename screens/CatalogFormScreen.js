@@ -5,18 +5,25 @@ import { Alert, AsyncStorage } from 'react-native';
 
 export default class CatalogFormScreen extends Component {
 
+    // TODO - get header to say "Edit Catalog" and "Add to Catalog"
+
     constructor(props) {
         super(props);
+
+        const data = this.props.navigation.state.params.data;
+
         this.state = {
             formType: this.props.navigation.state.params.formType,
-            newName: '',
-            newDescription: '',
-            newIcon: '',
+            data: data,
+            newName: data && data.name ? data.name : '',
+            newDescription: data && data.description ? data.description : '',
+            newIcon: data && data.icon ? data.icon : '',
             newColor: '',
-            newQuestion: '',
-            newAnswers: [''],
+            newQuestion: data && data.question ? data.question : '',
+            newAnswers: data && data.answers ? data.answers : [''],
             isDisabled: true,
         }
+        console.log(this.state.data);
     }
 
     render() {
@@ -30,8 +37,8 @@ export default class CatalogFormScreen extends Component {
 
                 <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Button 
-                        disabled={ this.state.isDisabled } 
-                        style={ this.state.isDisabled 
+                        disabled={ this.state.data ? false : this.state.isDisabled }
+                        style={ (this.state.data ? false : this.state.isDisabled)
                             ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } 
                             : { backgroundColor: '#52e3c2', justifyContent: 'center' } } 
                         onPress={ () => this.persistNew() }
@@ -48,13 +55,21 @@ export default class CatalogFormScreen extends Component {
             <View>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
-                    <Input
-                        style={{ color: 'white' }}
-                        onChangeText={value => this.setState({
-                            newName: value, 
-                            isDisabled: value.length === 0 || this.state.newIcon.length === 0
-                        })}
-                    />
+                    {
+                        this.state.data && this.state.data.name ? 
+                        <Input
+                            style={{ color: 'white', opacity: 0.8 }}
+                            value={this.state.data.name}
+                            disabled
+                        /> :
+                        <Input
+                            style={{ color: 'white' }}
+                            onChangeText={value => this.setState({
+                                newName: value, 
+                                isDisabled: value.length === 0 || this.state.newIcon.length === 0
+                            })}
+                        /> 
+                    }
                 </Item>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Icon (emoji)</Label>
@@ -67,13 +82,15 @@ export default class CatalogFormScreen extends Component {
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Description (optional)</Label>
                     <Input
                         style={{ color: 'white' }}
+                        value={this.state.newDescription}
                         onChangeText={value => this.setState({ newDescription: value })}
-                    />
+                    /> 
                 </Item>
             </View>
         );
     }
 
+    // TODO - handle EDIT mode of PROMPT
     renderPromptForm() {
         return (
             <View padder>
@@ -133,53 +150,68 @@ export default class CatalogFormScreen extends Component {
     }
 
     async persistNew() {
-        console.log(`[CatalogFormScreen] persist new`);
+        console.log(`[CatalogFormScreen] ${this.state.data ? 'UPDATE' : 'CREATE'}`);
+
         const sessionToken = await AsyncStorage.getItem('sessionToken');
-        const endpoint = `${HOST}/catalog/events/${this.state.formType}`;
-        const body = {
-            dayEventCatalogId: '',
-            belongsTo: '',
-            type: this.state.formType,
-            name: this.state.newName,
-            color: this.state.newColor, // TODO - this is not getting set from input
-            icon: this.state.newIcon, // TODO - this is not getting set from input
-            description: this.state.newDescription,
-            question: this.state.newQuestion,
-            answers: this.state.newAnswers,
-            allowMultiSelect: this.state.newAllowMultiSelect // TODO - this is not getting set from input
-        };
+
         const headers = {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             'Session-Token': sessionToken
         };
 
+        const endpoint = this.state.data 
+            ? `${HOST}/catalog/events/${this.state.formType}/catalogEventId/${this.state.data.catalogEventId}` 
+            : `${HOST}/catalog/events/${this.state.formType}`
+        
+        let body;
+
+        if (this.state.data) {
+            this.state.formType === 'ACTIVITY' 
+                ? (this.state.data.description = this.state.newDescription, this.state.data.icon = this.state.newIcon)
+                : this.state.data.answers = this.state.newAnswers;
+            body = this.state.data;
+        } else {
+            body = {
+                dayEventCatalogId: '',
+                belongsTo: '',
+                type: this.state.formType,
+                name: this.state.newName,
+                color: this.state.newColor, // TODO - this is not getting set from input
+                icon: this.state.newIcon, // TODO - this is not getting set from input
+                description: this.state.newDescription,
+                question: this.state.newQuestion,
+                answers: this.state.newAnswers,
+                allowMultiSelect: this.state.newAllowMultiSelect // TODO - this is not getting set from input
+            };
+        }
+        
         console.log(`[CatalogFormScreen] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
         let requestSuccess = false;
 
         fetch(endpoint, {
-            method: 'POST',
+            method: this.state.data ? 'PUT' : 'POST',
             headers: headers,
             body: JSON.stringify(body)
         }).then((response) => {
             if (response.ok) {
                 requestSuccess = true;
-                console.log(`[CatalogFormScreen] successfully posted new`);
+                console.log(`[CatalogFormScreen] successfully created/updated`);
                 AsyncStorage.setItem('doCatalogUpdate_DayScreen', 'doCatalogUpdate_DayScreen');
                 AsyncStorage.setItem('doCatalogUpdate_CatalogScreen', 'doCatalogUpdate_CatalogScreen');
             } else {
                 requestSuccess = false;
-                console.log(`[CatalogFormScreen] error posting new`);
+                console.log(`[CatalogFormScreen] error creating/updating`);
             }
             return response.json();
         }).then((json) => {
             console.log(`[CatalogFormScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
-                console.log(`[CatalogFormScreen] successfully saved new catalog data, navigating back`);
+                console.log(`[CatalogFormScreen] successfully persisted catalog data, navigating back`);
                 this.props.navigation.goBack();
             } else {
-                console.log(`[CatalogFormScreen] error posting new event with error message: ${json.message}`);
+                console.log(`[CatalogFormScreen] error creating/updating with error message: ${json.message}`);
                 this.errorMessage = json.message;
                 Alert.alert('Error', this.errorMessage);
             }

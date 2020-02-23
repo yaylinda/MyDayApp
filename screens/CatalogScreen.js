@@ -3,10 +3,11 @@ import {
     Card, CardItem, Button, Text, Form, Item, Label, Input, Accordion, View, Icon, List, ListItem, Content, Tabs, Tab,
 } from 'native-base';
 import { HOST, COLORS } from '../util/Constants';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import ActionButton from 'react-native-action-button';
 import { NavigationEvents } from 'react-navigation';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const CATALOG_TYPES = ['ACTIVITY', 'PROMPT'];
 
@@ -18,6 +19,8 @@ export default class CatalogScreen extends Component {
             catalogData: { 'ACTIVITY': [], 'PROMPT': [] },
             errorMessage: '',
             activeTabIndex: 0,
+            showEditButton: false,
+            indexToEdit: -1
         }
     }
 
@@ -89,18 +92,79 @@ export default class CatalogScreen extends Component {
     renderActivityCatalogData() {
         if (this.state.catalogData['ACTIVITY'] && this.state.catalogData['ACTIVITY'].length) {
             return (
-                <Accordion
-                    dataArray={this.state.catalogData['ACTIVITY']}
-                    animation={true}
-                    expanded={false}
-                    renderHeader={this.renderActivityCatalogDataHeader}
-                    renderContent={this.renderActivityCatalogDataContent}
-                    style={{ borderWidth: 0 }}>
-                </Accordion>
+                <List>
+                    {
+                        this.state.catalogData['ACTIVITY'].map((item, index) => {
+                            return (
+                                <TouchableOpacity 
+                                    activeOpacity={0.5} 
+                                    onLongPress={() => this.setState({
+                                        showEditButton: true, 
+                                        indexToEdit: index
+                                    })}
+                                >
+                                    {this.renderActivityCatalogDataHeader(item, index)}
+                                    {this.renderActivityCatalogDataContent(item, index)}
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </List>
             );
         } else {
             return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No catalog data yet</Text>);
         }
+    }
+
+    renderActivityCatalogDataHeader(item, index) {
+        return (
+                <View padder style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: COLORS.BACKGORUND_ACCENT,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    borderBottomLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                    marginBottom: 0,
+                }}>
+                    <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
+                    {
+                        this.state.showEditButton && this.state.indexToEdit === index 
+                            ? <Button small rounded
+                                onPress={() => this.navigateToEdit('ACTIVITY', item)} 
+                                style={{ borderColor: '#ff4495', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
+                              >
+                                <Text style={{ color: 'white' }}>Edit</Text>
+                              </Button> 
+                            : null
+                    }
+                </View>
+        );
+    }
+
+    navigateToEdit(formType, item) {
+        this.setState({
+            showEditButton: false,
+            indexToEdit: -1
+        });
+        this.props.navigation.navigate('CatalogForm', { formType: formType, data: item });
+    }
+
+    renderActivityCatalogDataContent(item, index) {
+        return (
+            <View padder style={{
+                backgroundColor: COLORS.BACKGROUND_LIGHT,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+                marginBottom: 10,
+            }}>
+                {item.description
+                    ? <Text style={{ color: 'white' }}>{item.description}</Text>
+                    : <Text style={{ color: 'white', fontStyle: 'italic' }}>No description available</Text>
+                }
+            </View>);
     }
 
     renderPromptCatalogData() {
@@ -120,25 +184,7 @@ export default class CatalogScreen extends Component {
         }
     }
 
-    renderActivityCatalogDataHeader(item, expanded) {
-        return (
-            <View padder style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: COLORS.BACKGORUND_ACCENT,
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderBottomLeftRadius: expanded ? 0 : 10,
-                borderBottomRightRadius: expanded ? 0 : 10,
-                marginBottom: expanded ? 0 : 10,
-            }}>
-                <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
-                {expanded
-                    ? <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-up' />
-                    : <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-down' />}
-            </View>);
-    }
+    
 
     renderPromptCatalogDataHeader(item, expanded) {
         return (
@@ -160,20 +206,7 @@ export default class CatalogScreen extends Component {
             </View>);
     }
 
-    renderActivityCatalogDataContent(item) {
-        return (
-            <View padder style={{
-                backgroundColor: COLORS.BACKGROUND_LIGHT,
-                borderBottomLeftRadius: 10,
-                borderBottomRightRadius: 10,
-                marginBottom: 10,
-            }}>
-                {item.description
-                    ? <Text style={{ color: 'white' }}>{item.description}</Text>
-                    : <Text style={{ color: 'white', fontStyle: 'italic' }}>No description available</Text>
-                }
-            </View>);
-    }
+    
 
     renderPromptCatalogDataContent(item) {
         return (
