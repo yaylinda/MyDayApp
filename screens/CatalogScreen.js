@@ -98,10 +98,7 @@ export default class CatalogScreen extends Component {
                             return (
                                 <TouchableOpacity 
                                     activeOpacity={0.5} 
-                                    onLongPress={() => this.setState({
-                                        showEditButton: true, 
-                                        indexToEdit: index
-                                    })}
+                                    onLongPress={() => this.handleLongPress(index)}
                                 >
                                     {this.renderActivityCatalogDataHeader(item, index)}
                                     {this.renderActivityCatalogDataContent(item, index)}
@@ -114,6 +111,22 @@ export default class CatalogScreen extends Component {
         } else {
             return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No catalog data yet</Text>);
         }
+    }
+
+    handleLongPress(indexToEdit) {
+        if (this.state.showEditButton && this.state.indexToEdit === indexToEdit) {
+            this.setState({
+                showEditButton: false, 
+                indexToEdit: -1
+            });
+        } else {
+            this.setState({
+                showEditButton: true, 
+                indexToEdit: indexToEdit
+            })
+        }
+
+        
     }
 
     renderActivityCatalogDataHeader(item, index) {
@@ -131,14 +144,16 @@ export default class CatalogScreen extends Component {
                 }}>
                     <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
                     {
-                        this.state.showEditButton && this.state.indexToEdit === index 
-                            ? <Button small rounded
+                        this.state.showEditButton && this.state.indexToEdit === index ? 
+                            <Button small rounded
                                 onPress={() => this.navigateToEdit('ACTIVITY', item)} 
-                                style={{ borderColor: '#ff4495', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
-                              >
+                                style={{ 
+                                    borderColor: '#ff4495', 
+                                    borderWidth: 1, 
+                                    backgroundColor: COLORS.BACKGROUND_MAIN 
+                            }}>
                                 <Text style={{ color: 'white' }}>Edit</Text>
-                              </Button> 
-                            : null
+                            </Button> : null
                     }
                 </View>
         );

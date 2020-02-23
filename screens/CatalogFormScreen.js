@@ -22,6 +22,7 @@ export default class CatalogFormScreen extends Component {
             newQuestion: data && data.question ? data.question : '',
             newAnswers: data && data.answers ? data.answers : [''],
             isDisabled: true,
+            doDelete: false,
         }
         console.log(this.state.data);
     }
@@ -46,8 +47,34 @@ export default class CatalogFormScreen extends Component {
                         <Text>Save</Text>
                     </Button>
                 </View>
+
+                {
+                    this.state.data ? 
+                    <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <Button 
+                        style={{ backgroundColor: 'red', justifyContent: 'center' }} 
+                        onPress={() => Alert.alert(
+                            'Are you sure?', 
+                            `This ${this.state.formType} will be deleted from the Catalog and you will not be able to select it for your future Days. It will still remain on your previous Days and Stats.`,
+                            [
+                                {text: 'Cancel'},
+                                {text: 'OK', onPress: () => this.handleDeleteConfirmation()}
+                            ])
+                        }
+                    >
+                        <Text>Delete</Text>
+                    </Button>
+                </View> : null
+                }
+
+                
             </View>
         );
+    }
+
+    handleDeleteConfirmation() {
+        this.setState({doDelete: true});
+        this.persistNew();
     }
 
     renderActivityForm() {
@@ -150,7 +177,7 @@ export default class CatalogFormScreen extends Component {
     }
 
     async persistNew() {
-        console.log(`[CatalogFormScreen] ${this.state.data ? 'UPDATE' : 'CREATE'}`);
+        console.log(`[CatalogFormScreen] ${this.state.doDelete ? 'DELETE' : this.state.data ? 'PUT' : 'POST'}`);
 
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
@@ -160,30 +187,32 @@ export default class CatalogFormScreen extends Component {
             'Session-Token': sessionToken
         };
 
-        const endpoint = this.state.data 
+        const endpoint = (this.state.data || this.doDelete)
             ? `${HOST}/catalog/events/${this.state.formType}/catalogEventId/${this.state.data.catalogEventId}` 
             : `${HOST}/catalog/events/${this.state.formType}`
         
-        let body;
+        let body = {};
 
-        if (this.state.data) {
-            this.state.formType === 'ACTIVITY' 
-                ? (this.state.data.description = this.state.newDescription, this.state.data.icon = this.state.newIcon)
-                : this.state.data.answers = this.state.newAnswers;
-            body = this.state.data;
-        } else {
-            body = {
-                dayEventCatalogId: '',
-                belongsTo: '',
-                type: this.state.formType,
-                name: this.state.newName,
-                color: this.state.newColor, // TODO - this is not getting set from input
-                icon: this.state.newIcon, // TODO - this is not getting set from input
-                description: this.state.newDescription,
-                question: this.state.newQuestion,
-                answers: this.state.newAnswers,
-                allowMultiSelect: this.state.newAllowMultiSelect // TODO - this is not getting set from input
-            };
+        if (!this.state.doDelete) {
+            if (this.state.data) {
+                this.state.formType === 'ACTIVITY' 
+                    ? (this.state.data.description = this.state.newDescription, this.state.data.icon = this.state.newIcon)
+                    : this.state.data.answers = this.state.newAnswers;
+                body = this.state.data;
+            } else {
+                body = {
+                    dayEventCatalogId: '',
+                    belongsTo: '',
+                    type: this.state.formType,
+                    name: this.state.newName,
+                    color: this.state.newColor, // TODO - this is not getting set from input
+                    icon: this.state.newIcon, // TODO - this is not getting set from input
+                    description: this.state.newDescription,
+                    question: this.state.newQuestion,
+                    answers: this.state.newAnswers,
+                    allowMultiSelect: this.state.newAllowMultiSelect // TODO - this is not getting set from input
+                };
+            }
         }
         
         console.log(`[CatalogFormScreen] calling ${endpoint}, with ${JSON.stringify(body)}`);
@@ -191,7 +220,7 @@ export default class CatalogFormScreen extends Component {
         let requestSuccess = false;
 
         fetch(endpoint, {
-            method: this.state.data ? 'PUT' : 'POST',
+            method: this.state.doDelete ? 'DELETE' : this.state.data ? 'PUT' : 'POST',
             headers: headers,
             body: JSON.stringify(body)
         }).then((response) => {
@@ -230,6 +259,7 @@ export default class CatalogFormScreen extends Component {
             newQuestion: '',
             newAnswers: [''],
             isDisabled: true,
+            doDelete: false,
         });
     }
 }
