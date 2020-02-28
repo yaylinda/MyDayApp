@@ -125,8 +125,6 @@ export default class CatalogScreen extends Component {
                 indexToEdit: indexToEdit
             })
         }
-
-        
     }
 
     renderActivityCatalogDataHeader(item, index) {

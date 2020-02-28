@@ -83,11 +83,7 @@ export default class DayInfo extends Component {
                     {
                         this.props.day.emotions.map((item, index) => {
                             return (
-                                <TouchableOpacity key={index} activeOpacity={0.5} onLongPress={() => this.setState({
-                                    showEditScoresButton: true,
-                                    eventTypeToEdit: 'EMOTION',
-                                    dayEventIdToEdit: item.dayEventId,
-                                })}>
+                                <TouchableOpacity key={index} activeOpacity={0.5} onLongPress={() => this.handleLongPress('EMOTION', item.dayEventId)}>
                                     <View key={index} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
                                         <View padder style={{
                                             flexDirection: 'row',
@@ -109,26 +105,7 @@ export default class DayInfo extends Component {
                                                 {this.renderDayScore(item.emotionScore)}
                                             </View>
                                         </View>
-                                        {
-                                            (this.state.dayEventIdToEdit === item.dayEventId) ?
-                                                <View padder style={{
-                                                    flexGrow: (this.state.dayEventIdToEdit === item.dayEventId) ? 0.4 : 0
-                                                }}>
-                                                    <Button
-                                                        style={{ backgroundColor: 'red', justifyContent: 'center' }}
-                                                        onPress={() => Alert.alert(
-                                                            'Are you sure?',
-                                                            `This will delete the score from this day.`,
-                                                            [
-                                                                { text: 'Cancel', onPress: () => this.setState({dayEventIdToEdit: ''}) },
-                                                                { text: 'OK', onPress: () => this.handleDeleteConfirmation() }
-                                                            ])
-                                                        }
-                                                    >
-                                                        <Text>Delete</Text>
-                                                    </Button>
-                                                </View> : null
-                                        }
+                                        { this.renderDeleteButton(item.dayEventId) }
                                     </View>
                                 </TouchableOpacity>
                             );
@@ -154,26 +131,29 @@ export default class DayInfo extends Component {
                 <View style={{ flex: 1 }}>
                     {this.props.day.activities.map((item, index) => {
                         return (
-                            <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
-                                <View padder style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'center',
-                                    width: 110,
-                                    backgroundColor: COLORS.BACKGORUND_ACCENT,
-                                    borderTopLeftRadius: 10,
-                                    borderBottomLeftRadius: 10
-                                }}>
-                                    <Text style={{ color: 'white', fontWeight: "500" }}>{item.startTime}</Text>
+                            <TouchableOpacity key={index} activeOpacity={0.5} onLongPress={() => this.handleLongPress('ACTIVITY', item.dayEventId)}>
+                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
+                                    <View padder style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        width: 110,
+                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                        borderTopLeftRadius: 10,
+                                        borderBottomLeftRadius: 10
+                                    }}>
+                                        <Text style={{ color: 'white', fontWeight: "500" }}>{item.startTime}</Text>
+                                    </View>
+                                    <View padder style={{
+                                        flexGrow: 1,
+                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                        borderTopRightRadius: 10,
+                                        borderBottomRightRadius: 10
+                                    }}>
+                                        <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
+                                    </View>
+                                    { this.renderDeleteButton(item.dayEventId) }
                                 </View>
-                                <View padder style={{
-                                    flexGrow: 1,
-                                    backgroundColor: COLORS.BACKGORUND_ACCENT,
-                                    borderTopRightRadius: 10,
-                                    borderBottomRightRadius: 10
-                                }}>
-                                    <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
-                                </View>
-                            </View>
+                            </TouchableOpacity>
                         );
                     })}
 
@@ -190,33 +170,36 @@ export default class DayInfo extends Component {
                     {
                         this.props.day.prompts.map((item, index) => {
                             return (
-                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
-                                    <View padder style={{
-                                        flexDirection: 'row',
-                                        justifyContent: 'center',
-                                        maxWidth: 110,
-                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
-                                        borderTopLeftRadius: 10,
-                                        borderBottomLeftRadius: 10
-                                    }}>
-                                        <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
-                                    </View>
-                                    <View padder style={{
-                                        flexGrow: 1,
-                                        backgroundColor: COLORS.BACKGORUND_ACCENT,
-                                        borderTopRightRadius: 10,
-                                        borderBottomRightRadius: 10
-                                    }}>
-                                        <View>
-                                            <View style={{ flexDirection: 'row', borderBottomColor: '#b4b8cd', borderBottomWidth: 1, paddingBottom: 5 }}>
-                                                <Text style={{ flex: 1, color: 'white' }}>{item.question}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: 'row', paddingTop: 5 }}>
-                                                <Text style={{ flex: 1, color: 'white' }}>{item.selectedAnswer}</Text>
+                                <TouchableOpacity key={index} activeOpacity={0.5} onLongPress={() => this.handleLongPress('PROMPT', item.dayEventId)}>
+                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
+                                        <View padder style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            maxWidth: 110,
+                                            backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                            borderTopLeftRadius: 10,
+                                            borderBottomLeftRadius: 10
+                                        }}>
+                                            <Text style={{ color: 'white', fontWeight: "600" }}>{item.startTime}</Text>
+                                        </View>
+                                        <View padder style={{
+                                            flexGrow: 1,
+                                            backgroundColor: COLORS.BACKGORUND_ACCENT,
+                                            borderTopRightRadius: 10,
+                                            borderBottomRightRadius: 10
+                                        }}>
+                                            <View>
+                                                <View style={{ flexDirection: 'row', borderBottomColor: '#b4b8cd', borderBottomWidth: 1, paddingBottom: 5 }}>
+                                                    <Text style={{ flex: 1, color: 'white' }}>{item.question}</Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', paddingTop: 5 }}>
+                                                    <Text style={{ flex: 1, color: 'white' }}>{item.selectedAnswer}</Text>
+                                                </View>
                                             </View>
                                         </View>
+                                        { this.renderDeleteButton(item.dayEventId) }
                                     </View>
-                                </View>
+                                </TouchableOpacity>
                             );
                         })
                     }
@@ -224,6 +207,42 @@ export default class DayInfo extends Component {
             );
         } else {
             return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No answered prompts for this day yet</Text>);
+        }
+    }
+
+    renderDeleteButton(dayEventId) {
+        return (this.state.dayEventIdToEdit === dayEventId) ?
+            <View padder style={{
+                flexGrow: (this.state.dayEventIdToEdit === dayEventId) ? 0.4 : 0
+            }}>
+                <Button
+                    small
+                    style={{ backgroundColor: 'red', justifyContent: 'center' }}
+                    onPress={() => Alert.alert(
+                        'Are you sure?',
+                        `This will remove the event from this day.`,
+                        [
+                            { text: 'Cancel', onPress: () => this.setState({ dayEventIdToEdit: '' }) },
+                            { text: 'OK', onPress: () => this.handleDeleteConfirmation() }
+                        ])
+                    }
+                >
+                    <Text>Delete</Text>
+                </Button>
+            </View> : null
+    }
+
+    handleLongPress(eventTypeToEdit, dayEventIdToEdit) {
+        if (this.state.dayEventIdToEdit === dayEventIdToEdit) {
+            this.setState({
+                eventTypeToEdit: '',
+                dayEventIdToEdit: '',
+            });
+        } else {
+            this.setState({
+                eventTypeToEdit: eventTypeToEdit,
+                dayEventIdToEdit: dayEventIdToEdit,
+            })
         }
     }
 
