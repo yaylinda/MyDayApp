@@ -92,7 +92,7 @@ export default class DayScreen extends Component {
 
     renderItem = ({ item, index }) => {
         return (
-            <DayInfo key={index} day={item} />
+            <DayInfo key={index} day={item} actions={{ deleteDayEvent: this.deleteExisting.bind(this) }}/>
         );
     }
 
@@ -536,7 +536,6 @@ export default class DayScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[DayInfo] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.activeSlide}`);
                 let tempDays = this.state.daysData;
@@ -550,6 +549,48 @@ export default class DayScreen extends Component {
             }
 
             this.resetState();
+        });
+    }
+
+    async deleteExisting(dayId, eventType, dayEventId) {
+        const sessionToken = await AsyncStorage.getItem('sessionToken');
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const headers = {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Session-Token': sessionToken,
+            'Timezone': timezone,
+        };
+
+        const endpoint = `${HOST}/days/${dayId}/events/${eventType}/dayEventId/${dayEventId}`;
+        console.log(`[DayInfo] delete day event, calling ${endpoint}`);
+
+        let requestSuccess = false;
+
+        fetch(endpoint, {
+            method: 'DELETE',
+            headers: headers,
+        }).then((response) => {
+            if (response.ok) {
+                requestSuccess = true;
+                console.log(`[DayInfo] successfully deleted day event`);
+            } else {
+                requestSuccess = false;
+                console.log(`[DayInfo] error deleting day event`);
+            }
+            return response.json();
+        }).then((json) => {
+            if (requestSuccess) {
+                console.log(`[DayInfo] updating this.state.daysData[activeIndex], where activeIndex=${this.state.activeSlide}`);
+                let tempDays = this.state.daysData;
+                tempDays[this.state.activeSlide] = json;
+                this.setState({ daysData: tempDays });
+                AsyncStorage.setItem('doStatsUpdate', 'doStatsUpdate');
+            } else {
+                console.log(`[DayInfo] error deleting day event with error message: ${json.message}`);
+                this.errorMessage = json.message;
+                Alert.alert('Error', this.errorMessage);
+            }
         });
     }
 
