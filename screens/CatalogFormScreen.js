@@ -20,7 +20,7 @@ export default class CatalogFormScreen extends Component {
             newIcon: data && data.icon ? data.icon : '',
             newColor: '',
             newQuestion: data && data.question ? data.question : '',
-            newAnswers: data && data.answers ? data.answers : [''],
+            newAnswers: data && data.answers ? data.answers : [{answer: ''}],
             isDisabled: true,
             doDelete: false,
         }
@@ -84,18 +84,18 @@ export default class CatalogFormScreen extends Component {
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
                     {
                         this.state.data && this.state.data.name ? 
-                        <Input
-                            style={{ color: 'white', opacity: 0.8 }}
-                            value={this.state.data.name}
-                            disabled
-                        /> :
-                        <Input
-                            style={{ color: 'white' }}
-                            onChangeText={value => this.setState({
-                                newName: value, 
-                                isDisabled: value.length === 0 || this.state.newIcon.length === 0
-                            })}
-                        /> 
+                            <Input
+                                style={{ color: 'white', opacity: 0.8 }}
+                                value={this.state.data.name}
+                                disabled
+                            /> :
+                            <Input
+                                style={{ color: 'white' }}
+                                onChangeText={value => this.setState({
+                                    newName: value,
+                                    isDisabled: value.length === 0 || this.state.newIcon.length === 0
+                                })}
+                            /> 
                     }
                 </Item>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
@@ -123,13 +123,21 @@ export default class CatalogFormScreen extends Component {
             <View padder>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Question</Label>
-                    <Input
-                        style={{ color: 'white' }} 
-                        onChangeText={value => this.setState({
-                            newQuestion: value, 
-                            isDisabled: value.length === 0 || this.state.newAnswers[0].length === 0
-                        })} 
-                    />
+                    {
+                        this.state.data && this.state.data.question ?
+                            <Input
+                                style={{ color: 'white' }}
+                                value={this.state.data.question}
+                                disabled
+                            /> :
+                            <Input
+                                style={{ color: 'white' }}
+                                onChangeText={value => this.setState({
+                                    newQuestion: value,
+                                    isDisabled: value.length === 0 || this.state.newAnswers[0].answer.length === 0
+                                })}
+                            />
+                    }
                 </Item>
                 {
                     this.state.newAnswers.map((answer, index) => {
@@ -138,6 +146,7 @@ export default class CatalogFormScreen extends Component {
                                 <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Answer Option #{index + 1}</Label>
                                 <Input 
                                     style={{ color: 'white' }} 
+                                    value={answer.answer}
                                     onChangeText={value => this.updateAnswers(index, value)} 
                                 />
                             </Item>
@@ -146,7 +155,7 @@ export default class CatalogFormScreen extends Component {
                 }
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Button small rounded 
-                        onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat('') })} 
+                        onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat({answer: ''}) })} 
                         style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
                         <Text style={{ color: 'white' }}>Add Answer Option</Text>
@@ -158,8 +167,11 @@ export default class CatalogFormScreen extends Component {
 
     updateAnswers(index, value) {
         const tempAnswers = this.state.newAnswers;
-        tempAnswers[index] = value;
-        this.setState({ newAnswers: tempAnswers, isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].length === 0 });
+        tempAnswers[index].answer = value;
+        this.setState({ 
+            newAnswers: tempAnswers, 
+            isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].answer.length === 0 
+        });
     }
 
     cleanEmojiInput(value) {
@@ -205,12 +217,10 @@ export default class CatalogFormScreen extends Component {
                     belongsTo: '',
                     type: this.state.formType,
                     name: this.state.newName,
-                    color: this.state.newColor, // TODO - this is not getting set from input
-                    icon: this.state.newIcon, // TODO - this is not getting set from input
+                    icon: this.state.newIcon,
                     description: this.state.newDescription,
                     question: this.state.newQuestion,
                     answers: this.state.newAnswers,
-                    allowMultiSelect: this.state.newAllowMultiSelect // TODO - this is not getting set from input
                 };
             }
         }

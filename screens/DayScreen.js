@@ -293,7 +293,7 @@ export default class DayScreen extends Component {
                                     })}
                                 />
                                 <Body>
-                                    <Text style={{ color: 'white' }}>{answer}</Text>
+                                    <Text style={{ color: 'white' }}>{answer.answer}</Text>
                                 </Body>
                             </ListItem>
                         );
@@ -501,13 +501,14 @@ export default class DayScreen extends Component {
         let body = {};
         if (this.state.addType === 'EMOTION') {
             body['emotionScore'] = this.state.selectedEmotionScore;
-            body['description'] = ''; // TODO - get description input later
         } else if (this.state.addType === 'ACTIVITY') {
             const newDayEvent = this.state.catalogData[this.state.addType][this.state.selectedActivityIndex];
             body = newDayEvent;
         } else if (this.state.addType === 'PROMPT') {
+            body['catalogEventId'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].catalogEventId;
             body['question'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].question;
-            body['selectedAnswer'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers[this.state.selectedPromptAnswerIndex];
+            body['selectedAnswer'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers[this.state.selectedPromptAnswerIndex].answer;
+            body['selectedAnswerCatalogEventId'] = this.state.catalogData['PROMPT'][this.state.randomPromptIndex].answers[this.state.selectedPromptAnswerIndex].catalogEventId;
         }
 
         if (this.state.customTime) {
@@ -515,8 +516,6 @@ export default class DayScreen extends Component {
         } else {
             body['startTime'] = moment().format('hh:mm A');
         }
-
-        body['endTime'] = '';
 
         console.log(`[DayInfo] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
@@ -542,6 +541,7 @@ export default class DayScreen extends Component {
                 tempDays[this.state.activeSlide] = json;
                 this.setState({ daysData: tempDays });
                 AsyncStorage.setItem('doStatsUpdate', 'doStatsUpdate');
+                AsyncStorage.setItem('doCatalogUpdate_CatalogScreen', 'doCatalogUpdate_CatalogScreen');
             } else {
                 console.log(`[DayInfo] error posting new event with error message: ${json.message}`);
                 this.errorMessage = json.message;
@@ -586,6 +586,7 @@ export default class DayScreen extends Component {
                 tempDays[this.state.activeSlide] = json;
                 this.setState({ daysData: tempDays });
                 AsyncStorage.setItem('doStatsUpdate', 'doStatsUpdate');
+                AsyncStorage.setItem('doCatalogUpdate_CatalogScreen', 'doCatalogUpdate_CatalogScreen');
             } else {
                 console.log(`[DayInfo] error deleting day event with error message: ${json.message}`);
                 this.errorMessage = json.message;

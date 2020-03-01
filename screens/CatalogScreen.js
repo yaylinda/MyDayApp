@@ -19,8 +19,7 @@ export default class CatalogScreen extends Component {
             catalogData: { 'ACTIVITY': [], 'PROMPT': [] },
             errorMessage: '',
             activeTabIndex: 0,
-            showEditButton: false,
-            indexToEdit: -1
+            catalogEventId: '',
         }
     }
 
@@ -94,14 +93,14 @@ export default class CatalogScreen extends Component {
             return (
                 <List>
                     {
-                        this.state.catalogData['ACTIVITY'].map((item, index) => {
+                        this.state.catalogData['ACTIVITY'].map((item) => {
                             return (
                                 <TouchableOpacity 
                                     activeOpacity={0.5} 
-                                    onLongPress={() => this.handleLongPress(index)}
+                                    onLongPress={() => this.handleLongPress(item.catalogEventId)}
                                 >
-                                    {this.renderActivityCatalogDataHeader(item, index)}
-                                    {this.renderActivityCatalogDataContent(item, index)}
+                                    {this.renderActivityCatalogDataHeader(item)}
+                                    {this.renderActivityCatalogDataContent(item)}
                                 </TouchableOpacity>
                             )
                         })
@@ -113,21 +112,7 @@ export default class CatalogScreen extends Component {
         }
     }
 
-    handleLongPress(indexToEdit) {
-        if (this.state.showEditButton && this.state.indexToEdit === indexToEdit) {
-            this.setState({
-                showEditButton: false, 
-                indexToEdit: -1
-            });
-        } else {
-            this.setState({
-                showEditButton: true, 
-                indexToEdit: indexToEdit
-            })
-        }
-    }
-
-    renderActivityCatalogDataHeader(item, index) {
+    renderActivityCatalogDataHeader(item) {
         return (
                 <View padder style={{
                     flexDirection: 'row',
@@ -141,31 +126,12 @@ export default class CatalogScreen extends Component {
                     marginBottom: 0,
                 }}>
                     <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
-                    {
-                        this.state.showEditButton && this.state.indexToEdit === index ? 
-                            <Button small rounded
-                                onPress={() => this.navigateToEdit('ACTIVITY', item)} 
-                                style={{ 
-                                    borderColor: '#ff4495', 
-                                    borderWidth: 1, 
-                                    backgroundColor: COLORS.BACKGROUND_MAIN 
-                            }}>
-                                <Text style={{ color: 'white' }}>Edit</Text>
-                            </Button> : null
-                    }
+                    { this.renderEditButton('ACTIVITY', item) }
                 </View>
         );
     }
 
-    navigateToEdit(formType, item) {
-        this.setState({
-            showEditButton: false,
-            indexToEdit: -1
-        });
-        this.props.navigation.navigate('CatalogForm', { formType: formType, data: item });
-    }
-
-    renderActivityCatalogDataContent(item, index) {
+    renderActivityCatalogDataContent(item) {
         return (
             <View padder style={{
                 backgroundColor: COLORS.BACKGROUND_LIGHT,
@@ -183,23 +149,28 @@ export default class CatalogScreen extends Component {
     renderPromptCatalogData() {
         if (this.state.catalogData['PROMPT'] && this.state.catalogData['PROMPT'].length) {
             return (
-                <Accordion
-                    dataArray={this.state.catalogData['PROMPT']}
-                    animation={true}
-                    expanded={false}
-                    renderHeader={this.renderPromptCatalogDataHeader}
-                    renderContent={this.renderPromptCatalogDataContent}
-                    style={{ borderWidth: 0 }}>
-                </Accordion>
+                <List>
+                    {
+                        this.state.catalogData['PROMPT'].map((item) => {
+                            return (
+                                <TouchableOpacity 
+                                    activeOpacity={0.5} 
+                                    onLongPress={() => this.handleLongPress(item.catalogEventId)}
+                                >
+                                    {this.renderPromptCatalogDataHeader(item)}
+                                    {this.renderPromptCatalogDataContent(item)}
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </List>
             );
         } else {
             return (<Text style={{ color: 'white', fontStyle: 'italic' }}>No catalog data yet</Text>);
         }
     }
 
-    
-
-    renderPromptCatalogDataHeader(item, expanded) {
+    renderPromptCatalogDataHeader(item) {
         return (
             <View padder style={{
                 flexDirection: 'row',
@@ -208,18 +179,14 @@ export default class CatalogScreen extends Component {
                 backgroundColor: COLORS.BACKGORUND_ACCENT,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
-                borderBottomLeftRadius: expanded ? 0 : 10,
-                borderBottomRightRadius: expanded ? 0 : 10,
-                marginBottom: expanded ? 0 : 10,
+                borderBottomLeftRadius: 0 ,
+                borderBottomRightRadius: 0,
+                marginBottom: 0,
             }}>
                 <Text style={{ fontWeight: '500', color: 'white' }}>{item.question}</Text>
-                {expanded
-                    ? <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-up' />
-                    : <Icon style={{ fontSize: 18, color: 'white' }} name='arrow-down' />}
+                { this.renderEditButton('PROMPT', item) }
             </View>);
     }
-
-    
 
     renderPromptCatalogDataContent(item) {
         return (
@@ -234,7 +201,7 @@ export default class CatalogScreen extends Component {
                         item.answers.map((answer, index) => {
                             return (
                                 <ListItem key={index} style={{ borderBottomWidth: 0 }}>
-                                    <Text style={{ color: 'white' }}>{answer}</Text>
+                                    <Text style={{ color: 'white' }}>{answer.answer}</Text>
                                 </ListItem>
                             );
                         })
@@ -243,9 +210,41 @@ export default class CatalogScreen extends Component {
             </View>);
     }
 
+    renderEditButton(formType, item) {
+        return this.state.catalogEventId === item.catalogEventId ? 
+        <Button small rounded
+            onPress={() => this.navigateToEdit(formType, item)} 
+            style={{ 
+                borderColor: '#ff4495', 
+                borderWidth: 1, 
+                backgroundColor: COLORS.BACKGROUND_MAIN 
+        }}>
+            <Text style={{ color: 'white' }}>Edit</Text>
+        </Button> : null
+    }
+
     updateActiveTab(ref) {
         console.log(`[CatalogScreen] updateActiveTab, activeTabIndex=${ref.i}`);
         this.setState({ activeTabIndex: ref.i });
+    }
+
+    handleLongPress(catalogEventId) {
+        if (this.state.catalogEventId === catalogEventId) {
+            this.setState({
+                catalogEventId: ''
+            });
+        } else {
+            this.setState({
+                catalogEventId: catalogEventId
+            })
+        }
+    }
+
+    navigateToEdit(formType, item) {
+        this.setState({
+            catalogEventId: ''
+        });
+        this.props.navigation.navigate('CatalogForm', { formType: formType, data: item });
     }
 
     async loadCatalogData() {
