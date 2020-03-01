@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Form, Label, Input, Button, Item } from 'native-base';
+import { Text, View, Form, Label, Input, Button, Item, Icon } from 'native-base';
 import { COLORS, HOST, EMOJI_REGEX_PATTERN } from '../util/Constants';
 import { Alert, AsyncStorage } from 'react-native';
 
@@ -142,14 +142,22 @@ export default class CatalogFormScreen extends Component {
                 {
                     this.state.newAnswers.map((answer, index) => {
                         return (
-                            <Item floatingLabel key={index} style={{ marginBottom: 10 }}>
-                                <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Answer Option #{index + 1}</Label>
-                                <Input 
-                                    style={{ color: 'white' }} 
-                                    value={answer.answer}
-                                    onChangeText={value => this.updateAnswers(index, value)} 
-                                />
-                            </Item>
+                            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                                <Item floatingLabel key={index} style={{ flexGrow: 1 }}>
+                                    <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Answer Option #{index + 1}</Label>
+                                    <Input
+                                        style={{ color: 'white' }}
+                                        value={answer.answer}
+                                        onChangeText={value => this.updateAnswers(index, value)}
+                                    />
+                                </Item>
+                                <Button rounded small 
+                                    onPress={() => this.removeAnswer(index)} 
+                                    style={{ alignSelf: 'center', borderColor: 'red', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN}}
+                                >
+                                    <Icon name='trash' />
+                                </Button>
+                            </View>
                         );
                     })
                 }
@@ -171,6 +179,14 @@ export default class CatalogFormScreen extends Component {
         this.setState({ 
             newAnswers: tempAnswers, 
             isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].answer.length === 0 
+        });
+    }
+
+    removeAnswer(index) {
+        const tempAnswers = this.state.newAnswers;
+        tempAnswers.splice(index, 1);
+        this.setState({
+            newAnswers: tempAnswers
         });
     }
 
