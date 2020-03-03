@@ -93,9 +93,10 @@ export default class CatalogScreen extends Component {
             return (
                 <List>
                     {
-                        this.state.catalogData['ACTIVITY'].map((item) => {
+                        this.state.catalogData['ACTIVITY'].map((item, index) => {
                             return (
                                 <TouchableOpacity 
+                                    key={index}
                                     activeOpacity={0.5} 
                                     onLongPress={() => this.handleLongPress(item.catalogEventId)}
                                 >
@@ -126,7 +127,7 @@ export default class CatalogScreen extends Component {
                     marginBottom: 0,
                 }}>
                     <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
-                    { this.renderEditButton('ACTIVITY', item) }
+                    { this.renderHeaderRight('ACTIVITY', item) }
                 </View>
         );
     }
@@ -184,7 +185,7 @@ export default class CatalogScreen extends Component {
                 marginBottom: 0,
             }}>
                 <Text style={{ fontWeight: '500', color: 'white' }}>{item.question}</Text>
-                { this.renderEditButton('PROMPT', item) }
+                { this.renderHeaderRight('PROMPT', item) }
             </View>);
     }
 
@@ -200,8 +201,13 @@ export default class CatalogScreen extends Component {
                     {
                         item.answers.map((answer, index) => {
                             return (
-                                <ListItem key={index} style={{ borderBottomWidth: 0 }}>
+                                <ListItem key={index} style={{
+                                    borderBottomWidth: 0, 
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between'
+                                }}>
                                     <Text style={{ color: 'white' }}>{answer.answer}</Text>
+                                    <Text style={{ color: '#b4b8cd' }}>{answer.count}</Text>
                                 </ListItem>
                             );
                         })
@@ -210,17 +216,20 @@ export default class CatalogScreen extends Component {
             </View>);
     }
 
-    renderEditButton(formType, item) {
+    renderHeaderRight(formType, item) {
         return this.state.catalogEventId === item.catalogEventId ? 
-        <Button small rounded
-            onPress={() => this.navigateToEdit(formType, item)} 
-            style={{ 
-                borderColor: '#ff4495', 
-                borderWidth: 1, 
-                backgroundColor: COLORS.BACKGROUND_MAIN 
-        }}>
-            <Text style={{ color: 'white' }}>Edit</Text>
-        </Button> : null
+            <Button small rounded
+                onPress={() => this.navigateToEdit(formType, item)} 
+                style={{ 
+                    borderColor: '#ff4495', 
+                    borderWidth: 1, 
+                    backgroundColor: COLORS.BACKGROUND_MAIN 
+            }}>
+                <Text style={{ color: 'white' }}>Edit</Text>
+            </Button> : 
+            <View style={{backgroundColor: COLORS.BACKGROUND_MAIN, padding: 5, borderRadius: 100}}>
+                <Text style={{color: 'white'}}>{item.count}</Text>
+            </View>
     }
 
     updateActiveTab(ref) {

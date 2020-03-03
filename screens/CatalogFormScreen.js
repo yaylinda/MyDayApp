@@ -117,7 +117,6 @@ export default class CatalogFormScreen extends Component {
         );
     }
 
-    // TODO - handle EDIT mode of PROMPT
     renderPromptForm() {
         return (
             <View padder>
@@ -142,7 +141,7 @@ export default class CatalogFormScreen extends Component {
                 {
                     this.state.newAnswers.map((answer, index) => {
                         return (
-                            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                            <View key={index} style={{ flexDirection: 'row', marginBottom: 10 }}>
                                 <Item floatingLabel key={index} style={{ flexGrow: 1 }}>
                                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Answer Option #{index + 1}</Label>
                                     <Input
