@@ -6,6 +6,7 @@ import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart, ProgressCircle
 import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
 import moment from 'moment'
+import CalendarMonthTiles from '../components/CalendarMonthTiles';
 
 const SCORE_KEY = 'score';
 const ACTIVITY_KEY = 'activity';
@@ -43,11 +44,6 @@ export default class StatisticsScreen extends Component {
             <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                 <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                     <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
-
-                    {/* <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 24, fontWeight: '900', color: COLORS.TEXT_MAIN }}>Statistics</Text>
-                </View> */}
-
                     <Tabs tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}>
                         <Tab heading="Summary"
                             tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
@@ -100,6 +96,17 @@ export default class StatisticsScreen extends Component {
                                 {this.renderPromptStats(PROMPT_KEY, WEEK_KEY, 'Last 7 Days')}
                                 {this.renderPromptStats(PROMPT_KEY, MONTH_KEY, 'This Month')}
                                 {this.renderPromptStats(PROMPT_KEY, YEAR_KEY, 'This Year')}
+                            </View>
+                        </Tab>
+                        <Tab heading="Trends"
+                            tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                            textStyle={{ color: 'white' }}
+                            activeTextStyle={{ color: COLORS.TEXT_MAIN }}
+                            style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
+                        >
+                            <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
+                                <CalendarMonthTiles title='Scores' data={[1, 2, 3, 1, 2, 9,8,7,6]} />
                             </View>
                         </Tab>
                     </Tabs>

@@ -152,9 +152,10 @@ export default class CatalogScreen extends Component {
             return (
                 <List>
                     {
-                        this.state.catalogData['PROMPT'].map((item) => {
+                        this.state.catalogData['PROMPT'].map((item, index) => {
                             return (
                                 <TouchableOpacity 
+                                    key={index}
                                     activeOpacity={0.5} 
                                     onLongPress={() => this.handleLongPress(item.catalogEventId)}
                                 >

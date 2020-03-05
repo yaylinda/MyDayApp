@@ -6,6 +6,7 @@ export const COLORS = {
     BACKGROUND_LIGHT: '#32323e',
     BACKGORUND_ACCENT: '#40424f',
     TEXT_MAIN: '#52e3c2',
+    TEXT_ACCENT: '#ff4495',
     TEXT_LIGHT_WHITE: '#b4b8cd',
 }
 
