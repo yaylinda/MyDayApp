@@ -9,7 +9,7 @@ export default class CalendarMonthTiles extends Component {
     constructor(props) {
         super(props);
         // title
-        // data: [{ value: , label: , }]
+        // data: [{ date: , value: , label: ,}]
 
         this.state = {
             calendarCols: [0, 1, 2, 3, 4, 5, 6],
@@ -40,24 +40,28 @@ export default class CalendarMonthTiles extends Component {
                     {this.renderTiles()}
                 </View>
 
-                
-
-                
             </View>
         );
     }
 
     renderMoreInformation() {
         if (this.state.showMoreInformation) {
-            return (
-                <View padder style={{
-                    backgroundColor: COLORS.BACKGROUND_MAIN, 
-                    borderRadius: 10, 
-                    marginBottom: 10
-                }}>
-                    <Text>More info! row: {this.state.selectedRowIndex}, col: {this.state.selectedColIndex}</Text>
-                </View>
-            );
+
+            const datum = this.getDatumAtIndex(this.state.selectedRowIndex, this.state.selectedColIndex);
+
+            if (datum) {
+                return (
+                    <View padder style={{
+                        flexDirection: 'column',
+                        backgroundColor: COLORS.BACKGROUND_MAIN, 
+                        borderRadius: 10, 
+                        marginBottom: 10
+                    }}>
+                        <Text style={{color: 'white'}}>{datum.date}</Text>
+                        <Text style={{color: 'white'}}>{datum.label}: {datum.value}</Text>
+                    </View>
+                );
+            }
         }
     }
 
@@ -99,18 +103,28 @@ export default class CalendarMonthTiles extends Component {
     }
 
     renderTileData(rowIndex, colIndex) {
-        const index = (rowIndex * this.state.calendarCols.length) + colIndex;
-        const datum = this.props.data[index];
+        const datum = this.getDatumAtIndex(rowIndex, colIndex);
+        if (datum) {
+            return (
+                <Text style={{alignSelf: 'center', color: 'white'}}>
+                    {datum.value}
+                </Text>
+            );
+        }
+        
+    }
 
-        return (
-            <Text style={{alignSelf: 'center', color: 'white'}}>
-                {datum}
-            </Text>
-        );
+    getDatumAtIndex(rowIndex, colIndex) {
+        const index = (rowIndex * this.state.calendarCols.length) + colIndex;
+        return this.props.data[index];
     }
 
     handleClickTile(rowIndex, colIndex) {
-        if (rowIndex === this.state.selectedRowIndex && colIndex === this.state.selectedColIndex && this.state.showMoreInformation) {
+        const datum = this.getDatumAtIndex(rowIndex, colIndex); 
+        if (rowIndex === this.state.selectedRowIndex 
+                && colIndex === this.state.selectedColIndex 
+                && this.state.showMoreInformation 
+                || !datum) {
             this.setState({
                 showMoreInformation: false,
                 selectedRowIndex: -1,
