@@ -19,12 +19,8 @@ export default class StatisticsScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allStats: {
-                [SCORE_KEY]: {},
-                [ACTIVITY_KEY]: {},
-                [PROMPT_KEY]: {},
-                [SUMMARY_KEY]: {}
-            },
+            stats: {},
+            selectedStatKey: 'EMOTION',
         }
     }
 
@@ -38,7 +34,7 @@ export default class StatisticsScreen extends Component {
                 <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                     <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
                     <Tabs tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}>
-                        <Tab heading="Trends"
+                        <Tab heading="Score & Activity Tiles"
                             tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             textStyle={{ color: 'white' }}
@@ -47,7 +43,7 @@ export default class StatisticsScreen extends Component {
                         >
                             {this.renderTrendsTabContent()}
                         </Tab>
-                        <Tab heading="Prompts"
+                        <Tab heading="Prompts Diary"
                             tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             textStyle={{ color: 'white' }}
@@ -66,27 +62,38 @@ export default class StatisticsScreen extends Component {
     }
 
     renderTrendsTabContent() {
-        return (
-            <View padder>
+        if (this.state.stats && this.state.stats[this.state.selectedStatKey]) {
+            const options = Object.keys(this.state.stats).map(k => { return {value: k} });
+            return (
                 <View>
+                    <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
+                        <Dropdown
+                            baseColor={COLORS.TEXT_ACCENT}
+                            textColor='white'
+                            itemColor='white'
+                            label="Select Data"
+                            pickerStyle={{backgroundColor: COLORS.BACKGORUND_ACCENT}}
+                            data={options}
+                            value={this.state.selectedStatKey}
+                            onChangeText={(value) => this.setState({selectedStatKey: value})}
+                        />
+                    </View>
 
+                    <View style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
+                        <CalendarMonthTiles 
+                            title={this.state.selectedStatKey} 
+                            data={this.state.stats[this.state.selectedStatKey]} 
+                        />
+                    </View>
                 </View>
-
-                <View style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-                    <CalendarMonthTiles title='Scores' data={[
-                        {date: '2020-03-05', value: 1, label: 'Average Score'}, 
-                        {date: '2020-03-06', value: 2, label: 'Average Score'}, 
-                    ]} />
-                </View>
-            </View>
-
-        );
+            );
+        }
     }
 
     async loadStats() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${HOST}/stats`;
+        const endpoint = `${HOST}/stats/tiles`;
         console.log(`[StatisticsScreen] calling ${endpoint}`);
 
         let requestSuccess = false;
@@ -110,7 +117,7 @@ export default class StatisticsScreen extends Component {
             // console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log('[StatisticsScreen] updating state.allStats');
-                this.setState({ allStats: json });
+                this.setState({ stats: json });
                 AsyncStorage.setItem('doStatsUpdate', '');
             } else {
                 console.log(`[StatisticsScreen] retrieving allStats object error message: ${json.message}`);
@@ -127,9 +134,5 @@ export default class StatisticsScreen extends Component {
             console.log('[StatisticsScreen] [onWillFocus] - checkForUpdates: doStatsUpdate=true');
             this.loadStats();
         }
-    }
-
-    formatDate(date) {
-        return moment(date, "YYYY-MM-DD").format('ddd, MMM Do YYYY');
     }
 }
