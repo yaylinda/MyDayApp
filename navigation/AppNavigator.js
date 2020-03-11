@@ -89,7 +89,7 @@ const StatisticsStack = createStackNavigator(
     StatisticsPage: {
       screen: StatisticsScreen,
       navigationOptions: {
-        title: 'Statistics',
+        title: 'Tiles & Stats',
         headerStyle: {
           backgroundColor: COLORS.BACKGROUND_MAIN,
           borderBottomWidth: 0,
@@ -148,7 +148,7 @@ const AppStack = createBottomTabNavigator(
     Stats: {
       screen: StatisticsStack,
       navigationOptions: {
-        tabBarLabel: 'Statistics',
+        tabBarLabel: 'Tiles & Stats',
         tabBarIcon: ({ focused }) => (
           <Ionicons
             name={

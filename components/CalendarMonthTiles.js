@@ -26,14 +26,9 @@ export default class CalendarMonthTiles extends Component {
             maxValue: Math.max(...props.data.map(d => d.value)),
             colorsArray: colors.reverse(),
         }
-
-        console.log(this.state.maxValue);
     }
 
-    render() {
-
-        // this.setState({maxValue: Math.max(...this.state.data.map(d => d.value))})
-        
+    render() {        
         return (
             <View padder style={{ flex: 1 }}>
                 <View padder>
@@ -129,7 +124,7 @@ export default class CalendarMonthTiles extends Component {
 
     handleClickTile(rowIndex, colIndex) {
         const datum = this.getDatumAtIndex(rowIndex, colIndex); 
-        
+
         if (!datum) {
             return;
         }

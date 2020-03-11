@@ -19,8 +19,8 @@ export default class StatisticsScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stats: {},
-            selectedStatKey: 'EMOTION',
+            stats: { tiles: null, summary: null },
+            selectedStatKey: 'Scores', // default for dropdown
         }
     }
 
@@ -34,7 +34,7 @@ export default class StatisticsScreen extends Component {
                 <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                     <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
                     <Tabs tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}>
-                        <Tab heading="Score & Activity Tiles"
+                        <Tab heading="Tiles"
                             tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             textStyle={{ color: 'white' }}
@@ -43,18 +43,15 @@ export default class StatisticsScreen extends Component {
                         >
                             {this.renderTrendsTabContent()}
                         </Tab>
-                        <Tab heading="Prompts Diary"
+                        <Tab heading="Summary"
                             tabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             activeTabStyle={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                             textStyle={{ color: 'white' }}
                             activeTextStyle={{ color: COLORS.TEXT_MAIN }}
                             style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}
                         >
-                            <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN }}>
-
-                            </View>
+                            {this.renderSummaryTabContent()}
                         </Tab>
-
                     </Tabs>
                 </Content>
             </View>
@@ -62,8 +59,8 @@ export default class StatisticsScreen extends Component {
     }
 
     renderTrendsTabContent() {
-        if (this.state.stats && this.state.stats[this.state.selectedStatKey]) {
-            const options = Object.keys(this.state.stats).map(k => { return {value: k} });
+        if (this.state.stats.tiles && this.state.stats.tiles[this.state.selectedStatKey]) {
+            const options = Object.keys(this.state.stats.tiles).map(k => { return { value: k } });
             return (
                 <View>
                     <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
@@ -72,17 +69,17 @@ export default class StatisticsScreen extends Component {
                             textColor='white'
                             itemColor='white'
                             label="Select Data"
-                            pickerStyle={{backgroundColor: COLORS.BACKGORUND_ACCENT}}
+                            pickerStyle={{ backgroundColor: COLORS.BACKGORUND_ACCENT }}
                             data={options}
                             value={this.state.selectedStatKey}
-                            onChangeText={(value) => this.setState({selectedStatKey: value})}
+                            onChangeText={(value) => this.setState({ selectedStatKey: value })}
                         />
                     </View>
 
                     <View style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
-                        <CalendarMonthTiles 
-                            title={this.state.selectedStatKey} 
-                            data={this.state.stats[this.state.selectedStatKey]} 
+                        <CalendarMonthTiles
+                            title={this.state.selectedStatKey}
+                            data={this.state.stats.tiles[this.state.selectedStatKey]}
                         />
                     </View>
                 </View>
@@ -90,10 +87,55 @@ export default class StatisticsScreen extends Component {
         }
     }
 
+    renderSummaryTabContent() {
+        if (this.state.stats.summary) {
+            return (
+                <View>
+                    <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
+                        <Text style={{ color: COLORS.TEXT_ACCENT, fontSize: 20, marginBottom: 10 }}>Days</Text>
+                        {this.renderSummaryDataBox(this.state.stats.summary.totalNumDays, 'Total Days')}
+                    </View>
+                    <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
+                        <Text style={{ color: COLORS.TEXT_ACCENT, fontSize: 20, marginBottom: 10 }}>Scores</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {this.renderSummaryDataBox(this.state.stats.summary.averageScore, 'Average Daily Score')}
+                            {this.renderSummaryDataBox(this.state.stats.summary.totalNumScores, 'Total Score')}
+                        </View>
+                    </View>
+                    <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
+                        <Text style={{ color: COLORS.TEXT_ACCENT, fontSize: 20, marginBottom: 10 }}>Activities</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {this.renderSummaryDataBox(this.state.stats.summary.numUniqueActivities, 'Number of Unique Activities')}
+                            {this.renderSummaryDataBox(this.state.stats.summary.totalNumActivities, 'Total Activities')}
+                        </View>
+                    </View>
+                    <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
+                        <Text style={{ color: COLORS.TEXT_ACCENT, fontSize: 20, marginBottom: 10 }}>Prompts</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            {this.renderSummaryDataBox(this.state.stats.summary.numUniquePrompts, 'Number of Unique Prompts Answered')}
+                            {this.renderSummaryDataBox(this.state.stats.summary.totalNumPrompts, 'Total Prompts Answered')}
+                        </View>
+                    </View>
+                </View>
+            );
+        }
+    }
+
+    renderSummaryDataBox(value, subtitle) {
+        return (
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                <View padder style={{ backgroundColor: COLORS.BACKGROUND_MAIN, borderRadius: 10, display: 'flex', width: 120, height: 120 }}>
+                    <Text style={{ textAlign: 'center', fontSize: 50, color: 'white', marginBottom: 10 }}>{value}</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 10, color: COLORS.TEXT_MAIN }}>{subtitle}</Text>
+                </View>
+            </View>
+        );
+    }
+
     async loadStats() {
         const sessionToken = await AsyncStorage.getItem('sessionToken');
 
-        const endpoint = `${HOST}/stats/tiles`;
+        const endpoint = `${HOST}/stats`;
         console.log(`[StatisticsScreen] calling ${endpoint}`);
 
         let requestSuccess = false;
@@ -114,7 +156,7 @@ export default class StatisticsScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            // console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
+            console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log('[StatisticsScreen] updating state.allStats');
                 this.setState({ stats: json });
