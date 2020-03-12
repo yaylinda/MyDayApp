@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import {
-    Card, CardItem, Button, Text, Form, Item, Label, Input, Accordion, View, Icon, List, ListItem, Content, Tabs, Tab,
+    Button, Text, View, Icon, List, ListItem, Content, Tabs, Tab,
 } from 'native-base';
 import { HOST, COLORS } from '../util/Constants';
 import { AsyncStorage, TouchableOpacity } from 'react-native';
-import Modal from 'react-native-modal';
 import ActionButton from 'react-native-action-button';
 import { NavigationEvents } from 'react-navigation';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-
-const CATALOG_TYPES = ['ACTIVITY', 'PROMPT'];
 
 export default class CatalogScreen extends Component {
 
@@ -31,7 +27,7 @@ export default class CatalogScreen extends Component {
         return (
             <View style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}>
                 <NavigationEvents onWillFocus={() => this.checkForUpdates()} />
-                
+
                 <Content padder style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, }}>
                     <Tabs
                         tabBarUnderlineStyle={{ backgroundColor: COLORS.TEXT_MAIN }}
@@ -67,8 +63,8 @@ export default class CatalogScreen extends Component {
                     style={{ bottom: 0 }}
                     buttonColor='#ff4495'
                     renderIcon={() => <Icon name='add' style={{ fontSize: 18, color: 'white' }} />}>
-                        {
-                            this.state.activeTabIndex === 0 ? 
+                    {
+                        this.state.activeTabIndex === 0 ?
                             <ActionButton.Item
                                 size={40}
                                 title={'Activity'}
@@ -82,7 +78,7 @@ export default class CatalogScreen extends Component {
                                 style={{ backgroundColor: '#ff4495' }}>
                                 <Icon name="help" style={{ fontSize: 18, color: 'white' }} />
                             </ActionButton.Item>
-                        }
+                    }
                 </ActionButton>
             </View>
         );
@@ -95,9 +91,9 @@ export default class CatalogScreen extends Component {
                     {
                         this.state.catalogData['ACTIVITY'].map((item, index) => {
                             return (
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     key={index}
-                                    activeOpacity={0.5} 
+                                    activeOpacity={0.5}
                                     onLongPress={() => this.handleLongPress(item.catalogEventId)}
                                 >
                                     {this.renderActivityCatalogDataHeader(item)}
@@ -115,20 +111,20 @@ export default class CatalogScreen extends Component {
 
     renderActivityCatalogDataHeader(item) {
         return (
-                <View padder style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: COLORS.BACKGORUND_ACCENT,
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    borderBottomLeftRadius: 0,
-                    borderBottomRightRadius: 0,
-                    marginBottom: 0,
-                }}>
-                    <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
-                    { this.renderHeaderRight('ACTIVITY', item) }
-                </View>
+            <View padder style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                backgroundColor: COLORS.BACKGORUND_ACCENT,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                marginBottom: 0,
+            }}>
+                <Text style={{ fontWeight: '500', color: 'white' }}>{item.icon} {item.name}</Text>
+                {this.renderHeaderRight('ACTIVITY', item)}
+            </View>
         );
     }
 
@@ -154,9 +150,9 @@ export default class CatalogScreen extends Component {
                     {
                         this.state.catalogData['PROMPT'].map((item, index) => {
                             return (
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     key={index}
-                                    activeOpacity={0.5} 
+                                    activeOpacity={0.5}
                                     onLongPress={() => this.handleLongPress(item.catalogEventId)}
                                 >
                                     {this.renderPromptCatalogDataHeader(item)}
@@ -181,12 +177,12 @@ export default class CatalogScreen extends Component {
                 backgroundColor: COLORS.BACKGORUND_ACCENT,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
-                borderBottomLeftRadius: 0 ,
+                borderBottomLeftRadius: 0,
                 borderBottomRightRadius: 0,
                 marginBottom: 0,
             }}>
                 <Text style={{ fontWeight: '500', color: 'white' }}>{item.question}</Text>
-                { this.renderHeaderRight('PROMPT', item) }
+                {this.renderHeaderRight('PROMPT', item)}
             </View>);
     }
 
@@ -203,7 +199,7 @@ export default class CatalogScreen extends Component {
                         item.answers.map((answer, index) => {
                             return (
                                 <ListItem key={index} style={{
-                                    borderBottomWidth: 0, 
+                                    borderBottomWidth: 0,
                                     flexDirection: 'row',
                                     justifyContent: 'space-between'
                                 }}>
@@ -218,18 +214,18 @@ export default class CatalogScreen extends Component {
     }
 
     renderHeaderRight(formType, item) {
-        return this.state.catalogEventId === item.catalogEventId ? 
+        return this.state.catalogEventId === item.catalogEventId ?
             <Button small rounded
-                onPress={() => this.navigateToEdit(formType, item)} 
-                style={{ 
-                    borderColor: '#ff4495', 
-                    borderWidth: 1, 
-                    backgroundColor: COLORS.BACKGROUND_MAIN 
-            }}>
+                onPress={() => this.navigateToEdit(formType, item)}
+                style={{
+                    borderColor: '#ff4495',
+                    borderWidth: 1,
+                    backgroundColor: COLORS.BACKGROUND_MAIN
+                }}>
                 <Text style={{ color: 'white' }}>Edit</Text>
-            </Button> : 
-            <View style={{backgroundColor: COLORS.BACKGROUND_MAIN, padding: 5, borderRadius: 100}}>
-                <Text style={{color: 'white'}}>{item.count}</Text>
+            </Button> :
+            <View style={{ backgroundColor: COLORS.BACKGROUND_MAIN, padding: 5, borderRadius: 100 }}>
+                <Text style={{ color: 'white' }}>{item.count}</Text>
             </View>
     }
 

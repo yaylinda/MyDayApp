@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, Form, Label, Input, Button, Item, Icon } from 'native-base';
+import { Text, View, Label, Input, Button, Item, Icon } from 'native-base';
 import { COLORS, HOST, EMOJI_REGEX_PATTERN } from '../util/Constants';
 import { Alert, AsyncStorage } from 'react-native';
 
 export default class CatalogFormScreen extends Component {
-
-    // TODO - get header to say "Edit Catalog" and "Add to Catalog"
 
     constructor(props) {
         super(props);
@@ -20,7 +18,7 @@ export default class CatalogFormScreen extends Component {
             newIcon: data && data.icon ? data.icon : '',
             newColor: '',
             newQuestion: data && data.question ? data.question : '',
-            newAnswers: data && data.answers ? data.answers : [{answer: ''}],
+            newAnswers: data && data.answers ? data.answers : [{ answer: '' }],
             isDisabled: true,
             doDelete: false,
         }
@@ -37,43 +35,43 @@ export default class CatalogFormScreen extends Component {
                 </View>
 
                 <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button 
-                        disabled={ this.state.data ? false : this.state.isDisabled }
-                        style={ (this.state.data ? false : this.state.isDisabled)
-                            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } 
-                            : { backgroundColor: '#52e3c2', justifyContent: 'center' } } 
-                        onPress={ () => this.persistNew() }
+                    <Button
+                        disabled={this.state.data ? false : this.state.isDisabled}
+                        style={(this.state.data ? false : this.state.isDisabled)
+                            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 }
+                            : { backgroundColor: '#52e3c2', justifyContent: 'center' }}
+                        onPress={() => this.persistNew()}
                     >
                         <Text>Save</Text>
                     </Button>
                 </View>
 
                 {
-                    this.state.data ? 
-                    <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button 
-                        style={{ backgroundColor: 'red', justifyContent: 'center' }} 
-                        onPress={() => Alert.alert(
-                            'Are you sure?', 
-                            `This ${this.state.formType} will be deleted from the Catalog and you will not be able to select it for your future Days. It will still remain on your previous Days and Stats.`,
-                            [
-                                {text: 'Cancel'},
-                                {text: 'OK', onPress: () => this.handleDeleteConfirmation()}
-                            ])
-                        }
-                    >
-                        <Text>Delete</Text>
-                    </Button>
-                </View> : null
+                    this.state.data ?
+                        <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <Button
+                                style={{ backgroundColor: 'red', justifyContent: 'center' }}
+                                onPress={() => Alert.alert(
+                                    'Are you sure?',
+                                    `This ${this.state.formType} will be deleted from the Catalog and you will not be able to select it for your future Days. It will still remain on your previous Days and Stats.`,
+                                    [
+                                        { text: 'Cancel' },
+                                        { text: 'OK', onPress: () => this.handleDeleteConfirmation() }
+                                    ])
+                                }
+                            >
+                                <Text>Delete</Text>
+                            </Button>
+                        </View> : null
                 }
 
-                
+
             </View>
         );
     }
 
     handleDeleteConfirmation() {
-        this.setState({doDelete: true});
+        this.setState({ doDelete: true });
         this.persistNew();
     }
 
@@ -83,7 +81,7 @@ export default class CatalogFormScreen extends Component {
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Activity Name</Label>
                     {
-                        this.state.data && this.state.data.name ? 
+                        this.state.data && this.state.data.name ?
                             <Input
                                 style={{ color: 'white', opacity: 0.8 }}
                                 value={this.state.data.name}
@@ -95,7 +93,7 @@ export default class CatalogFormScreen extends Component {
                                     newName: value,
                                     isDisabled: value.length === 0 || this.state.newIcon.length === 0
                                 })}
-                            /> 
+                            />
                     }
                 </Item>
                 <Item floatingLabel style={{ marginBottom: 10 }}>
@@ -111,7 +109,7 @@ export default class CatalogFormScreen extends Component {
                         style={{ color: 'white' }}
                         value={this.state.newDescription}
                         onChangeText={value => this.setState({ newDescription: value })}
-                    /> 
+                    />
                 </Item>
             </View>
         );
@@ -150,9 +148,9 @@ export default class CatalogFormScreen extends Component {
                                         onChangeText={value => this.updateAnswers(index, value)}
                                     />
                                 </Item>
-                                <Button rounded small 
-                                    onPress={() => this.removeAnswer(index)} 
-                                    style={{ alignSelf: 'center', borderColor: 'red', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN}}
+                                <Button rounded small
+                                    onPress={() => this.removeAnswer(index)}
+                                    style={{ alignSelf: 'center', borderColor: 'red', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
                                 >
                                     <Icon name='trash' />
                                 </Button>
@@ -161,8 +159,8 @@ export default class CatalogFormScreen extends Component {
                     })
                 }
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button small rounded 
-                        onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat({answer: ''}) })} 
+                    <Button small rounded
+                        onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat({ answer: '' }) })}
                         style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
                         <Text style={{ color: 'white' }}>Add Answer Option</Text>
@@ -175,9 +173,9 @@ export default class CatalogFormScreen extends Component {
     updateAnswers(index, value) {
         const tempAnswers = this.state.newAnswers;
         tempAnswers[index].answer = value;
-        this.setState({ 
-            newAnswers: tempAnswers, 
-            isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].answer.length === 0 
+        this.setState({
+            newAnswers: tempAnswers,
+            isDisabled: this.state.newQuestion.length === 0 || tempAnswers[0].answer.length === 0
         });
     }
 
@@ -198,7 +196,7 @@ export default class CatalogFormScreen extends Component {
         console.log('cleanedInput: ' + cleanedInput);
 
         this.setState({
-            newIcon: cleanedInput, 
+            newIcon: cleanedInput,
             isDisabled: cleanedInput.length === 0 || this.state.newName.length === 0
         })
     }
@@ -215,14 +213,14 @@ export default class CatalogFormScreen extends Component {
         };
 
         const endpoint = (this.state.data || this.doDelete)
-            ? `${HOST}/catalog/events/${this.state.formType}/catalogEventId/${this.state.data.catalogEventId}` 
+            ? `${HOST}/catalog/events/${this.state.formType}/catalogEventId/${this.state.data.catalogEventId}`
             : `${HOST}/catalog/events/${this.state.formType}`
-        
+
         let body = {};
 
         if (!this.state.doDelete) {
             if (this.state.data) {
-                this.state.formType === 'ACTIVITY' 
+                this.state.formType === 'ACTIVITY'
                     ? (this.state.data.description = this.state.newDescription, this.state.data.icon = this.state.newIcon)
                     : this.state.data.answers = this.state.newAnswers;
                 body = this.state.data;
@@ -239,7 +237,7 @@ export default class CatalogFormScreen extends Component {
                 };
             }
         }
-        
+
         console.log(`[CatalogFormScreen] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
         let requestSuccess = false;

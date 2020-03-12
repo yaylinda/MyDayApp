@@ -9,7 +9,7 @@ import StatisticsScreen from '../screens/StatisticsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { HOST, COLORS } from '../util/Constants';
+import { COLORS } from '../util/Constants';
 import { createStackNavigator } from 'react-navigation-stack';
 import CatalogFormScreen from '../screens/CatalogFormScreen';
 

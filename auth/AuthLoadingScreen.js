@@ -1,19 +1,17 @@
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
 import {
   ActivityIndicator,
   AsyncStorage,
   StatusBar,
-  StyleSheet,
   View,
 } from 'react-native';
-import { HOST, COLORS } from '../util/Constants';
+import { HOST } from '../util/Constants';
 
 export class AuthLoadingScreen extends Component {
   componentDidMount() {
     this._bootstrapAsync();
   }
 
-  // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     const sessionToken = await AsyncStorage.getItem('sessionToken');
     let username;
@@ -32,16 +30,13 @@ export class AuthLoadingScreen extends Component {
 
     console.log('[AuthLoadingScreen]... here...');
 
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
     if (username) {
-      this.props.navigation.navigate('App', {username: username});
+      this.props.navigation.navigate('App', { username: username });
     } else {
       this.props.navigation.navigate('Auth');
     }
   };
 
-  // Render any loading content that you like here
   render() {
     return (
       <View>
@@ -56,17 +51,17 @@ export class AuthLoadingScreen extends Component {
     console.log(`[APIService] calling ${endpoint}`);
 
     return fetch(endpoint)
-        .then((response) => {
-            if (response.ok) {
-                console.log(`[AuthLoadingScreen] found user for sessionToken`);
-                return response.json();
-            } else {
-                console.log(`[AuthLoadingScreen] unable to find user for sessionToken`);
-                throw new Error();
-            }
-        })
-        .catch((error) => {
-            throw error;
-        });     
-}
+      .then((response) => {
+        if (response.ok) {
+          console.log(`[AuthLoadingScreen] found user for sessionToken`);
+          return response.json();
+        } else {
+          console.log(`[AuthLoadingScreen] unable to find user for sessionToken`);
+          throw new Error();
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }
 }

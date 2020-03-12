@@ -34,61 +34,61 @@ export default class SignInScreen extends Component {
     return (
       <Container style={{ flex: 1, backgroundColor: COLORS.BACKGROUND_MAIN, padding: 20 }}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 30 }}>
           <Text style={{ fontSize: 24, fontWeight: '900', color: '#52e3c2' }}>Sign In</Text>
         </View>
 
         <Form style={{ marginBottom: 20 }}>
           <Item floatingLabel>
             <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Username</Label>
-            <Input 
-              style={{ color: 'white' }} 
-              autoCapitalize='none' 
-              onChangeText={username => this.onUsernameInputChange(username)} 
+            <Input
+              style={{ color: 'white' }}
+              autoCapitalize='none'
+              onChangeText={username => this.onUsernameInputChange(username)}
             />
           </Item>
           <Item floatingLabel>
             <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Password</Label>
-            <Input 
-              style={{ color: 'white' }} 
-              secureTextEntry={true} 
-              autoCapitalize='none' 
-              onChangeText={password => this.onPasswordInputChange(password)} 
+            <Input
+              style={{ color: 'white' }}
+              secureTextEntry={true}
+              autoCapitalize='none'
+              onChangeText={password => this.onPasswordInputChange(password)}
             />
           </Item>
         </Form>
-        <Button 
-          disabled={ this.state.isDisabled } 
-          style={ this.state.isDisabled 
-            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 } 
-            : { backgroundColor: '#52e3c2', justifyContent: 'center' }} 
+        <Button
+          disabled={this.state.isDisabled}
+          style={this.state.isDisabled
+            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 }
+            : { backgroundColor: '#52e3c2', justifyContent: 'center' }}
           onPress={() => this.signIn()}
         >
           <Text> Sign In </Text>
         </Button>
-        <Button 
-          transparent 
-          style={{ justifyContent: 'center' }} 
+        <Button
+          transparent
+          style={{ justifyContent: 'center' }}
           onPress={() => this.goToRegisterScreen()}
         >
-          <Text style={{color: '#ff4495'}}> Go To Register </Text>
+          <Text style={{ color: '#ff4495' }}> Go To Register </Text>
         </Button>
       </Container>
     );
   }
 
   onUsernameInputChange(username) {
-    this.setState({ 
+    this.setState({
       username: username,
       isDisabled: username.length === 0 || this.state.password.length === 0
-     });
+    });
   }
 
   onPasswordInputChange(password) {
-    this.setState({ 
+    this.setState({
       password: password,
       isDisabled: this.state.username.length === 0 || password.length === 0
-     });
+    });
   }
 
   async signIn() {

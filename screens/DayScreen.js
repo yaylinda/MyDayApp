@@ -92,7 +92,7 @@ export default class DayScreen extends Component {
 
     renderItem = ({ item, index }) => {
         return (
-            <DayInfo key={index} day={item} actions={{ deleteDayEvent: this.deleteExisting.bind(this) }}/>
+            <DayInfo key={index} day={item} actions={{ deleteDayEvent: this.deleteExisting.bind(this) }} />
         );
     }
 
@@ -190,16 +190,16 @@ export default class DayScreen extends Component {
                             <Button transparent key={index} onPress={() => this.toggleHearts(index)}>
                                 {
                                     this.state.selectedHearts[index] ?
-                                        <Icon name="star" style={{ 
-                                            fontSize: 30, 
-                                            fontWeight: "500", 
-                                            color: '#ffd900' 
-                                        }}/> :
-                                        <Icon name="star-outline" style={{ 
-                                            fontSize: 30, 
-                                            fontWeight: "500", 
+                                        <Icon name="star" style={{
+                                            fontSize: 30,
+                                            fontWeight: "500",
                                             color: '#ffd900'
-                                        }}/>
+                                        }} /> :
+                                        <Icon name="star-outline" style={{
+                                            fontSize: 30,
+                                            fontWeight: "500",
+                                            color: '#ffd900'
+                                        }} />
                                 }
                             </Button>
                         );
@@ -363,12 +363,12 @@ export default class DayScreen extends Component {
             <View>
                 {this.renderModelTitle(`${capitalizeFromUpper(catalogType)}s Catalog is empty`)}
                 <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Button small rounded
-                    onPress={() => this.handleNavigateToCatalogForm(catalogType)}
-                    style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
-                >
-                    <Text style={{ color: 'white' }}>Add one</Text>
-                </Button>
+                    <Button small rounded
+                        onPress={() => this.handleNavigateToCatalogForm(catalogType)}
+                        style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
+                    >
+                        <Text style={{ color: 'white' }}>Add one</Text>
+                    </Button>
                 </View>
             </View>
         );

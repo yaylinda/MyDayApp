@@ -1,10 +1,9 @@
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import React, { Component } from 'react';
-import {
-  Container} from 'native-base';
+import { Container } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { HOST, COLORS } from './util/Constants';
+import { COLORS } from './util/Constants';
 import AppNavigator from './navigation/AppNavigator';
 
 console.disableYellowBox = true;

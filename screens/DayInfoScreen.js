@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Card, CardItem, Text, Button, View, Picker, Icon, ListItem, CheckBox, Body, List, Fab, Content } from "native-base";
+import { Card, CardItem, Text, Button, View, Icon, Content } from "native-base";
 import moment from 'moment'
-import Modal from "react-native-modal";
-import { AsyncStorage, Dimensions, TouchableOpacity, Alert } from "react-native";
-import { HOST, COLORS } from "../util/Constants";
+import { Dimensions, TouchableOpacity, Alert } from "react-native";
+import { COLORS } from "../util/Constants";
 
 export default class DayInfo extends Component {
 
@@ -105,7 +104,7 @@ export default class DayInfo extends Component {
                                                 {this.renderDayScore(item.emotionScore)}
                                             </View>
                                         </View>
-                                        { this.renderDeleteButton(item.dayEventId) }
+                                        {this.renderDeleteButton(item.dayEventId)}
                                     </View>
                                 </TouchableOpacity>
                             );
@@ -151,7 +150,7 @@ export default class DayInfo extends Component {
                                     }}>
                                         <Text style={{ color: 'white' }}>{item.icon} {item.name}</Text>
                                     </View>
-                                    { this.renderDeleteButton(item.dayEventId) }
+                                    {this.renderDeleteButton(item.dayEventId)}
                                 </View>
                             </TouchableOpacity>
                         );
@@ -197,7 +196,7 @@ export default class DayInfo extends Component {
                                                 </View>
                                             </View>
                                         </View>
-                                        { this.renderDeleteButton(item.dayEventId) }
+                                        {this.renderDeleteButton(item.dayEventId)}
                                     </View>
                                 </TouchableOpacity>
                             );

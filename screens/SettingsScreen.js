@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Button, Content } from 'native-base';
 import { AsyncStorage } from 'react-native';
-import { HOST, COLORS } from '../util/Constants';
+import { COLORS } from '../util/Constants';
 
 export default class SettingsScreen extends Component {
 
