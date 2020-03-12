@@ -2,17 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, Content, Tabs, Tab } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import { HOST, COLORS } from '../util/Constants';
-import { Grid, YAxis, XAxis, BarChart, StackedBarChart, PieChart, ProgressCircle } from 'react-native-svg-charts';
-import palette from 'google-palette';
 import { NavigationEvents } from 'react-navigation';
-import moment from 'moment'
 import CalendarMonthTiles from '../components/CalendarMonthTiles';
 import { Dropdown } from 'react-native-material-dropdown';
-
-const SCORE_KEY = 'score';
-const ACTIVITY_KEY = 'activity';
-const PROMPT_KEY = 'prompt';
-const SUMMARY_KEY = 'summary';
 
 export default class StatisticsScreen extends Component {
 
