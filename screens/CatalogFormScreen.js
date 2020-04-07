@@ -21,6 +21,7 @@ export default class CatalogFormScreen extends Component {
             newAnswers: data && data.answers ? data.answers : [{ answer: '' }],
             isDisabled: true,
             doDelete: false,
+            saving: false,
         }
         console.log(this.state.data);
     }
@@ -241,6 +242,7 @@ export default class CatalogFormScreen extends Component {
         console.log(`[CatalogFormScreen] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
         let requestSuccess = false;
+        this.setState({ saving: true });
 
         fetch(endpoint, {
             method: this.state.doDelete ? 'DELETE' : this.state.data ? 'PUT' : 'POST',
@@ -256,6 +258,7 @@ export default class CatalogFormScreen extends Component {
                 requestSuccess = false;
                 console.log(`[CatalogFormScreen] error creating/updating`);
             }
+            this.setState({ saving: false });
             return response.json();
         }).then((json) => {
             console.log(`[CatalogFormScreen] json: ${JSON.stringify(json)}`);

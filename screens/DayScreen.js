@@ -20,6 +20,7 @@ export default class DayScreen extends Component {
             catalogData: { 'ACTIVITY': [], 'EMOTION': [], 'PROMPT': [] },
             loadedDayData: false,
             errorMessage: '',
+            saving: false,
 
             // states for FAB / modal actions
             addFabActive: false,
@@ -520,7 +521,7 @@ export default class DayScreen extends Component {
         console.log(`[DayInfo] calling ${endpoint}, with ${JSON.stringify(body)}`);
 
         let requestSuccess = false;
-
+        this.setState({ saving: true });
         fetch(endpoint, {
             method: 'PUT',
             headers: headers,
@@ -533,6 +534,7 @@ export default class DayScreen extends Component {
                 requestSuccess = false;
                 console.log(`[DayInfo] error updating day`);
             }
+            this.setState({ saving: false });
             return response.json();
         }).then((json) => {
             if (requestSuccess) {
