@@ -36,15 +36,24 @@ export default class CatalogFormScreen extends Component {
                 </View>
 
                 <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Button
-                        disabled={(this.state.data ? false : this.state.isDisabled)}
-                        style={(this.state.data ? false : this.state.isDisabled)
-                            ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 }
-                            : { backgroundColor: '#52e3c2', justifyContent: 'center' }}
-                        onPress={() => this.persistNew()}
-                    >
-                        <Text>Save</Text>
-                    </Button>
+                    {
+                        this.state.saving ? 
+                        <Button 
+                            disabled={true} 
+                            style={{ backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 }}
+                        >
+                            <Text>Saving...</Text>
+                        </Button> :
+                        <Button
+                            disabled={(this.state.data ? false : this.state.isDisabled)}
+                            style={(this.state.data ? false : this.state.isDisabled)
+                                ? { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 }
+                                : { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center' }}
+                            onPress={() => this.persistNew()}
+                        >
+                            <Text>Save</Text>
+                        </Button>
+                    }
                 </View>
 
                 {
@@ -89,6 +98,7 @@ export default class CatalogFormScreen extends Component {
                                 disabled
                             /> :
                             <Input
+                                disabled={this.state.saving}
                                 style={{ color: 'white' }}
                                 onChangeText={value => this.setState({
                                     newName: value,
@@ -100,6 +110,7 @@ export default class CatalogFormScreen extends Component {
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Icon (emoji)</Label>
                     <Input
+                        disabled={this.state.saving}
                         onChangeText={value => this.cleanEmojiInput(value)}
                         value={this.state.newIcon}
                     />
@@ -107,6 +118,7 @@ export default class CatalogFormScreen extends Component {
                 <Item floatingLabel style={{ marginBottom: 10 }}>
                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Description (optional)</Label>
                     <Input
+                        disabled={this.state.saving}
                         style={{ color: 'white' }}
                         value={this.state.newDescription}
                         onChangeText={value => this.setState({ newDescription: value })}
@@ -129,6 +141,7 @@ export default class CatalogFormScreen extends Component {
                                 disabled
                             /> :
                             <Input
+                                disabled={this.state.saving}
                                 style={{ color: 'white' }}
                                 onChangeText={value => this.setState({
                                     newQuestion: value,
@@ -144,12 +157,14 @@ export default class CatalogFormScreen extends Component {
                                 <Item floatingLabel key={index} style={{ flexGrow: 1 }}>
                                     <Label style={{ color: COLORS.TEXT_LIGHT_WHITE }}>Answer Option #{index + 1}</Label>
                                     <Input
+                                        disabled={this.state.saving}
                                         style={{ color: 'white' }}
                                         value={answer.answer}
                                         onChangeText={value => this.updateAnswers(index, value)}
                                     />
                                 </Item>
                                 <Button rounded small
+                                    disabled={this.state.saving}
                                     onPress={() => this.removeAnswer(index)}
                                     style={{ alignSelf: 'center', borderColor: 'red', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
                                 >
@@ -161,6 +176,7 @@ export default class CatalogFormScreen extends Component {
                 }
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Button small rounded
+                        disabled={this.state.saving}
                         onPress={() => this.setState({ newAnswers: this.state.newAnswers.concat({ answer: '' }) })}
                         style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: COLORS.BACKGROUND_MAIN }}
                     >
@@ -258,8 +274,6 @@ export default class CatalogFormScreen extends Component {
                 requestSuccess = false;
                 console.log(`[CatalogFormScreen] error creating/updating`);
             }
-
-            this.setState({ saving: false });
             return response.json();
         }).then((json) => {
             console.log(`[CatalogFormScreen] json: ${JSON.stringify(json)}`);
@@ -287,6 +301,7 @@ export default class CatalogFormScreen extends Component {
             newAnswers: [''],
             isDisabled: true,
             doDelete: false,
+            saving: false,
         });
     }
 }
