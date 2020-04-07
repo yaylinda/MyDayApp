@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const HOST = 'http://localhost:8080/my-day-backend';
 // export const HOST = 'https://api.lindazheng.me/my-day-backend';
 
@@ -15,6 +17,19 @@ export const EMOJI_REGEX_PATTERN = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000
 export const capitalizeFromUpper = (upper) => {
     return upper.charAt(0) + upper.substr(1).toLowerCase();
 }
+
+export const formatDecimal = (value) => {
+    if (value === 0) {
+        return 0;
+    } else {
+        return parseFloat(value).toFixed(2);
+    }
+}
+
+export const formatDate = (date) => {
+    return moment(date, "YYYY-MM-DD").format('ddd, MMM Do YYYY');
+}
+
 
 /*
     --atom-red: #ff4495;

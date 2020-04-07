@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text } from 'native-base';
-import { COLORS } from '../util/Constants';
-import moment from 'moment';
+import { COLORS, formatDecimal, formatDate } from '../util/Constants';
 import { TouchableOpacity } from 'react-native';
+import ColorInterpolator from '../util/ColorInterpolator';
 
 const NUM_COLORS = 10;
 
@@ -11,7 +11,7 @@ export default class CalendarMonthTiles extends Component {
     constructor(props) {
         super(props);
 
-        let colors = this.generateColor('#FFFFFF', '#52e3c2', NUM_COLORS);
+        let colors = ColorInterpolator.generateColor('#FFFFFF', '#52e3c2', NUM_COLORS);
 
         this.state = {
             title: props.title,
@@ -53,10 +53,13 @@ export default class CalendarMonthTiles extends Component {
                         backgroundColor: COLORS.BACKGROUND_MAIN,
                         borderRadius: 10,
                         marginBottom: 10,
-
                     }}>
-                        <Text style={{ color: COLORS.TEXT_ACCENT, fontWeight: '500' }}>{this.formatDate(datum.date)}</Text>
-                        <Text style={{ color: 'white' }}>{datum.label}: {datum.value}</Text>
+                        <Text style={{ color: COLORS.TEXT_ACCENT, fontWeight: '500' }}>
+                            {formatDate(datum.date)}
+                        </Text>
+                        <Text style={{ color: 'white' }}>
+                            {datum.label}: {formatDate(datum.value)}
+                        </Text>
                     </View>
                 );
             }
@@ -112,7 +115,7 @@ export default class CalendarMonthTiles extends Component {
             return (
                 <View style={{ flex: 1, borderRadius: 10, justifyContent: 'center', backgroundColor: color }}>
                     <Text style={{ alignSelf: 'center', color: 'black' }}>
-                        {datum.value}
+                        {formatDecimal(datum.value)}
                     </Text>
                 </View>
             );
@@ -149,47 +152,7 @@ export default class CalendarMonthTiles extends Component {
         }
     }
 
-    formatDate(date) {
-        return moment(date, "YYYY-MM-DD").format('ddd, MMM Do YYYY');
-    }
+    
 
-    hex(c) {
-        let s = "0123456789abcdef";
-        let i = parseInt(c);
-        if (i == 0 || isNaN(c))
-            return "00";
-        i = Math.round(Math.min(Math.max(0, i), 255));
-        return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
-    }
-
-    convertToHex(rgb) {
-        return this.hex(rgb[0]) + this.hex(rgb[1]) + this.hex(rgb[2]);
-    }
-
-    trim(s) { return (s.charAt(0) == '#') ? s.substring(1, 7) : s }
-
-    convertToRGB(hex) {
-        let color = [];
-        color[0] = parseInt((this.trim(hex)).substring(0, 2), 16);
-        color[1] = parseInt((this.trim(hex)).substring(2, 4), 16);
-        color[2] = parseInt((this.trim(hex)).substring(4, 6), 16);
-        return color;
-    }
-
-    generateColor(colorStart, colorEnd, colorCount) {
-        let start = this.convertToRGB(colorStart);
-        let end = this.convertToRGB(colorEnd);
-        let len = colorCount;
-        let alpha = 0.0;
-        let results = [];
-        for (let i = 0; i < len; i++) {
-            let c = [];
-            alpha += (1.0 / len);
-            c[0] = start[0] * alpha + (1 - alpha) * end[0];
-            c[1] = start[1] * alpha + (1 - alpha) * end[1];
-            c[2] = start[2] * alpha + (1 - alpha) * end[2];
-            results.push(this.convertToHex(c));
-        }
-        return results;
-    }
+    
 }

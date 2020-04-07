@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Content, Tabs, Tab } from 'native-base';
 import { AsyncStorage } from 'react-native';
-import { HOST, COLORS } from '../util/Constants';
+import { HOST, COLORS, formatDecimal } from '../util/Constants';
 import { NavigationEvents } from 'react-navigation';
 import CalendarMonthTiles from '../components/CalendarMonthTiles';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -90,7 +90,7 @@ export default class StatisticsScreen extends Component {
                     <View padder style={{ backgroundColor: COLORS.BACKGROUND_LIGHT, borderRadius: 10, marginTop: 10 }}>
                         <Text style={{ color: COLORS.TEXT_ACCENT, fontSize: 20, marginBottom: 10 }}>Scores</Text>
                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                            {this.renderSummaryDataBox(this.state.stats.summary.averageScore, 'Average Daily Score')}
+                            {this.renderSummaryDataBox(formatDecimal(this.state.stats.summary.averageScore), 'Average Daily Score')}
                             {this.renderSummaryDataBox(this.state.stats.summary.totalNumScores, 'Total Score')}
                         </View>
                     </View>
