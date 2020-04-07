@@ -148,7 +148,7 @@ export default class StatisticsScreen extends Component {
             }
             return response.json();
         }).then((json) => {
-            console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
+            // console.log(`[StatisticsScreen] json: ${JSON.stringify(json)}`);
             if (requestSuccess) {
                 console.log('[StatisticsScreen] updating state.allStats');
                 this.setState({ stats: json });
