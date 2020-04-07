@@ -107,6 +107,26 @@ const StatisticsStack = createStackNavigator(
   }
 );
 
+const SettingsStack = createStackNavigator(
+  {
+    SettingsPage: {
+      screen: SettingsScreen,
+      navigationOptions: {
+        title: 'Settings',
+        headerStyle: {
+          backgroundColor: COLORS.BACKGROUND_MAIN,
+          borderBottomWidth: 0,
+        },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '900',
+          color: COLORS.TEXT_MAIN,
+        },
+      }
+    }
+  }
+);
+
 const AppStack = createBottomTabNavigator(
   {
     Day: {
@@ -164,17 +184,8 @@ const AppStack = createBottomTabNavigator(
       }
     },
     Settings: {
-      screen: SettingsScreen,
+      screen: SettingsStack,
       navigationOptions: {
-        title: 'Settings',
-        headerStyle: {
-          backgroundColor: COLORS.BACKGROUND_MAIN
-        },
-        headerTitleStyle: {
-          fontSize: 24,
-          fontWeight: '900',
-          color: COLORS.TEXT_MAIN,
-        },
         tabBarLabel: 'Settings',
         tabBarIcon: ({ focused }) => (
           <Ionicons
