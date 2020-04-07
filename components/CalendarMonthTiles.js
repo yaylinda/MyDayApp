@@ -58,7 +58,7 @@ export default class CalendarMonthTiles extends Component {
                             {formatDate(datum.date)}
                         </Text>
                         <Text style={{ color: 'white' }}>
-                            {datum.label}: {formatDate(datum.value)}
+                            {datum.label}: {formatDecimal(datum.value)}
                         </Text>
                     </View>
                 );
