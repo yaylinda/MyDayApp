@@ -1,5 +1,5 @@
-// export const HOST = 'http://localhost:8080/my-day-backend';
-export const HOST = 'https://api.lindazheng.me/my-day-backend';
+export const HOST = 'http://localhost:8080/my-day-backend';
+// export const HOST = 'https://api.lindazheng.me/my-day-backend';
 
 export const COLORS = {
     BACKGROUND_MAIN: '#282833',

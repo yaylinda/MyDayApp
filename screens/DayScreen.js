@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Content, Button, Icon, Text, View, List, ListItem, CheckBox, Body } from 'native-base';
+import { Content, Button, Icon, Text, View, List, ListItem, CheckBox, Body, Spinner } from 'native-base';
 import { HOST, COLORS, capitalizeFromUpper } from '../util/Constants';
 import { AsyncStorage, Dimensions, Alert } from 'react-native';
 import DayInfo from './DayInfoScreen';
@@ -287,6 +287,7 @@ export default class DayScreen extends Component {
                         return (
                             <ListItem key={index}>
                                 <CheckBox
+                                    disabled={this.state.saving}
                                     checked={this.state.selectedPromptAnswerIndex === index}
                                     onPress={() => this.setState({
                                         selectedPromptAnswerIndex: index,
@@ -318,6 +319,7 @@ export default class DayScreen extends Component {
         return (
             <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <Button small rounded
+                    disabled={this.state.saving}
                     onPress={() => this.setState({ showDatePicker: true })}
                     style={{ borderColor: '#52e3c2', borderWidth: 1, backgroundColor: '#40424f' }}
                 >
@@ -346,15 +348,24 @@ export default class DayScreen extends Component {
     renderSaveDayEventButton() {
         return (
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                <Button
-                    disabled={this.state.isDisabled}
-                    style={this.state.isDisabled
-                        ? { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 }
-                        : { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center' }}
-                    onPress={() => this.persistNew()}
-                >
-                    <Text>Save</Text>
-                </Button>
+                {
+                    this.state.saving ? 
+                        <Button 
+                            disabled={true} 
+                            style={{ backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 }}
+                        >
+                            <Text>Saving...</Text>
+                        </Button> :
+                        <Button
+                            disabled={this.state.isDisabled}
+                            style={this.state.isDisabled
+                                ? { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center', opacity: 0.5 }
+                                : { backgroundColor: COLORS.TEXT_MAIN, justifyContent: 'center' }}
+                            onPress={() => this.persistNew()}
+                        >
+                            <Text>Save</Text>
+                        </Button>
+                }
             </View>
         );
     }
@@ -386,6 +397,10 @@ export default class DayScreen extends Component {
     }
 
     toggleHearts(heartIndex) {
+        if (this.state.saving) {
+            return;
+        }
+
         let tempHearts = [false, false, false, false, false];
 
         for (let i = 0; i < this.state.selectedHearts.length; i++) {
@@ -522,6 +537,7 @@ export default class DayScreen extends Component {
 
         let requestSuccess = false;
         this.setState({ saving: true });
+
         fetch(endpoint, {
             method: 'PUT',
             headers: headers,
@@ -534,7 +550,6 @@ export default class DayScreen extends Component {
                 requestSuccess = false;
                 console.log(`[DayInfo] error updating day`);
             }
-            this.setState({ saving: false });
             return response.json();
         }).then((json) => {
             if (requestSuccess) {
@@ -568,6 +583,7 @@ export default class DayScreen extends Component {
         console.log(`[DayInfo] delete day event, calling ${endpoint}`);
 
         let requestSuccess = false;
+        this.setState({ saving: true });
 
         fetch(endpoint, {
             method: 'DELETE',
@@ -609,6 +625,7 @@ export default class DayScreen extends Component {
             randomPromptIndex: -1,
             selectedPromptAnswerIndex: -1,
             isDisabled: true,
+            saving: false,
         });
     }
 

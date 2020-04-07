@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Label, Input, Button, Item, Icon } from 'native-base';
+import { Text, View, Label, Input, Button, Item, Icon, Spinner } from 'native-base';
 import { COLORS, HOST, EMOJI_REGEX_PATTERN } from '../util/Constants';
 import { Alert, AsyncStorage } from 'react-native';
 
@@ -37,7 +37,7 @@ export default class CatalogFormScreen extends Component {
 
                 <View padder style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <Button
-                        disabled={this.state.data ? false : this.state.isDisabled}
+                        disabled={(this.state.data ? false : this.state.isDisabled)}
                         style={(this.state.data ? false : this.state.isDisabled)
                             ? { backgroundColor: '#52e3c2', justifyContent: 'center', opacity: 0.5 }
                             : { backgroundColor: '#52e3c2', justifyContent: 'center' }}
@@ -258,6 +258,7 @@ export default class CatalogFormScreen extends Component {
                 requestSuccess = false;
                 console.log(`[CatalogFormScreen] error creating/updating`);
             }
+
             this.setState({ saving: false });
             return response.json();
         }).then((json) => {

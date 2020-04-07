@@ -16,7 +16,6 @@ export default class CatalogScreen extends Component {
             errorMessage: '',
             activeTabIndex: 0,
             catalogEventId: '',
-            saving: false,
         }
     }
 
@@ -261,7 +260,6 @@ export default class CatalogScreen extends Component {
         console.log(`[CatalogScreen] calling ${endpoint}`);
 
         let requestSuccess = false;
-        this.setState({ saving: true });
 
         fetch(endpoint, {
             headers: {
@@ -277,7 +275,6 @@ export default class CatalogScreen extends Component {
                 console.log(`[CatalogScreen] error retrieving day event catalog data`);
                 requestSuccess = false;
             }
-            this.setState({ saving: false });
             return response.json();
         }).then((json) => {
             console.log(`[CatalogScreen] json: ${JSON.stringify(json)}`);
