@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.4",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/images/icon1.png",
     "splash": {
@@ -25,7 +25,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "yay.linda.mydayapp"
+      "bundleIdentifier": "yay.linda.mydayapp",
+      "infoPlist": {
+        "UIUserInterfaceStyle": "Light"
+      }
     },
     "android": {
       "package": "yay.linda.mydayapp",
