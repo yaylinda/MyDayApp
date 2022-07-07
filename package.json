@@ -17,7 +17,7 @@
     "@react-native-community/datetimepicker": "2.1.0",
     "expo": "~36.0.0",
     "expo-font": "~8.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "native-base": "^2.13.8",
     "npm-force-resolutions": "0.0.3",
     "react": "~16.9.0",
